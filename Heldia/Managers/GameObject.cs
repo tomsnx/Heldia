@@ -11,7 +11,6 @@ namespace Heldia
         public float x, y;
         public float xSpeed, ySpeed;
         public int width, height;
-        public int column, line;
 
         public Vector2 position { get { return new Vector2(x, y); } set { x = value.X; y = value.Y; } }
         public Vector2 speed { get { return new Vector2(xSpeed, ySpeed); } set { xSpeed = value.X; ySpeed = value.Y; } }

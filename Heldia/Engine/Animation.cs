@@ -25,7 +25,7 @@ namespace Heldia
 
             if (myElapsed >= myDelay)
             {
-                if (myFrames >= 3)
+                if (myFrames >= Player.column)
                 {
                     myFrames = 0;
                 }
@@ -36,7 +36,7 @@ namespace Heldia
                 myElapsed = 0;
             }
             
-            rect = new Rectangle((int)dims.X * myFrames, (int)dims.Y * Player.mY, (int)dims.X, (int)dims.Y);
+            rect = new Rectangle((int)dims.X * myFrames, (int)dims.Y * Player.line, (int)dims.X, (int)dims.Y);
         }
     }
 }
