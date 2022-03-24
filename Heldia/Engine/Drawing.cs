@@ -53,11 +53,18 @@ namespace Heldia
             spriteBatch.Draw(rect, bounds, null, col, 0, new Vector2(0, 0), SpriteEffects.None, depth);
         }
 
-        public static void FillRect(Texture2D texture, Rectangle bounds, Color col, float depth, Main g)
+        public static void FillRect(Texture2D texture, Rectangle bounds,Color col, float depth, Main g)
         {
             if (rect == null) { rect = new Texture2D(g.GraphicsDevice, 1, 1); }
             rect.SetData(new[] { Color.White });
             spriteBatch.Draw(texture, bounds, null, col, 0, new Vector2(0, 0), SpriteEffects.None, depth);
+        }
+
+        public static void FillRect(Texture2D texture, Rectangle devideSprite,Rectangle bounds, Color col, float depth, Main g)
+        {
+            if (rect == null) { rect = new Texture2D(g.GraphicsDevice, 1, 1); }
+            rect.SetData(new[] { Color.White });
+            spriteBatch.Draw(texture, bounds, devideSprite, col, 0, new Vector2(0, 0), SpriteEffects.None, depth);
         }
     }
 }

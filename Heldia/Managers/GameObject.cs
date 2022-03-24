@@ -11,10 +11,13 @@ namespace Heldia
         public float x, y;
         public float xSpeed, ySpeed;
         public int width, height;
+        public int column, line;
+
         public Vector2 position { get { return new Vector2(x, y); } set { x = value.X; y = value.Y; } }
         public Vector2 speed { get { return new Vector2(xSpeed, ySpeed); } set { xSpeed = value.X; ySpeed = value.Y; } }
         public Vector2 size { get { return new Vector2(width, height); } set { width = (int)value.X; height = (int)value.Y; } }
         public Rectangle bounds;
+        public Rectangle devideSprite;
 
         //properties
         public int id;
@@ -33,6 +36,7 @@ namespace Heldia
             this.width = w;
             this.height = h;
             bounds = new Rectangle(x, y, width, height);
+            devideSprite = new Rectangle(0, 24, 16, 24);
 
             //properties
             this.id = id;

@@ -20,7 +20,6 @@ namespace Heldia
         public SpriteSheets(Main g, int id,string name)
         {
             this.name = name;
-
             type = sfManager.getSFManager(id);
 
             if (type != null)
