@@ -1,28 +1,26 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Heldia
+namespace Heldia;
+public class Camera
 {
-    public class Camera
+    // Properties
+    public Vector2 position;
+    public Matrix transform { get; private set; }
+    public float delay { get; set; } = 6.0f;
+
+    // Constructor
+    public Camera(Vector2 pos) { this.position = pos; }
+
+    // Update
+
+    public void Update(Vector2 pos, Main g)
     {
-        // properties
-        public Vector2 position;
-        public Matrix transform { get; private set; }
-        public float delay { get; set; } = 6.0f;
+        float d = delay * Drawing.delta;
 
-        // constructor
-        public Camera(Vector2 pos) { this.position = pos; }
+        // Move
+        position.X += ((pos.X - position.X) - Drawing.width / 2) * d;
+        position.Y += ((pos.Y - position.Y) - Drawing.height / 2) * d;
 
-        // update
-
-        public void Update(Vector2 pos, Main g)
-        {
-            float d = delay * Drawing.delta;
-
-            // move
-            position.X += ((pos.X - position.X) - Drawing.width / 2) * d;
-            position.Y += ((pos.Y - position.Y) - Drawing.height / 2) * d;
-
-            transform = Matrix.CreateTranslation((int)-position.X, -position.Y, 0);
-        }
+        transform = Matrix.CreateTranslation((int)-position.X, -position.Y, 0);
     }
 }

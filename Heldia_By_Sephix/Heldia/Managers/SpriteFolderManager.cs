@@ -2,43 +2,39 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Heldia
+namespace Heldia;
+public class SpriteFolderManager
 {
-    public class SpriteFolderManager
+    enum e_IdFile : int
     {
-        enum e_IDFile : int
+        Characters = ObjectID.player,
+        Block = ObjectID.block,
+        Tree = ObjectID.tree
+    }
+
+    e_IdFile _id;
+
+    // get
+    public string GetSfManager(int id)
+    {
+        _id = (e_IdFile)id;
+
+        //determine the folder of the texture
+        if (_id == e_IdFile.Characters)
         {
-            characters = ObjectID.player,
-            block = ObjectID.block,
-            tree = ObjectID.tree
+            return "characters";
         }
-
-        e_IDFile id;
-
-        public SpriteFolderManager() { }
-
-
-        // get
-        public string getSFManager(int id)
+        else if (_id == e_IdFile.Block)
         {
-            this.id = (e_IDFile)id;
-
-            //determine the folder of the texture
-            if (this.id == e_IDFile.characters)
-            {
-                return "characters";
-            }
-            if (this.id == e_IDFile.block)
-            {
-                return "world";
-            }
-            if (this.id == e_IDFile.tree)
-            {
-                return "world";
-            }
-
+            return "world";
+        }
+        else if (_id == e_IdFile.Tree)
+        {
+            return "world";
+        }
+        else
+        {
             return "";
         }
-
     }
 }

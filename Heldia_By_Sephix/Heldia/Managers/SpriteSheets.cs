@@ -3,33 +3,31 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Heldia
+namespace Heldia;
+public class SpriteSheets
 {
-    public class SpriteSheets
+    // texture path
+    string path { get; set; } = "textures";
+    string type { get; set; }
+    string name { get; set; }
+
+    Texture2D _texture;
+
+    SpriteFolderManager _sfManager = new SpriteFolderManager();
+
+    //constructor
+    public SpriteSheets(Main g, int id,string name)
     {
-        // texture path
-        string path { get; set; } = "textures";
-        string type { get; set; }
-        string name { get; set; }
+        this.name = name;
+        type = _sfManager.GetSfManager(id);
 
-        Texture2D texture;
-
-        SpriteFolderManager sfManager = new SpriteFolderManager();
-
-        //constructor
-        public SpriteSheets(Main g, int id,string name)
+        if (type != null)
         {
-            this.name = name;
-            type = sfManager.getSFManager(id);
-
-            if (type != null)
-            {
-                this.path = Path.Combine(path, type, name);
-            }
-            this.texture = g.Content.Load<Texture2D>(path);
+            this.path = Path.Combine(path, type, name);
         }
-
-        // gets
-        public Texture2D GetSheet() { return texture; }
+        this._texture = g.Content.Load<Texture2D>(path);
     }
+
+    // gets
+    public Texture2D GetSheet() { return _texture; }
 }

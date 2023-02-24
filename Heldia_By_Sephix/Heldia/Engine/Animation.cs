@@ -2,41 +2,39 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Heldia
+namespace Heldia;
+class Animation
 {
-    class Animation
+    private Vector2 _dims;
+
+    private float _myElapsed;
+    private float _myDelay = 100;
+    private int _myFrames = 0;
+
+    public Rectangle rect;
+
+    public Animation() { }
+
+    // get
+    public void GetAnimRect(int dimsx, int dimsy, GameTime gt)
     {
-        private Vector2 dims;
+        _dims = new Vector2(dimsx, dimsy);
 
-        float myElapsed;
-        float myDelay = 100;
-        int myFrames = 0;
+        _myElapsed += (float)gt.ElapsedGameTime.TotalMilliseconds;
 
-        public Rectangle rect;
-
-        public Animation() { }
-
-        // get
-        public void GetAnimRect(int dimsx, int dimsy, GameTime gt)
+        if (_myElapsed >= _myDelay)
         {
-            this.dims = new Vector2(dimsx, dimsy);
-
-            myElapsed += (float)gt.ElapsedGameTime.TotalMilliseconds;
-
-            if (myElapsed >= myDelay)
+            if (_myFrames >= Player.column)
             {
-                if (myFrames >= Player.column)
-                {
-                    myFrames = 0;
-                }
-                else
-                {
-                    myFrames++;
-                }
-                myElapsed = 0;
+                _myFrames = 0;
             }
-            
-            rect = new Rectangle((int)dims.X * myFrames, (int)dims.Y * Player.line, (int)dims.X, (int)dims.Y);
+            else
+            {
+                _myFrames++;
+            }
+            _myElapsed = 0;
         }
+        
+        rect = new Rectangle((int)_dims.X * _myFrames, (int)_dims.Y * Player.line, (int)_dims.X, (int)_dims.Y);
     }
 }
