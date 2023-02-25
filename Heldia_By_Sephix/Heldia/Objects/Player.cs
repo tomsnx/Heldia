@@ -23,14 +23,14 @@ public class Player : GameObject
     private Animation _anim;
 
     // texture name
-    private string _name = "sprite";
+    private string _name = "blue_fire";
 
     // set dimensions
-    public static int playerWidth = 37;
-    public static int playerHeight = 45;
+    public static int playerWidth = 36;
+    public static int playerHeight = 50;
 
     // init the started animation
-    public static int column = 3; // Started to count on column 0
+    public static int column = 8; // Started to count on column 0
     public static int line = 1; // Started on line 0 but here is useless
     
     public Player(int x, int y) : base(x, y, playerWidth, playerHeight, ObjectID.player)
@@ -59,7 +59,7 @@ public class Player : GameObject
         y += ySpeed;
 
         // Set variable devideSprite to a X and Y Value of the TileSet
-        _anim.GetAnimRect(16, 24, gt);
+        _anim.GetAnimRect(740,1200, gt);
         devideSprite = _anim.rect;
 
         _sprite = new SpriteSheets(g, ObjectID.player, _name);
@@ -75,10 +75,10 @@ public class Player : GameObject
         float spd = walkSpeed * Drawing.delta;
 
         //pressed
-        if (_kb.IsKeyDown(Keys.Z)) { ySpeed = -spd; }
-        if (_kb.IsKeyDown(Keys.Q)) { xSpeed = -spd; line = 2; }
-        if (_kb.IsKeyDown(Keys.S)) { ySpeed = spd; }
-        if (_kb.IsKeyDown(Keys.D)) { xSpeed = spd; line = 2; }
+        if (_kb.IsKeyDown(Keys.Z)) { ySpeed = -spd; line = 1; }
+        if (_kb.IsKeyDown(Keys.Q)) { xSpeed = -spd; line = 1; }
+        if (_kb.IsKeyDown(Keys.S)) { ySpeed = spd; line = 1; }
+        if (_kb.IsKeyDown(Keys.D)) { xSpeed = spd; line = 1; }
 
         //released
         if (_kb.IsKeyUp(Keys.Z) && _kb.IsKeyUp(Keys.S)) { ySpeed = 0; }

@@ -55,7 +55,7 @@ public abstract class GameObject
     public void SetPosition (float x, float y) { this.x = x; this.y = y; }
     public void SetSpeed (float xs, float ys) { this.xSpeed = xs; this.ySpeed = ys; }
     public void SetSize (int w, int h) { this.width = w; this.height = h; }
-    public void SetScale(int s) { this.width = this.width * s; this.height = this.height * s ; }
+    public void SetScale(float s) { this.width = (int)(this.width * s); this.height = (int)(this.height * s); }
     public void SetBounds(float x, float y, int w, int h) { this.bounds = new Rectangle((int)x, (int)y, w, h); }
 
     //gets
