@@ -7,12 +7,12 @@ namespace Heldia
     public class Tree : GameObject
     {
         //Sprite
-        SpriteSheets sprite;
+        private SpriteSheets _sprite;
 
         // texture name
-        string name = "tree";
+        private string _name = "tree";
 
-        public Tree(int x, int y) : base(x, y, 32, 37, ObjectID.tree)
+        public Tree(int x, int y) : base(x, y, 32, 37, ObjectID.Tree)
         {
 
         }
@@ -28,12 +28,12 @@ namespace Heldia
 
         public override void Update(GameTime gt, Main g)
         {
-            sprite = new SpriteSheets(g, ObjectID.tree, name);
+            _sprite = new SpriteSheets(g, ObjectID.Tree, _name);
         }
 
         public override void Draw(Main g)
         {
-            Drawing.FillRect(sprite.GetSheet(), bounds, Color.White, 0, g);
+            Drawing.FillRect(_sprite.GetSheet(), bounds, Color.White, 0, g);
         }
     }
 }

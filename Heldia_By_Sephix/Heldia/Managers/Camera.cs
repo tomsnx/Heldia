@@ -6,7 +6,7 @@ public class Camera
     // Properties
     public Vector2 position;
     public Matrix transform { get; private set; }
-    public float delay { get; set; } = 6.0f;
+    public float delay { get; set; } = 10.0f;
 
     // Constructor
     public Camera(Vector2 pos) { this.position = pos; }

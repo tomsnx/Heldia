@@ -34,7 +34,7 @@ public abstract class GameObject
         this.width = w;
         this.height = h;
         this.bounds = new Rectangle(x, y, width, height);
-        this.devideSprite = new Rectangle(0, 24, 16, 24);
+        this.devideSprite = new Rectangle(0, 0, 0, 0);
 
         //Properties
         this.id = id;

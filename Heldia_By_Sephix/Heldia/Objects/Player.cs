@@ -33,7 +33,7 @@ public class Player : GameObject
     public static int column = 8; // Started to count on column 0
     public static int line = 1; // Started on line 0 but here is useless
     
-    public Player(int x, int y) : base(x, y, playerWidth, playerHeight, ObjectID.player)
+    public Player(int x, int y) : base(x, y, playerWidth, playerHeight, ObjectID.Player)
     {
         
     }
@@ -59,10 +59,10 @@ public class Player : GameObject
         y += ySpeed;
 
         // Set variable devideSprite to a X and Y Value of the TileSet
-        _anim.GetAnimRect(740,1200, gt);
+        _anim.GetAnimRect(755,1200, gt);
         devideSprite = _anim.rect;
 
-        _sprite = new SpriteSheets(g, ObjectID.player, _name);
+        _sprite = new SpriteSheets(g, ObjectID.Player, _name);
     }
 
     public override void Draw(Main g)

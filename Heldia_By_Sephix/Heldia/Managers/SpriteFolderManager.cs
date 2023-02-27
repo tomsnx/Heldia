@@ -7,28 +7,36 @@ public class SpriteFolderManager
 {
     enum e_IdFile : int
     {
-        Characters = ObjectID.player,
-        Block = ObjectID.block,
-        Tree = ObjectID.tree
+        Characters = ObjectID.Player,
+        Block = ObjectID.Block,
+        Tree = ObjectID.Tree
     }
 
-    e_IdFile _id;
+    private e_IdFile _id;
 
     // get
     public string GetSfManager(int id)
     {
         _id = (e_IdFile)id;
 
+        foreach (var item in ObjectID.GrassTab)
+        {
+            if (id == item)
+            {
+                return "world";
+            }
+        }
+
         //determine the folder of the texture
         if (_id == e_IdFile.Characters)
         {
             return "characters";
         }
-        else if (_id == e_IdFile.Block)
+        else if (_id == e_IdFile.Tree)
         {
             return "world";
         }
-        else if (_id == e_IdFile.Tree)
+        else if (_id == e_IdFile.Block)
         {
             return "world";
         }

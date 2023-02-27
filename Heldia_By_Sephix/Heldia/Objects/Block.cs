@@ -7,12 +7,12 @@ namespace Heldia
     public class Block : GameObject
     {
         //Sprite
-        SpriteSheets sprite;
+        private SpriteSheets _sprite;
 
         // texture name
-        string name = "carreRouge";
+        private string _name = "carreRouge";
 
-        public Block(int x, int y) : base(x, y, 48, 48, ObjectID.block)
+        public Block(int x, int y) : base(x, y, 48, 48, ObjectID.Block)
         {
 
         }
@@ -28,12 +28,12 @@ namespace Heldia
 
         public override void Update(GameTime gt, Main g)
         {
-            sprite = new SpriteSheets(g, ObjectID.block, name);
+            _sprite = new SpriteSheets(g, ObjectID.Block, _name);
         }
 
         public override void Draw(Main g)
         {
-            Drawing.FillRect( sprite.GetSheet(),bounds, Color.Red, 0, g);
+            Drawing.FillRect( _sprite.GetSheet(),bounds, Color.Red, 0, g);
         }
     }
 }
