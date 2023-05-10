@@ -26,15 +26,15 @@ public class Player : GameObject
     private Animation _anim;
 
     // texture name
-    private string _name = "blue_fire";
+    private string _name = "player";
 
     // set dimensions
-    public static int playerWidth = 36;
-    public static int playerHeight = 50;
+    public static int playerWidth = 16;
+    public static int playerHeight = 32;
 
     // init the started animation
-    public static int column = 8; // Started to count on column 0
-    public static int line = 1; // Started on line 0 but here is useless
+    public static int column = 6; // Started to count on column 0
+    public static int line = 0; // Started on line 0 but here is useless
 
     public Player(int x, int y) : base(x, y, playerWidth, playerHeight, ObjectID.Player)
     {
@@ -60,7 +60,7 @@ public class Player : GameObject
         // move
         foreach (var obj in objects)
         {
-            if (obj == this || obj.id == 2)
+            if (obj == this || obj.id == 2 || obj.id == 1)
             {
                 continue;
             }
@@ -79,11 +79,11 @@ public class Player : GameObject
         
         x += xSpeed;
         y += ySpeed;
-
+        
         // Set variable devideSprite to a X and Y Value of the TileSet
-        _anim.GetAnimRect(755,1200, gt);
+        _anim.GetAnimRect(playerWidth,playerHeight, gt);
         devideSprite = _anim.rect;
-
+        
         _sprite = new SpriteSheets(g, ObjectID.Player, _name);
     }
 
@@ -96,6 +96,8 @@ public class Player : GameObject
     {
         float spd;
         
+        // --- Pressed ---
+        
         //Sprint
         if (_kb.IsKeyDown(Keys.LeftShift))
         {
@@ -106,27 +108,27 @@ public class Player : GameObject
             spd = walkSpeed * Drawing.delta;
         }
 
+        //Diagonal movements
         if (_kb.IsKeyDown(Keys.S) && _kb.IsKeyDown(Keys.D)) { spd /= DiagonalDivide; }
         if (_kb.IsKeyDown(Keys.S) && _kb.IsKeyDown(Keys.Q)) { spd /= DiagonalDivide; }
         if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.D)) { spd /= DiagonalDivide; }
         if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.Q)) { spd /= DiagonalDivide; }
-
-        //pressed
-        // Horizontal movements
-        if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.S)) { ySpeed = 0; line = 1; }
-        else if (_kb.IsKeyDown(Keys.Z)) { ySpeed = -spd; line = 1; }
-        else if (_kb.IsKeyDown(Keys.S)) { ySpeed = spd; line = 1; }
         
         //Vertical movements
-        if (_kb.IsKeyDown(Keys.Q) && _kb.IsKeyDown(Keys.D)) { xSpeed = 0; line = 1; }
-        else if (_kb.IsKeyDown(Keys.Q)) { xSpeed = -spd; line = 1; }
+        if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.S)) { ySpeed = 0; line = 0; }
+        else if (_kb.IsKeyDown(Keys.Z)) { ySpeed = -spd; line = 3; }
+        else if (_kb.IsKeyDown(Keys.S)) { ySpeed = spd; line = 4; }
+        
+        // Horizontal movements
+        if (_kb.IsKeyDown(Keys.Q) && _kb.IsKeyDown(Keys.D)) { xSpeed = 0; line = 0; }
+        else if (_kb.IsKeyDown(Keys.Q)) { xSpeed = -spd; line = 2; }
         else if (_kb.IsKeyDown(Keys.D)) { xSpeed = spd; line = 1; }
 
-        //released
+        // --- Released ---
         if (_kb.IsKeyUp(Keys.Z) && _kb.IsKeyUp(Keys.S)) { ySpeed = 0; }
         if (_kb.IsKeyUp(Keys.Q) && _kb.IsKeyUp(Keys.D)) { xSpeed = 0; }
 
-        // set idle animation with line here :
-        if (_kb.IsKeyUp(Keys.Q) && _kb.IsKeyUp(Keys.D)) { line = 1; }
+        // Set idle animation
+        if (_kb.IsKeyUp(Keys.Q) && _kb.IsKeyUp(Keys.D)) { line = 0; }
     }
 }

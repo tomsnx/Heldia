@@ -20,7 +20,7 @@ public class PageGame : Page
     {
         map.Init(objMgr ,g);
 
-        player.SetScale(2);
+        player.SetScale(4);
         objMgr.Add(player, g);
     }
 

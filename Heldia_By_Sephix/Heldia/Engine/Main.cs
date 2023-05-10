@@ -28,13 +28,13 @@ public class Main : Game
 
     protected override void Initialize()
     {
+        // init graphics
+        Drawing.Initialize(this);
+        
         // Init objects
         pageMgr = new PageManager();
         pageMenu = new PageMenu(content, pageMgr);
         pageGame = new PageGame();
-        
-        // init graphics
-        Drawing.Initialize(this);
 
         // window
         IsMouseVisible = true;
