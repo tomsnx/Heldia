@@ -8,12 +8,15 @@ namespace Heldia
     {
 
         public List<Page> pages = new List<Page>();
+        public Page actualPage;
+        public Page nextPage;
 
         public int count { get { return pages.Count; } }
-        public int selected;
+        public static int selected;
 
         public void Update(GameTime gt, Main g)
         {
+            actualPage = pages[selected];
             for(int i = 0; i < count; i++)
             {
                 Page page = pages[i];
@@ -35,5 +38,9 @@ namespace Heldia
         public void Add(Page page, Main g) { pages.Add(page);  page.Init(g); }
         public void Remove(Page page) { pages.Remove(page); }
         public void Clear() { pages.Clear(); }
+        public void ChangePage(Page nextPage)
+        {
+            this.nextPage = nextPage;
+        }
     }
 }

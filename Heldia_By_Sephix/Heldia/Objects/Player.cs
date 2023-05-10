@@ -65,13 +65,13 @@ public class Player : GameObject
                 continue;
             }
 
-            if ((this.xSpeed > 0 && this.isTouchingLeft(obj)) || 
-                 (this.xSpeed < 0 && this.isTouchingRight(obj)))
+            if ((this.xSpeed > 0 && this.IsTouchingLeft(obj)) || 
+                 (this.xSpeed < 0 && this.IsTouchingRight(obj)))
             {
                 this.xSpeed = 0;
             }
-            if ((this.ySpeed > 0 && this.isTouchingTop(obj)) || 
-                (this.ySpeed < 0 && this.isTouchingBottom(obj)))
+            if ((this.ySpeed > 0 && this.IsTouchingTop(obj)) || 
+                (this.ySpeed < 0 && this.IsTouchingBottom(obj)))
             {
                 this.ySpeed = 0;
             }

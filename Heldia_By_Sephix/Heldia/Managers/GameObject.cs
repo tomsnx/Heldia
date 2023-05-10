@@ -52,7 +52,7 @@ public abstract class GameObject
     public abstract void Update(GameTime gt, Main g, List<GameObject> objects);
     public abstract void Draw(Main g);
 
-    protected bool isTouchingLeft(GameObject obj)
+    protected bool IsTouchingLeft(GameObject obj)
     {
         return this.bounds.Right + this.xSpeed > obj.bounds.Left &&
                this.bounds.Left < obj.bounds.Left &&
@@ -60,7 +60,7 @@ public abstract class GameObject
                this.bounds.Top < obj.bounds.Bottom;
     }
 
-    protected bool isTouchingRight(GameObject obj)
+    protected bool IsTouchingRight(GameObject obj)
     {
         return this.bounds.Left + this.xSpeed < obj.bounds.Right &&
                this.bounds.Right > obj.bounds.Right &&
@@ -68,7 +68,7 @@ public abstract class GameObject
                this.bounds.Top < obj.bounds.Bottom;
     }
 
-    protected bool isTouchingTop(GameObject obj)
+    protected bool IsTouchingTop(GameObject obj)
     {
         return this.bounds.Bottom + this.ySpeed > obj.bounds.Top &&
                this.bounds.Top < obj.bounds.Top &&
@@ -76,7 +76,7 @@ public abstract class GameObject
                this.bounds.Left < obj.bounds.Right;
     }
 
-    protected bool isTouchingBottom(GameObject obj)
+    protected bool IsTouchingBottom(GameObject obj)
     {
         return this.bounds.Top + this.ySpeed < obj.bounds.Bottom &&
                this.bounds.Bottom > obj.bounds.Bottom &&

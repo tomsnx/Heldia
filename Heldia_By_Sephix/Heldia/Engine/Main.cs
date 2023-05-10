@@ -15,8 +15,9 @@ public class Main : Game
     public static ContentManager content;
 
     // page
-    public PageManager pageMgr = new PageManager();
-    public PageGame pageGame = new PageGame();
+    public PageManager pageMgr;
+    public PageMenu pageMenu;
+    public PageGame pageGame;
 
     public Main()
     {
@@ -27,6 +28,11 @@ public class Main : Game
 
     protected override void Initialize()
     {
+        // Init objects
+        pageMgr = new PageManager();
+        pageMenu = new PageMenu(content, pageMgr);
+        pageGame = new PageGame();
+        
         // init graphics
         Drawing.Initialize(this);
 
@@ -36,8 +42,9 @@ public class Main : Game
         Window.Title = Drawing.title;
 
         // init pages
+        pageMgr.Add(pageMenu, this);
         pageMgr.Add(pageGame, this);
-        pageMgr.Set(pageGame);
+        pageMgr.Set(pageMenu);
         base.Initialize();
     }
 
@@ -50,12 +57,18 @@ public class Main : Game
     // Loading Content Method
     protected override void UnloadContent()
     {
-
+        
     }
 
     // Updating Method
     protected override void Update(GameTime gameTime)
     {
+        if (pageMgr.nextPage != null)
+        {
+            pageMgr.Set(pageMgr.nextPage);
+            pageMgr.nextPage = null;
+        }
+        
         //update pages
         pageMgr.Update(gameTime, this);
 

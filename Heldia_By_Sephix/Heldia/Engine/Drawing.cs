@@ -57,25 +57,40 @@ namespace Heldia
             }
         }
 
-        public static void FillRect(Rectangle bounds, Color col, float depth, Main g)
+        public static void FillRect(Rectangle bounds, Color color, float depth, Main g)
         {
             if(rect == null) { rect = new Texture2D(g.GraphicsDevice, 1, 1); }
             rect.SetData(new[] { Color.White });
-            spriteBatch.Draw(rect, bounds, null, col, 0, new Vector2(0, 0), SpriteEffects.None, depth);
+            spriteBatch.Draw(rect, bounds, null, color, 0, new Vector2(0, 0), SpriteEffects.None, depth);
+        }
+        
+        public static void FillRect(Rectangle bounds, Color color, float depth, SpriteFont font, Color textColor, String text, Main g)
+        {
+            if(rect == null) { rect = new Texture2D(g.GraphicsDevice, 1, 1); }
+            rect.SetData(new[] { Color.White });
+            
+            Vector2 textSize = font.MeasureString(text);
+            Vector2 textPosition = new Vector2(
+                bounds.Center.X - textSize.X / 2,
+                bounds.Center.Y - textSize.Y / 2
+            );
+            
+            spriteBatch.Draw(rect, bounds, null, color, 0, new Vector2(0, 0), SpriteEffects.None, depth);
+            spriteBatch.DrawString(font, text, textPosition, textColor);
         }
 
-        public static void FillRect(Texture2D texture, Rectangle bounds,Color col, float depth, Main g)
+        public static void FillRect(Texture2D texture, Rectangle bounds,Color color, float depth, Main g)
         {
             if (rect == null) { rect = new Texture2D(g.GraphicsDevice, 1, 1); }
             rect.SetData(new[] { Color.White });
-            spriteBatch.Draw(texture, bounds, null, col, 0, new Vector2(0, 0), SpriteEffects.None, depth);
+            spriteBatch.Draw(texture, bounds, null, color, 0, new Vector2(0, 0), SpriteEffects.None, depth);
         }
 
-        public static void FillRect(Texture2D texture, Rectangle devideSprite,Rectangle bounds, Color col, float depth, Main g)
+        public static void FillRect(Texture2D texture, Rectangle devideSprite, Rectangle bounds, Color color, float depth, Main g)
         {
             if (rect == null) { rect = new Texture2D(g.GraphicsDevice, 1, 1); }
             rect.SetData(new[] { Color.White });
-            spriteBatch.Draw(texture, bounds, devideSprite, col, 0, new Vector2(0, 0), SpriteEffects.None, depth);
+            spriteBatch.Draw(texture, bounds, devideSprite, color, 0, new Vector2(0, 0), SpriteEffects.None, depth);
         }
     }
 }
