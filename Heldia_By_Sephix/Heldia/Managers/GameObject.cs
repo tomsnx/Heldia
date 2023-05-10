@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -48,8 +49,40 @@ public abstract class GameObject
     //Abstracts Methods
     public abstract void Init(Main g);
     public abstract void Destroy(Main g);
-    public abstract void Update(GameTime gt, Main g);
+    public abstract void Update(GameTime gt, Main g, List<GameObject> objects);
     public abstract void Draw(Main g);
+
+    protected bool isTouchingLeft(GameObject obj)
+    {
+        return this.bounds.Right + this.xSpeed > obj.bounds.Left &&
+               this.bounds.Left < obj.bounds.Left &&
+               this.bounds.Bottom > obj.bounds.Top &&
+               this.bounds.Top < obj.bounds.Bottom;
+    }
+
+    protected bool isTouchingRight(GameObject obj)
+    {
+        return this.bounds.Left + this.xSpeed < obj.bounds.Right &&
+               this.bounds.Right > obj.bounds.Right &&
+               this.bounds.Bottom > obj.bounds.Top &&
+               this.bounds.Top < obj.bounds.Bottom;
+    }
+
+    protected bool isTouchingTop(GameObject obj)
+    {
+        return this.bounds.Bottom + this.ySpeed > obj.bounds.Top &&
+               this.bounds.Top < obj.bounds.Top &&
+               this.bounds.Right > obj.bounds.Left &&
+               this.bounds.Left < obj.bounds.Right;
+    }
+
+    protected bool isTouchingBottom(GameObject obj)
+    {
+        return this.bounds.Top + this.ySpeed < obj.bounds.Bottom &&
+               this.bounds.Bottom > obj.bounds.Bottom &&
+               this.bounds.Right > obj.bounds.Left &&
+               this.bounds.Left < obj.bounds.Right;
+    }
 
     //Sets
     public void SetPosition (float x, float y) { this.x = x; this.y = y; }

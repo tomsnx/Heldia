@@ -107,11 +107,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/sephix/Desktop/Heldia/Heldia_By_Sephix/Heldia/Heldia.csproj",
+      "projectUniqueName": "/Users/sephix/Documents/Dev/C#/Heldia/Heldia_By_Sephix/Heldia/Heldia.csproj",
       "projectName": "Heldia",
-      "projectPath": "/Users/sephix/Desktop/Heldia/Heldia_By_Sephix/Heldia/Heldia.csproj",
+      "projectPath": "/Users/sephix/Documents/Dev/C#/Heldia/Heldia_By_Sephix/Heldia/Heldia.csproj",
       "packagesPath": "/Users/sephix/.nuget/packages/",
-      "outputPath": "/Users/sephix/Desktop/Heldia/Heldia_By_Sephix/Heldia/obj/",
+      "outputPath": "/Users/sephix/Documents/Dev/C#/Heldia/Heldia_By_Sephix/Heldia/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/sephix/.nuget/NuGet/NuGet.Config"
@@ -161,15 +161,15 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[6.0.13, 6.0.13]"
+            "version": "[6.0.15, 6.0.15]"
           },
           {
             "name": "Microsoft.NETCore.App.Host.osx-x64",
-            "version": "[6.0.13, 6.0.13]"
+            "version": "[6.0.15, 6.0.15]"
           },
           {
             "name": "Microsoft.NETCore.App.Ref",
-            "version": "[6.0.13, 6.0.13]"
+            "version": "[6.0.15, 6.0.15]"
           }
         ],
         "frameworkReferences": {
@@ -177,7 +177,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/x64/sdk/7.0.102/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/x64/sdk/7.0.202/RuntimeIdentifierGraph.json"
       }
     }
   }

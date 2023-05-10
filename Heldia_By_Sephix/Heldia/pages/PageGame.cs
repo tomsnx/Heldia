@@ -7,7 +7,7 @@ public class PageGame : Page
 {
     public ObjectManager objMgr = new ObjectManager();
     public Map map = new Map(2);
-    public Player player = new Player(150, 150);
+    public Player player = new Player(-100, -100);
 
     public Camera cam = new Camera(new Vector2(0, 0));
 

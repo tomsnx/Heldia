@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -15,6 +16,8 @@ public class Player : GameObject
 
     // speeds
     public float walkSpeed = 350f;
+    public const float WalkSpeedSprint = 700f;
+    private const float DiagonalDivide = 1.55f;
 
     // sprite
     private SpriteSheets _sprite;
@@ -32,7 +35,7 @@ public class Player : GameObject
     // init the started animation
     public static int column = 8; // Started to count on column 0
     public static int line = 1; // Started on line 0 but here is useless
-    
+
     public Player(int x, int y) : base(x, y, playerWidth, playerHeight, ObjectID.Player)
     {
         
@@ -48,13 +51,32 @@ public class Player : GameObject
         
     }
 
-    public override void Update(GameTime gt, Main g)
+    public override void Update(GameTime gt, Main g, List<GameObject> objects)
     {
         // input
         _kb = Keyboard.GetState();
         MovementInput(g);
 
         // move
+        foreach (var obj in objects)
+        {
+            if (obj == this || obj.id == 2)
+            {
+                continue;
+            }
+
+            if ((this.xSpeed > 0 && this.isTouchingLeft(obj)) || 
+                 (this.xSpeed < 0 && this.isTouchingRight(obj)))
+            {
+                this.xSpeed = 0;
+            }
+            if ((this.ySpeed > 0 && this.isTouchingTop(obj)) || 
+                (this.ySpeed < 0 && this.isTouchingBottom(obj)))
+            {
+                this.ySpeed = 0;
+            }
+        }
+        
         x += xSpeed;
         y += ySpeed;
 
@@ -72,13 +94,33 @@ public class Player : GameObject
 
     private void MovementInput(Main g)
     {
-        float spd = walkSpeed * Drawing.delta;
+        float spd;
+        
+        //Sprint
+        if (_kb.IsKeyDown(Keys.LeftShift))
+        {
+            spd = WalkSpeedSprint * Drawing.delta;
+        }
+        else
+        {
+            spd = walkSpeed * Drawing.delta;
+        }
+
+        if (_kb.IsKeyDown(Keys.S) && _kb.IsKeyDown(Keys.D)) { spd /= DiagonalDivide; }
+        if (_kb.IsKeyDown(Keys.S) && _kb.IsKeyDown(Keys.Q)) { spd /= DiagonalDivide; }
+        if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.D)) { spd /= DiagonalDivide; }
+        if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.Q)) { spd /= DiagonalDivide; }
 
         //pressed
-        if (_kb.IsKeyDown(Keys.Z)) { ySpeed = -spd; line = 1; }
-        if (_kb.IsKeyDown(Keys.Q)) { xSpeed = -spd; line = 1; }
-        if (_kb.IsKeyDown(Keys.S)) { ySpeed = spd; line = 1; }
-        if (_kb.IsKeyDown(Keys.D)) { xSpeed = spd; line = 1; }
+        // Horizontal movements
+        if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.S)) { ySpeed = 0; line = 1; }
+        else if (_kb.IsKeyDown(Keys.Z)) { ySpeed = -spd; line = 1; }
+        else if (_kb.IsKeyDown(Keys.S)) { ySpeed = spd; line = 1; }
+        
+        //Vertical movements
+        if (_kb.IsKeyDown(Keys.Q) && _kb.IsKeyDown(Keys.D)) { xSpeed = 0; line = 1; }
+        else if (_kb.IsKeyDown(Keys.Q)) { xSpeed = -spd; line = 1; }
+        else if (_kb.IsKeyDown(Keys.D)) { xSpeed = spd; line = 1; }
 
         //released
         if (_kb.IsKeyUp(Keys.Z) && _kb.IsKeyUp(Keys.S)) { ySpeed = 0; }

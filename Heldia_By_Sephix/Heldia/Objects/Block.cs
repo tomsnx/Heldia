@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -26,7 +27,7 @@ namespace Heldia
             
         }
 
-        public override void Update(GameTime gt, Main g)
+        public override void Update(GameTime gt, Main g, List<GameObject> objects)
         {
             _sprite = new SpriteSheets(g, ObjectID.Block, _name);
         }

@@ -27,7 +27,7 @@ namespace Heldia
                 if (obj.rendered)
                 {
                     obj.SetBounds(obj.x, obj.y, obj.width, obj.height);
-                    obj.Update(gt, g);
+                    obj.Update(gt, g, objects);
                 }
             }
         }

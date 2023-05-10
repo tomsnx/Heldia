@@ -20,7 +20,10 @@ namespace Heldia
         public static Texture2D rect;
 
         // frametime
-        public static float fps, delta;
+        public static float delta, deltaTotal = 0;
+        public static int fps;
+        
+        private static int framerate = 0;
 
         // init
         public static void Initialize(Main g)
@@ -43,7 +46,15 @@ namespace Heldia
         public static void Update(GameTime gt, Main g)
         {
             delta = (float)gt.ElapsedGameTime.TotalSeconds;
-            fps = (float)(1 / delta);
+            framerate++;
+            deltaTotal += delta;
+
+            if (deltaTotal >= 1)
+            {
+                fps = (int)(framerate / deltaTotal);
+                framerate = 0;
+                deltaTotal = 0;
+            }
         }
 
         public static void FillRect(Rectangle bounds, Color col, float depth, Main g)
