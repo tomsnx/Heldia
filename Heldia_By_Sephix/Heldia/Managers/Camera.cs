@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Heldia;
+namespace Heldia.Managers;
 public class Camera
 {
     // Properties
@@ -18,8 +18,8 @@ public class Camera
         float d = delay * Drawing.delta;
 
         // Move
-        position.X += ((pos.X - position.X) - Drawing.width / 2) * d;
-        position.Y += ((pos.Y - position.Y) - Drawing.height / 2) * d;
+        position.X += ((pos.X - position.X) - (float)Drawing.width / 2) * d;
+        position.Y += ((pos.Y - position.Y) - (float)Drawing.height / 2) * d;
 
         transform = Matrix.CreateTranslation((int)-position.X, -position.Y, 0);
     }

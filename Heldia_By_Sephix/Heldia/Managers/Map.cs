@@ -1,6 +1,6 @@
-using System;
+using Heldia.Objects;
 
-namespace Heldia;
+namespace Heldia.Managers;
 
 public class Map
 {
@@ -36,22 +36,22 @@ public class Map
             for (int column = 0; column < _map.GetLength(1); column++)
             {
                 // Verify if the number (which is in array) are 
-                if ((ObjectID.e_ObjectId)_map[line, column] == ObjectID.e_ObjectId.Grass01)
+                if ((ObjectId.e_ObjectId)_map[line, column] == ObjectId.e_ObjectId.Grass01)
                 {
                     Grass01 grass = new Grass01(_tileSize * _mapScale * column, _tileSize * _mapScale * line);
                     grass.SetScale(_mapScale);
                     objMgr.Add(grass, g);
-                } else if ((ObjectID.e_ObjectId)_map[line, column] == ObjectID.e_ObjectId.Grass02)
+                } else if ((ObjectId.e_ObjectId)_map[line, column] == ObjectId.e_ObjectId.Grass02)
                 {
                     Grass02 grass = new Grass02(_tileSize * _mapScale * column, _tileSize * _mapScale * line);
                     grass.SetScale(_mapScale);
                     objMgr.Add(grass, g);
-                } else if ((ObjectID.e_ObjectId)_map[line, column] == ObjectID.e_ObjectId.Block)
+                } else if ((ObjectId.e_ObjectId)_map[line, column] == ObjectId.e_ObjectId.Block)
                 {
                     Block block = new Block(_tileSize * _mapScale * column, _tileSize * _mapScale * line);
                     block.SetScale(_mapScale);
                     objMgr.Add(block, g);
-                } else if ((ObjectID.e_ObjectId)_map[line, column] == ObjectID.e_ObjectId.Tree)
+                } else if ((ObjectId.e_ObjectId)_map[line, column] == ObjectId.e_ObjectId.Tree)
                 {
                     Tree tree = new Tree(_tileSize * _mapScale * column, _tileSize * _mapScale * line);
                     tree.SetScale(_mapScale);

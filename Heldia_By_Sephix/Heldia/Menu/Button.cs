@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Heldia.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -13,6 +14,7 @@ public class Button : GameObject
     // Button Click Event
     public event EventHandler Click;
 
+    // TODO: Mettre du text dans les boutons
     /*private String text;
     private SpriteFont font;
     private Color textColor;*/

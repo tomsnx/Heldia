@@ -1,13 +1,13 @@
-﻿namespace Heldia;
-public static class ObjectID
+﻿namespace Heldia.Objects;
+public static class ObjectId
 {
-    public enum e_ObjectId : int
+    public enum e_ObjectId // Int by default
     {
-        Player = ObjectID.Player,
-        Block = ObjectID.Block,
-        Tree = ObjectID.Tree,
-        Grass01 = ObjectID.Grass01,
-        Grass02 = ObjectID.Grass02
+        Player = ObjectId.Player,
+        Block = ObjectId.Block,
+        Tree = ObjectId.Tree,
+        Grass01 = ObjectId.Grass01,
+        Grass02 = ObjectId.Grass02
     }
     
     public const int Player = 0;

@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Heldia.Objects;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
-namespace Heldia;
+namespace Heldia.Engine;
 class Animation
 {
     private Vector2 _dims;
@@ -13,9 +12,10 @@ class Animation
 
     public Rectangle rect;
 
+    // Constructor
     public Animation() { }
 
-    // get
+    // Get
     public void GetAnimRect(int dimsx, int dimsy, GameTime gt)
     {
         _dims = new Vector2(dimsx, dimsy);

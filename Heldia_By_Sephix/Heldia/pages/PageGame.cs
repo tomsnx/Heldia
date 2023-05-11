@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Heldia.Managers;
+using Heldia.Objects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Heldia;
+namespace Heldia.Pages;
 public class PageGame : Page
 {
     public ObjectManager objMgr = new ObjectManager();
@@ -11,7 +12,7 @@ public class PageGame : Page
 
     public Camera cam = new Camera(new Vector2(0, 0));
 
-    public PageGame() : base(PageID.game)
+    public PageGame() : base(PageId.Game)
     {
         
     }

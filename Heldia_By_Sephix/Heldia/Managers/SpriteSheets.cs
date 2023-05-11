@@ -1,9 +1,7 @@
-﻿using System;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Heldia;
+namespace Heldia.Managers;
 public class SpriteSheets
 {
     // texture path

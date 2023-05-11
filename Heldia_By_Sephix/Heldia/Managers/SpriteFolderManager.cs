@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Heldia.Objects;
 
-namespace Heldia;
+namespace Heldia.Managers;
 public class SpriteFolderManager
 {
-    enum e_IdFile : int
+    enum e_IdFile // Int by default
     {
-        Characters = ObjectID.Player,
-        Block = ObjectID.Block,
-        Tree = ObjectID.Tree
+        Characters = ObjectId.Player,
+        Block = ObjectId.Block,
+        Tree = ObjectId.Tree
     }
 
     private e_IdFile _id;
@@ -19,7 +17,7 @@ public class SpriteFolderManager
     {
         _id = (e_IdFile)id;
 
-        foreach (var item in ObjectID.GrassTab)
+        foreach (var item in ObjectId.GrassTab)
         {
             if (id == item)
             {

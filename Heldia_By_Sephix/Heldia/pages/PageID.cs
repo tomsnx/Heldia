@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Heldia
+﻿
+namespace Heldia.Pages;
+public static class PageId
 {
-    public static class PageID
-    {
 
-        public const int game = 0;
-        public const int menu = 1;
+    public const int Game = 0;
+    public const int Menu = 1;
 
-    }
 }

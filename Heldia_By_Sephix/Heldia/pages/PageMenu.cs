@@ -1,62 +1,61 @@
 using System;
 using System.Collections.Generic;
-using System.Net.Mime;
+using Heldia.Managers;
 using Heldia.Menu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 
-namespace Heldia;
+namespace Heldia.Pages;
 
 public class PageMenu : Page
 {
     // Main
-    private Main g;
+    private Main _g;
     
     // Managers
-    private PageManager pageMgr;
+    private PageManager _pageMgr;
     private ContentManager _content;
     public ObjectManager objMgr;
 
     // GameObject List (here : buttons...)
     private List<GameObject> _objectsList;
-    
-    //private SpriteFont ubuntu;
-    
+
     //Buttons sizes
-    private static float buttonWidth = Drawing.width * 0.25f;
-    private static float buttonHeight = Drawing.height * 0.10f;
-    
+    private static float _buttonWidth = Drawing.width * 0.30f;
+    private static float _buttonHeight = Drawing.height * 0.08f;
+
     //Buttons positions in the screen
-    private static  float middleScreenHeight = Drawing.height / 2 - buttonHeight / 2;
-    private static  float middleScreenWidth = Drawing.width / 2 - buttonWidth / 2;
+    private static  float _middleScreenHeight = (float)Drawing.height / 2 - _buttonHeight / 2;
+    private static  float _middleScreenWidth = (float)Drawing.width / 2 - _buttonWidth / 2;
+    
+    private static float _spacingBetween = Drawing.height * 0.01f;
+    private static float _yPositionButtonCenter = _middleScreenHeight + Drawing.height * 0.15f;
 
     // Constructor
-    public PageMenu(ContentManager content, PageManager pageMgr) : base(PageID.menu)
+    public PageMenu(ContentManager content, PageManager pageMgr) : base(PageId.Menu)
     {
         _content = content;
-        this.pageMgr = pageMgr;
+        _pageMgr = pageMgr;
         objMgr = new ObjectManager();
-        //ubuntu = content.Load<SpriteFont>("Fonts/Ubuntu32");
 
-        var newGameButton = new Button((int)middleScreenWidth, 
-                                       (int)(middleScreenHeight - buttonHeight - 50), 
-                                       (int)buttonWidth, 
-                                       (int)buttonHeight, 
+        var newGameButton = new Button((int)_middleScreenWidth, 
+                                       (int)(_yPositionButtonCenter - _buttonHeight - _spacingBetween), 
+                                       (int)_buttonWidth, 
+                                       (int)_buttonHeight, 
                                        999);
         newGameButton.Click += newGamebutton_Click;
         
-        var loadGameButton = new Button((int)middleScreenWidth, 
-                                        (int)middleScreenHeight, 
-                                        (int)buttonWidth, 
-                                        (int)buttonHeight, 
+        var loadGameButton = new Button((int)_middleScreenWidth, 
+                                        (int)_yPositionButtonCenter, 
+                                        (int)_buttonWidth, 
+                                        (int)_buttonHeight, 
                                         999);
         loadGameButton.Click += loadGamebutton_Click;
 
-        var quitGameButton = new Button((int)middleScreenWidth, 
-                                        (int)(middleScreenHeight + buttonHeight + 50), 
-                                        (int)buttonWidth, 
-                                        (int)buttonHeight, 
+        var quitGameButton = new Button((int)_middleScreenWidth, 
+                                        (int)(_yPositionButtonCenter + _buttonHeight + _spacingBetween), 
+                                        (int)_buttonWidth, 
+                                        (int)_buttonHeight, 
                                         999);
         quitGameButton.Click += quitGamebutton_Click;
 
@@ -70,7 +69,7 @@ public class PageMenu : Page
 
     public override void Init(Main g)
     {
-        this.g = g;
+        _g = g;
         
         foreach (var obj in _objectsList)
         {
@@ -101,7 +100,7 @@ public class PageMenu : Page
     // Methods - Action on event
     private void newGamebutton_Click(object sender, EventArgs e)
     {
-        pageMgr.ChangePage(new PageGame());
+        _pageMgr.ChangePage(new PageGame());
     }
     
     private void loadGamebutton_Click(object sender, EventArgs e)
@@ -111,6 +110,6 @@ public class PageMenu : Page
     
     private void quitGamebutton_Click(object sender, EventArgs e)
     {
-        g.Exit();
+        _g.Exit();
     }
 }

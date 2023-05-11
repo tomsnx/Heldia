@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Heldia.Engine;
+using Heldia.Managers;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Heldia;
+namespace Heldia.Objects;
 
 /// <summary>
 /// Player Class which define the properties of the objects.
@@ -15,7 +15,7 @@ public class Player : GameObject
     private KeyboardState _kb;
 
     // speeds
-    public float walkSpeed = 350f;
+    public float walkSpeed = 225f;
     public const float WalkSpeedSprint = 700f;
     private const float DiagonalDivide = 1.55f;
 
@@ -34,9 +34,9 @@ public class Player : GameObject
 
     // init the started animation
     public static int column = 5; // Started at 0 so n-1 frame
-    public static int line = 0; // Started att 0
+    public static int line = 0; // Started at 0
 
-    public Player(int x, int y) : base(x, y, playerWidth, playerHeight, ObjectID.Player)
+    public Player(int x, int y) : base(x, y, playerWidth, playerHeight, ObjectId.Player)
     {
         
     }
@@ -55,7 +55,7 @@ public class Player : GameObject
     {
         // input
         _kb = Keyboard.GetState();
-        MovementInput(g);
+        MovementInput();
 
         // move
         foreach (var obj in objects)
@@ -84,7 +84,7 @@ public class Player : GameObject
         _anim.GetAnimRect(playerWidth,playerHeight, gt);
         devideSprite = _anim.rect;
         
-        _sprite = new SpriteSheets(g, ObjectID.Player, _name);
+        _sprite = new SpriteSheets(g, ObjectId.Player, _name);
     }
 
     public override void Draw(Main g)
@@ -92,7 +92,7 @@ public class Player : GameObject
         Drawing.FillRect(_sprite.GetSheet(), devideSprite, bounds, Color.White, 0, g);
     }
 
-    private void MovementInput(Main g)
+    private void MovementInput()
     {
         float spd;
         
@@ -119,13 +119,11 @@ public class Player : GameObject
         else if (_kb.IsKeyDown(Keys.Z)) { 
             ySpeed = -spd; 
             line = 3;
-            Console.WriteLine(line);
         }
         else if (_kb.IsKeyDown(Keys.S))
         {
             ySpeed = spd; 
             line = 4;
-            Console.WriteLine(line);
         }
         
         // Horizontal movements

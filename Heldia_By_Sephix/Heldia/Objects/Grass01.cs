@@ -1,9 +1,9 @@
-using System;
 using System.Collections.Generic;
+using Heldia.Managers;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
-namespace Heldia;
+namespace Heldia.Objects;
+
 public class Grass01 : GameObject
 {
     //Sprite
@@ -12,7 +12,7 @@ public class Grass01 : GameObject
     // texture name
     string _name = "grass01";
 
-    public Grass01(int x, int y) : base(x, y, 64, 64, ObjectID.Grass01)
+    public Grass01(int x, int y) : base(x, y, 64, 64, ObjectId.Grass01)
     {
 
     }
@@ -21,6 +21,7 @@ public class Grass01 : GameObject
     {
 
     }
+
     public override void Destroy(Main g)
     {
 
@@ -28,7 +29,7 @@ public class Grass01 : GameObject
 
     public override void Update(GameTime gt, Main g, List<GameObject> objects)
     {
-        _sprite = new SpriteSheets(g, ObjectID.Grass01, _name);
+        _sprite = new SpriteSheets(g, ObjectId.Grass01, _name);
     }
 
     public override void Draw(Main g)

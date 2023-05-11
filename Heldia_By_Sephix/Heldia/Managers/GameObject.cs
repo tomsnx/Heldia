@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
-
-namespace Heldia;
+namespace Heldia.Managers;
 public abstract class GameObject
 {
     //Dimensions Variables
@@ -12,9 +9,9 @@ public abstract class GameObject
     public float xSpeed, ySpeed;
     public int width, height;
 
-    public Vector2 position { get { return new Vector2(x, y); } set { x = value.X; y = value.Y; } }
-    public Vector2 speed { get { return new Vector2(xSpeed, ySpeed); } set { xSpeed = value.X; ySpeed = value.Y; } }
-    public Vector2 size { get { return new Vector2(width, height); } set { width = (int)value.X; height = (int)value.Y; } }
+    public Vector2 Position { get { return new Vector2(x, y); } set { x = value.X; y = value.Y; } }
+    public Vector2 Speed { get { return new Vector2(xSpeed, ySpeed); } set { xSpeed = value.X; ySpeed = value.Y; } }
+    public Vector2 Size { get { return new Vector2(width, height); } set { width = (int)value.X; height = (int)value.Y; } }
     public Rectangle bounds;
     public Rectangle devideSprite;
 
@@ -93,6 +90,6 @@ public abstract class GameObject
 
     //gets
     public int GetId() { return id; }
-    public float DistanceTo(Vector2 pos) { return Vector2.Distance(position, pos); }
-    public Vector2 GetPositionCentered() { return new Vector2(x + (width / 2), y + (height / 2)); }
+    public float DistanceTo(Vector2 pos) { return Vector2.Distance(Position, pos); }
+    public Vector2 GetPositionCentered() { return new Vector2(x + ((float)width / 2), y + ((float)height / 2)); }
 }
