@@ -33,8 +33,8 @@ public class Player : GameObject
     public static int playerHeight = 32;
 
     // init the started animation
-    public static int column = 6; // Started to count on column 0
-    public static int line = 0; // Started on line 0 but here is useless
+    public static int column = 5; // Started at 0 so n-1 frame
+    public static int line = 0; // Started att 0
 
     public Player(int x, int y) : base(x, y, playerWidth, playerHeight, ObjectID.Player)
     {
@@ -116,8 +116,17 @@ public class Player : GameObject
         
         //Vertical movements
         if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.S)) { ySpeed = 0; line = 0; }
-        else if (_kb.IsKeyDown(Keys.Z)) { ySpeed = -spd; line = 3; }
-        else if (_kb.IsKeyDown(Keys.S)) { ySpeed = spd; line = 4; }
+        else if (_kb.IsKeyDown(Keys.Z)) { 
+            ySpeed = -spd; 
+            line = 3;
+            Console.WriteLine(line);
+        }
+        else if (_kb.IsKeyDown(Keys.S))
+        {
+            ySpeed = spd; 
+            line = 4;
+            Console.WriteLine(line);
+        }
         
         // Horizontal movements
         if (_kb.IsKeyDown(Keys.Q) && _kb.IsKeyDown(Keys.D)) { xSpeed = 0; line = 0; }
@@ -129,6 +138,10 @@ public class Player : GameObject
         if (_kb.IsKeyUp(Keys.Q) && _kb.IsKeyUp(Keys.D)) { xSpeed = 0; }
 
         // Set idle animation
-        if (_kb.IsKeyUp(Keys.Q) && _kb.IsKeyUp(Keys.D)) { line = 0; }
+        if (_kb.IsKeyUp(Keys.Q) && _kb.IsKeyUp(Keys.D) &&
+            !_kb.IsKeyDown(Keys.Z) && !_kb.IsKeyDown(Keys.S))
+        {
+            line = 0;
+        }
     }
 }
