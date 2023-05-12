@@ -7,7 +7,9 @@ public class SpriteFolderManager
     {
         Characters = ObjectId.Player,
         Block = ObjectId.Block,
-        Tree = ObjectId.Tree
+        Tree = ObjectId.Tree,
+        Grass = ObjectId.Grass,
+        BaseGrass = ObjectId.BaseGrass
     }
 
     private e_IdFile _id;
@@ -17,24 +19,16 @@ public class SpriteFolderManager
     {
         _id = (e_IdFile)id;
 
-        foreach (var item in ObjectId.GrassTab)
-        {
-            if (id == item)
-            {
-                return "world";
-            }
-        }
-
         //determine the folder of the texture
         if (_id == e_IdFile.Characters)
         {
             return "characters";
         }
-        else if (_id == e_IdFile.Tree)
+        else if (_id == e_IdFile.Grass)
         {
             return "world";
         }
-        else if (_id == e_IdFile.Block)
+        else if (_id == e_IdFile.BaseGrass)
         {
             return "world";
         }

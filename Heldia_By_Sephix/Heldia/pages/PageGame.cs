@@ -1,4 +1,6 @@
-﻿using Heldia.Managers;
+﻿using System;
+using Heldia.Engine;
+using Heldia.Managers;
 using Heldia.Objects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,15 +8,18 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Heldia.Pages;
 public class PageGame : Page
 {
-    public ObjectManager objMgr = new ObjectManager();
-    public Map map = new Map(2);
-    public Player player = new Player(-100, -100);
+    public ObjectManager objMgr;
+    public Map map;
+    public Player player;
 
-    public Camera cam = new Camera(new Vector2(0, 0));
+    public Camera cam;
 
     public PageGame() : base(PageId.Game)
     {
-        
+        objMgr = new ObjectManager();
+        map = new Map();
+        player = new Player(-100, -100);
+        cam = new Camera(new Vector2(0, 0));
     }
 
     public override void Init(Main g)
@@ -38,12 +43,17 @@ public class PageGame : Page
         g.GraphicsDevice.Clear(Color.Green);
 
         // begin
-        Drawing.spriteBatch.Begin(transformMatrix: cam.transform, samplerState: SamplerState.PointClamp);
+        Drawing.spriteBatch.Begin(transformMatrix: cam.Transform, samplerState: SamplerState.PointClamp);
 
         //objs
         objMgr.Draw(g);
 
         // end
         Drawing.spriteBatch.End();
+    }
+
+    public override void Destroy(Main g)
+    {
+        
     }
 }

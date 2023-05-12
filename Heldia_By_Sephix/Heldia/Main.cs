@@ -1,4 +1,6 @@
-﻿using Heldia.Managers;
+﻿using System;
+using Heldia.Engine;
+using Heldia.Managers;
 using Heldia.Pages;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -23,59 +25,52 @@ public class Main : Game
 
     protected override void Initialize()
     {
+        Console.WriteLine("Init");
+        
         // init graphics
         Drawing.Initialize(this);
         
         // Init objects
         pageMgr = new PageManager();
-        pageMenu = new PageMenu(content, pageMgr);
+        pageMenu = new PageMenu(content, pageMgr, this);
         pageGame = new PageGame();
 
         // window
         IsMouseVisible = true;
         IsFixedTimeStep = false;
-        Window.Title = Drawing.title;
-
+        Window.Title = Drawing.Title;
+        
+        base.Initialize();
+    }
+    
+    protected override void LoadContent()
+    {
+        Console.WriteLine("Load Content");
+        
         // init pages
         pageMgr.Add(pageMenu, this);
         pageMgr.Add(pageGame, this);
         pageMgr.Set(pageMenu);
-        base.Initialize();
-    }
-
-    // Loading Content Method
-    protected override void LoadContent()
-    {
-
     }
     
-    // Loading Content Method
     protected override void UnloadContent()
     {
-        
+        Console.WriteLine("Unload Content");
     }
-
-    // Updating Method
+    
     protected override void Update(GameTime gameTime)
     {
-        if (pageMgr.nextPage != null)
-        {
-            pageMgr.Set(pageMgr.nextPage);
-            pageMgr.nextPage = null;
-        }
-        
         //update pages
         pageMgr.Update(gameTime, this);
 
         // update drawing
         Drawing.Update(gameTime, this);
-        Window.Title = "FPS : " + Drawing.fps.ToString();
+        Window.Title = "FPS : " + Drawing.fps;
 
         // update base
         base.Update(gameTime);
     }
-
-    // Drawing Method
+    
     protected override void Draw(GameTime gameTime)
     {
         pageMgr.Draw(this);

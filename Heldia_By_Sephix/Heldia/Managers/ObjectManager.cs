@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Heldia.Menu;
 using Microsoft.Xna.Framework;
 
 namespace Heldia.Managers;
@@ -43,10 +44,19 @@ public class ObjectManager
         }
     }
 
+    public void Destroy(Main g)
+    {
+        for (int i = 0; i < objects.Count; i++)
+        {
+            objects.Remove(objects[i]);
+        }
+    }
+
     //Sets
     public void Add(GameObject obj, Main g) { objects.Add(obj); obj.Init(g); }
-    public virtual void Remove(GameObject obj, Main g) { obj.Destroy(g); objects.Remove(obj); }
-    public virtual void Remove(int index, Main g) { objects[index].Destroy(g);  objects.Remove(objects[index]); }
+    public virtual bool Remove(GameObject obj, Main g) { obj.Destroy(g); return objects.Remove(obj); }
+    public virtual bool Remove(Button obj, Main g) { obj.Destroy(g); return objects.Remove(obj); }
+    public virtual bool Remove(int index, Main g) { objects[index].Destroy(g);  return objects.Remove(objects[index]); }
     public void Clear() { objects.Clear(); }
 
     //Gets

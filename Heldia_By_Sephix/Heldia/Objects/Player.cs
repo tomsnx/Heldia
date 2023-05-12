@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Heldia.Engine;
 using Heldia.Managers;
 using Microsoft.Xna.Framework;
@@ -89,7 +90,7 @@ public class Player : GameObject
 
     public override void Draw(Main g)
     {
-        Drawing.FillRect(_sprite.GetSheet(), devideSprite, bounds, Color.White, 0, g);
+        Drawing.FillRect(_sprite.GetSheet(), devideSprite, bounds, Color.White, 1, g);
     }
 
     private void MovementInput()
