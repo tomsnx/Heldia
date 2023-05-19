@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Heldia.Engine;
 public static class Drawing
@@ -9,12 +10,17 @@ public static class Drawing
     public static GraphicsDeviceManager graphics;
     public static SpriteBatch spriteBatch;
 
+    // Controls
+    private static KeyboardState _kb;
+
+    public static bool IsFullScreen { get; set; } = false;
+    
     // window
     public static int Width { get; private set; }
     public static int Height { get; private set; }
     public static string Title { get; set; } = "Heldia";
     public static bool Vsync { get; set; } = false;
-    public static int fps { get; set; }
+    public static int Fps { get; set; }
 
     // dummy tex
     public static Texture2D rect;
@@ -28,12 +34,13 @@ public static class Drawing
     public static void Initialize(Main g)
     {
         // set screen size
-        Width = 1080;
+        Width = 1280;
         Height = 720;
 
         // init graphics
         graphics.PreferredBackBufferWidth = Width;
         graphics.PreferredBackBufferHeight = Height;
+        //graphics.IsFullScreen = true;
         graphics.SynchronizeWithVerticalRetrace = Vsync;
         graphics.ApplyChanges();
 
@@ -44,13 +51,16 @@ public static class Drawing
     // update
     public static void Update(GameTime gt, Main g)
     {
+
+        changeMode();
+
         delta = (float)gt.ElapsedGameTime.TotalSeconds;
         _framerate++;
         deltaTotal += delta;
 
         if (deltaTotal >= 1)
         {
-            fps = (int)(_framerate / deltaTotal);
+            Fps = (int)(_framerate / deltaTotal);
             _framerate = 0;
             deltaTotal = 0;
         }
@@ -90,5 +100,13 @@ public static class Drawing
         if (rect == null) { rect = new Texture2D(g.GraphicsDevice, 1, 1); }
         rect.SetData(new[] { Color.White });
         spriteBatch.Draw(texture, bounds, devideSprite, color, 0, new Vector2(0, 0), SpriteEffects.None, depth);
+    }
+
+    public static void changeMode()
+    {
+        /*if (_kb.IsKeyDown(Keys.F) && previousKeyboardState.IsKeyUp(Keys.F))
+        {
+            IsFullScreen = !IsFullScreen;
+        }*/
     }
 }

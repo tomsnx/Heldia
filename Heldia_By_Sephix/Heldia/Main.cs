@@ -4,6 +4,7 @@ using Heldia.Managers;
 using Heldia.Pages;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Input;
 
 namespace Heldia;
 
@@ -65,7 +66,7 @@ public class Main : Game
 
         // update drawing
         Drawing.Update(gameTime, this);
-        Window.Title = "FPS : " + Drawing.fps;
+        Window.Title = "FPS : " + Drawing.Fps;
 
         // update base
         base.Update(gameTime);

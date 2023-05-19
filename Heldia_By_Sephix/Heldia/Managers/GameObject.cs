@@ -13,6 +13,7 @@ public abstract class GameObject
     public Vector2 Speed { get { return new Vector2(xSpeed, ySpeed); } set { xSpeed = value.X; ySpeed = value.Y; } }
     public Vector2 Size { get { return new Vector2(width, height); } set { width = (int)value.X; height = (int)value.Y; } }
     public Rectangle bounds;
+    public Rectangle collisionBounds;
     public Rectangle devideSprite;
 
     //Properties
@@ -32,6 +33,7 @@ public abstract class GameObject
         this.width = w;
         this.height = h;
         this.bounds = new Rectangle(x, y, width, height);
+        this.collisionBounds = bounds;
         this.devideSprite = new Rectangle(0, 0, 0, 0);
 
         //Properties
@@ -51,34 +53,34 @@ public abstract class GameObject
 
     protected bool IsTouchingLeft(GameObject obj)
     {
-        return this.bounds.Right + this.xSpeed > obj.bounds.Left &&
-               this.bounds.Left < obj.bounds.Left &&
-               this.bounds.Bottom > obj.bounds.Top &&
-               this.bounds.Top < obj.bounds.Bottom;
+        return this.collisionBounds.Right + this.xSpeed > obj.bounds.Left &&
+               this.collisionBounds.Left < obj.bounds.Left &&
+               this.collisionBounds.Bottom > obj.bounds.Top &&
+               this.collisionBounds.Top < obj.bounds.Bottom;
     }
 
     protected bool IsTouchingRight(GameObject obj)
     {
-        return this.bounds.Left + this.xSpeed < obj.bounds.Right &&
-               this.bounds.Right > obj.bounds.Right &&
-               this.bounds.Bottom > obj.bounds.Top &&
-               this.bounds.Top < obj.bounds.Bottom;
+        return this.collisionBounds.Left + this.xSpeed < obj.bounds.Right &&
+               this.collisionBounds.Right > obj.bounds.Right &&
+               this.collisionBounds.Bottom > obj.bounds.Top &&
+               this.collisionBounds.Top < obj.bounds.Bottom;
     }
 
     protected bool IsTouchingTop(GameObject obj)
     {
-        return this.bounds.Bottom + this.ySpeed > obj.bounds.Top &&
-               this.bounds.Top < obj.bounds.Top &&
-               this.bounds.Right > obj.bounds.Left &&
-               this.bounds.Left < obj.bounds.Right;
+        return this.collisionBounds.Bottom + this.ySpeed > obj.bounds.Top &&
+               this.collisionBounds.Top < obj.bounds.Top &&
+               this.collisionBounds.Right > obj.bounds.Left &&
+               this.collisionBounds.Left < obj.bounds.Right;
     }
 
     protected bool IsTouchingBottom(GameObject obj)
     {
-        return this.bounds.Top + this.ySpeed < obj.bounds.Bottom &&
-               this.bounds.Bottom > obj.bounds.Bottom &&
-               this.bounds.Right > obj.bounds.Left &&
-               this.bounds.Left < obj.bounds.Right;
+        return this.collisionBounds.Top + this.ySpeed < obj.bounds.Bottom &&
+               this.collisionBounds.Bottom > obj.bounds.Bottom &&
+               this.collisionBounds.Right > obj.bounds.Left &&
+               this.collisionBounds.Left < obj.bounds.Right;
     }
 
     //Sets
@@ -87,6 +89,7 @@ public abstract class GameObject
     public void SetSize (int w, int h) { this.width = w; this.height = h; }
     public void SetScale(float s) { this.width = (int)(this.width * s); this.height = (int)(this.height * s); }
     public void SetBounds(float x, float y, int w, int h) { this.bounds = new Rectangle((int)x, (int)y, w, h); }
+    public void SetCollisionBounds(float x, float y, int w, int h) { this.collisionBounds = new Rectangle((int)x, (int)y, w, h); }
 
     //gets
     public int GetId() { return id; }
