@@ -13,10 +13,11 @@ public class Button : GameObject
     // Button Texture
     private Texture2D texture;
 
+    private Vector2 _textSize;
+    private Vector2 _textPosition;
+
     // Button Click Event
     public event EventHandler Click;
-
-    private PageManager pageMgr;
 
     // TODO: Mettre du text dans les boutons
     /*private String text;
@@ -32,19 +33,20 @@ public class Button : GameObject
     }*/
     
     // Constructor
-    public Button(int x, int y, int w, int h, int id, PageManager pageMgr) : base(x, y, w, h, id)
+    public Button(int x, int y, int w, int h, int id, String text) : base(x, y, w, h, id)
     {
         visible = true;
-        this.pageMgr = pageMgr;
-        /*this.text = text;
-        this.font = font;
-        this.textColor = textColor;*/
+        this.text = text;
     }
     
     // Init
     public override void Init(Main g)
     {
-        // You can initialize the button here
+        _textSize = Drawing.Arial32.MeasureString(text);
+        _textPosition = new Vector2(
+            bounds.Center.X - _textSize.X / 2,
+            bounds.Center.Y - _textSize.Y / 2
+        );
     }
 
     // Destroy
@@ -83,7 +85,10 @@ public class Button : GameObject
                 color = Color.Gray;
             }
             Drawing.FillRect(bounds, color, 0, g);
-            //Drawing.FillRect(bounds, color, 0, font, textColor, text, g);
+            
+            Drawing.DrawText(_textPosition,
+                Drawing.Arial32, Color.Black, 
+                text, g);
         }
     }
 }

@@ -21,6 +21,14 @@ public static class Drawing
     public static string Title { get; set; } = "Heldia";
     public static bool Vsync { get; set; } = false;
     public static int Fps { get; set; }
+    
+    public static SpriteFont Arial32 { get; set; }
+    public static SpriteFont Ubuntu12 { get; set; }
+    public static SpriteFont Ubuntu16 { get; set; }
+    public static SpriteFont Ubuntu32 { get; set; }
+    public static SpriteFont PixExtrusion12 { get; set; }
+    public static SpriteFont PixExtrusion16 { get; set; }
+    public static SpriteFont PixExtrusion32 { get; set; }
 
     // dummy tex
     public static Texture2D rect;
@@ -43,6 +51,15 @@ public static class Drawing
         //graphics.IsFullScreen = true;
         graphics.SynchronizeWithVerticalRetrace = Vsync;
         graphics.ApplyChanges();
+        
+        // Load Fonts
+        Arial32 = g.Content.Load<SpriteFont>("fonts/Arial32");
+        Ubuntu12 = g.Content.Load<SpriteFont>("fonts/Ubuntu12");
+        Ubuntu16 = g.Content.Load<SpriteFont>("fonts/Ubuntu16");
+        Ubuntu32 = g.Content.Load<SpriteFont>("fonts/Ubuntu32");
+        PixExtrusion12 = g.Content.Load<SpriteFont>("fonts/PixExtrusion12");
+        PixExtrusion16 = g.Content.Load<SpriteFont>("fonts/PixExtrusion16");
+        PixExtrusion32 = g.Content.Load<SpriteFont>("fonts/PixExtrusion32");
 
         // init
         spriteBatch = new SpriteBatch(g.GraphicsDevice);
@@ -100,6 +117,11 @@ public static class Drawing
         if (rect == null) { rect = new Texture2D(g.GraphicsDevice, 1, 1); }
         rect.SetData(new[] { Color.White });
         spriteBatch.Draw(texture, bounds, devideSprite, color, 0, new Vector2(0, 0), SpriteEffects.None, depth);
+    }
+
+    public static void DrawText(Vector2 position, SpriteFont font, Color textColor, String text, Main g)
+    {
+        spriteBatch.DrawString(font, text, position, textColor);
     }
 
     public static void changeMode()

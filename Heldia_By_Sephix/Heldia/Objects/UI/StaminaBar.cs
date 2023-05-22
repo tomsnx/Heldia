@@ -3,6 +3,7 @@ using Heldia.Managers;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using static Heldia.Engine.GameManager;
 
 namespace Heldia.Objects.UI;
 public class StaminaBar : GameObject
@@ -32,10 +33,9 @@ public class StaminaBar : GameObject
 
     public override void Update(GameTime gt, Main g, List<GameObject> objects)
     {
-        Vector2 playerPos = _player.GetPositionCentered();
         SetBounds(x, y, barWidth, barHeight);
 
-        float staminaPercent = (float)_player.Stamina / 100;
+        float staminaPercent = (float)Instance.PlayerStamina / 100;
         _barNewWidth = (int)((barWidth - 4) * staminaPercent);
     }
 
@@ -45,6 +45,16 @@ public class StaminaBar : GameObject
         
         Drawing.FillRect(bounds, _outlineColor, 1, g);
         Drawing.FillRect(barNewRect, _inlineColor, 1, g);
+        
+        text = "" + (int)Instance.PlayerStamina;
+        Vector2 textSize = Drawing.PixExtrusion12.MeasureString(text);
+        Vector2 textPosition = new Vector2(
+            bounds.Center.X - textSize.X / 2,
+            bounds.Center.Y - textSize.Y / 2
+        );
+        Drawing.DrawText(textPosition,
+            Drawing.PixExtrusion12, Color.White, 
+            text, g);
     }
 
     public override void Destroy(Main g)

@@ -1,7 +1,11 @@
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using Heldia.Engine;
 using Heldia.Managers;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using static Heldia.Engine.GameManager;
 
 namespace Heldia.Objects.UI;
 
@@ -32,10 +36,9 @@ public class LifeBar : GameObject
 
     public override void Update(GameTime gt, Main g, List<GameObject> objects)
     {
-        Vector2 playerPos = _player.GetPositionCentered();
         SetBounds(x, y, barWidth, barHeight);
 
-        float viePercent = (float)_player.Life / 100;
+        float viePercent = (float)Instance.PlayerLife / 100;
         _barNewWidth = (int)((barWidth - 4) * viePercent);
     }
 
@@ -45,6 +48,16 @@ public class LifeBar : GameObject
         
         Drawing.FillRect(bounds, _outlineColor, 1, g);
         Drawing.FillRect(barNewRect, _inlineColor, 1, g);
+
+        text = "" + (int)Instance.PlayerLife;
+        Vector2 textSize = Drawing.PixExtrusion12.MeasureString(text);
+        Vector2 textPosition = new Vector2(
+            bounds.Center.X - textSize.X / 2,
+            bounds.Center.Y - textSize.Y / 2
+        );
+        Drawing.DrawText(textPosition,
+                         Drawing.PixExtrusion12, Color.White, 
+                         text, g);
     }
 
     public override void Destroy(Main g)

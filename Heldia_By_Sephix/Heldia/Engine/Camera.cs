@@ -1,7 +1,7 @@
 ﻿using Heldia.Engine;
 using Microsoft.Xna.Framework;
 
-namespace Heldia.Managers;
+namespace Heldia.Engine;
 public class Camera
 {
     // Properties

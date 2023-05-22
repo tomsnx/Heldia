@@ -4,7 +4,6 @@ using Heldia.Managers;
 using Heldia.Pages;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Input;
 
 namespace Heldia;
 
@@ -27,6 +26,7 @@ public class Main : Game
     protected override void Initialize()
     {
         Console.WriteLine("Init");
+        GameManager.Init();
         
         // init graphics
         Drawing.Initialize(this);
@@ -53,20 +53,23 @@ public class Main : Game
         pageMgr.Add(pageGame, this);
         pageMgr.Set(pageMenu);
     }
-    
+
     protected override void UnloadContent()
     {
         Console.WriteLine("Unload Content");
     }
-    
+
     protected override void Update(GameTime gameTime)
     {
+        // Update the clock (ElapsedTime) of the game
+        GameManager.Instance.ElapsedTimeUpdate(gameTime);
+        
         //update pages
         pageMgr.Update(gameTime, this);
 
         // update drawing
         Drawing.Update(gameTime, this);
-        Window.Title = "FPS : " + Drawing.Fps;
+        Window.Title = "Heldia";
 
         // update base
         base.Update(gameTime);

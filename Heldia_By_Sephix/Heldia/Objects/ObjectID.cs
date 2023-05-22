@@ -9,7 +9,8 @@ public static class ObjectId
         Block = ObjectId.Block,
         Tree = ObjectId.Tree,
         Grass = ObjectId.Grass,
-        BaseGrass = ObjectId.BaseGrass
+        BaseGrass = ObjectId.BaseGrass,
+        HLetter = ObjectId.HLetter
     }
     
     public const int Player = 0;
@@ -19,4 +20,5 @@ public static class ObjectId
     public const int BaseGrass = 2;
     public const int Tree = 3;
     public const int Block = 4;
+    public const int HLetter = 13;
 }

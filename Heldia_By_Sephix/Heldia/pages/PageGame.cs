@@ -4,7 +4,6 @@ using Heldia.Objects;
 using Heldia.Objects.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Overlay = Heldia.Managers.Overlay;
 
 namespace Heldia.Pages;
@@ -16,7 +15,7 @@ public class PageGame : Page
     public Map map;
     public Player player;
     
-    private Overlay _overlay;
+    private Overlay _hud;
     private LifeBar _lifeBar;
     private StaminaBar _staminaBar;
 
@@ -33,7 +32,7 @@ public class PageGame : Page
         cam = new Camera(new Vector2(0, 0));
         _lifeBar = new LifeBar(10, 10, player);
         _staminaBar = new StaminaBar(10, LifeBar.barHeight * 2, player);
-        _overlay = new Overlay(cam);
+        _hud = new Overlay(cam, player);
     }
 
     public override void Init(Main g)
@@ -45,9 +44,11 @@ public class PageGame : Page
         player.SetScale(4);
         objMgr.Add(player, g);
         
-        // UI
-        _overlay.AddUiObject(_lifeBar);
-        _overlay.AddUiObject(_staminaBar);
+        // HUD
+        _hud.AddHudObject(_lifeBar);
+        _hud.AddHudObject(_staminaBar);
+        
+        // HUD (Debug)
     }
 
     public override void Update(GameTime gt, Main g)
@@ -55,23 +56,26 @@ public class PageGame : Page
         cam.Update(player.GetPositionCentered(), g);
         player.GetPositionCentered();
         objMgr.Update(gt, g);
-        _overlay.Update(gt, g);
+        _hud.Update(gt, g);
     }
 
     public override void Draw(Main g)
     {
         // Player
         g.GraphicsDevice.Clear(_backgroundColor);
-        Drawing.spriteBatch.Begin(transformMatrix: cam.GetViewMatrix(), samplerState: SamplerState.PointClamp);
+        
+        Drawing.spriteBatch.Begin(sortMode: SpriteSortMode.FrontToBack, 
+                                  transformMatrix: cam.GetViewMatrix(), 
+                                  samplerState: SamplerState.PointClamp);
+        
         objMgr.Draw(g);
-
-        // end
+        
         Drawing.spriteBatch.End();
         
         
         // Static Object Drawing
         Drawing.spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-        _overlay.Draw(g);
+        _hud.Draw(g);
         Drawing.spriteBatch.End();
     }
 

@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Heldia.Engine;
 using Heldia.Managers;
 using Heldia.Menu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Heldia.Pages;
 
@@ -34,35 +32,37 @@ public class PageMenu : Page
     private static float _spacingBetween = Drawing.Height * 0.01f;
     private static float _yPositionButtonCenter = _middleScreenHeight + Drawing.Height * 0.15f;
 
+    private TitleMenu _titleMenu;
+
     // Constructor
     public PageMenu(ContentManager content, PageManager pageMgr, Main g) : base(PageId.Menu)
     {
         _content = content;
         _pageMgr = pageMgr;
         objMgr = new ObjectManager();
-        
-        
+        _titleMenu = new TitleMenu(Drawing.Width / 2, Drawing.Height / 2, 10, 16);
     }
 
     public override void Init(Main g)
     {
         _g = g;
         IsLoad = true;
-        
-        var newGameButton = new Button((int)_middleScreenWidth, 
-            (int)(_yPositionButtonCenter - _buttonHeight - _spacingBetween), 
-            (int)_buttonWidth, 
+        _titleMenu.Init(g);
+
+        var newGameButton = new Button((int)_middleScreenWidth,
+            (int)(_yPositionButtonCenter - _buttonHeight - _spacingBetween),
+            (int)_buttonWidth,
             (int)_buttonHeight,
             999,
-            _pageMgr);
-        newGameButton.Click += newGamebutton_Click;
+            "New Game");
+            newGameButton.Click += newGamebutton_Click;
         
         var loadGameButton = new Button((int)_middleScreenWidth, 
             (int)_yPositionButtonCenter, 
             (int)_buttonWidth, 
             (int)_buttonHeight, 
             999,
-            _pageMgr);
+            "Load Game");
         loadGameButton.Click += loadGamebutton_Click;
 
         var quitGameButton = new Button((int)_middleScreenWidth, 
@@ -70,7 +70,7 @@ public class PageMenu : Page
             (int)_buttonWidth, 
             (int)_buttonHeight, 
             999,
-            _pageMgr);
+            "Exit");
         quitGameButton.Click += quitGamebutton_Click;
         
         _objectsList = new List<GameObject>()
@@ -103,6 +103,7 @@ public class PageMenu : Page
 
             //objs
             objMgr.Draw(g);
+            _titleMenu.Draw(g);
 
             // end
             Drawing.spriteBatch.End();
