@@ -14,7 +14,7 @@ public class LifeBar : GameObject
     private Player _player;
 
     // Définir la taille initiale de la barre du joueur
-    public static int barWidth { get; set; } = 200;
+    public static int barWidth { get; set; } = (int)Instance.PlayerMaxHealth * 2;
     public static int barHeight { get; set; } = 20;
 
     private int _barNewWidth;
@@ -38,7 +38,7 @@ public class LifeBar : GameObject
     {
         SetBounds(x, y, barWidth, barHeight);
 
-        float viePercent = (float)Instance.PlayerLife / 100;
+        float viePercent = (float)Instance.PlayerHealth / Instance.PlayerMaxHealth;
         _barNewWidth = (int)((barWidth - 4) * viePercent);
     }
 
@@ -49,7 +49,7 @@ public class LifeBar : GameObject
         Drawing.FillRect(bounds, _outlineColor, 1, g);
         Drawing.FillRect(barNewRect, _inlineColor, 1, g);
 
-        text = "" + (int)Instance.PlayerLife;
+        text = "" + (int)Instance.PlayerHealth;
         Vector2 textSize = Drawing.PixExtrusion12.MeasureString(text);
         Vector2 textPosition = new Vector2(
             bounds.Center.X - textSize.X / 2,

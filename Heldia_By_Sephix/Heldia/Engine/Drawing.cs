@@ -20,6 +20,8 @@ public static class Drawing
     public static int Height { get; private set; }
     public static string Title { get; set; } = "Heldia";
     public static bool Vsync { get; set; } = false;
+
+    public static float GoalFps { get; set; } = 144;
     public static int Fps { get; set; }
     
     public static SpriteFont Arial32 { get; set; }
@@ -51,7 +53,7 @@ public static class Drawing
         //graphics.IsFullScreen = true;
         graphics.SynchronizeWithVerticalRetrace = Vsync;
         graphics.ApplyChanges();
-        
+
         // Load Fonts
         Arial32 = g.Content.Load<SpriteFont>("fonts/Arial32");
         Ubuntu12 = g.Content.Load<SpriteFont>("fonts/Ubuntu12");

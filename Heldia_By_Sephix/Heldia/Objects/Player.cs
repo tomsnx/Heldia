@@ -41,6 +41,10 @@ public class Player : GameObject
     public static int column = 5; // Started at 0 so n-1 frame
     public static int line = 0; // Started at 0
     public bool StaminaDownToZero { get; set; }
+    
+    // Timer
+    private Timer _lifeTimer;
+    private Timer _staminaTimer;
 
     public Player(int x, int y) : base(x, y, playerWidth, playerHeight, ObjectId.Player)
     {
@@ -49,17 +53,31 @@ public class Player : GameObject
         runCoef = 2f;
 
         // Life
-        Instance.PlayerLife = 100f;
-        Instance.PlayerMaxLife = 100f;
-        Instance.PlayerCoefRegenLife = 2f;
-        Instance.PlayerDelayRegenLife = 1000f;
+        Instance.PlayerMaxHealth = 100f;
+        Instance.PlayerHealth = Instance.PlayerMaxHealth;;
+        Instance.PlayerCoefRegenHealth = 0.5f;
+        Instance.PlayerDelayRegenHealth = 1f;
 
         // Stamina
-        Instance.PlayerStamina = 100f;
-        Instance.PlayerMaxStamina = 100f;
+        Instance.PlayerMaxStamina = 40f;
+        Instance.PlayerStamina = Instance.PlayerMaxStamina;
         Instance.PlayerCoefLostStamina = 0.25f;
         Instance.PlayerCoefRegenStamina = 0.5f;
-        Instance.PlayerDelayRegenStamina = 25f;
+        Instance.PlayerDelayRegenStamina = 0.02f;
+
+        
+        // Set the timers for health and stamina
+        _lifeTimer = new Timer(Instance.PlayerDelayRegenHealth, () =>
+        {
+            Instance.PlayerHealth += Instance.PlayerCoefRegenHealth;
+        }, true);
+        _lifeTimer.Active = false;
+        
+        _staminaTimer = new Timer(Instance.PlayerDelayRegenStamina, () =>
+        {
+            Instance.PlayerStamina += Instance.PlayerCoefRegenStamina;
+        }, true);
+        _staminaTimer.Active = false;
     }
 
     public override void Init(Main g)
@@ -77,6 +95,9 @@ public class Player : GameObject
 
     public override void Update(GameTime gt, Main g, List<GameObject> objects)
     {
+        _lifeTimer.Update(gt);
+        _staminaTimer.Update(gt);
+        
         // input
         _kb = Keyboard.GetState();
         _mouse = Mouse.GetState();
@@ -148,13 +169,13 @@ public class Player : GameObject
      */
     public void TakeDommage(float dommage)
     {
-        if (Instance.PlayerLife > 0f && (Instance.PlayerLife - dommage >= 0f))
+        if (Instance.PlayerHealth > 0f && (Instance.PlayerHealth - dommage) >= 0f)
         {
-            Instance.PlayerLife -= dommage;
+            Instance.PlayerHealth -= dommage;
         }
         else
         {
-            Instance.PlayerLife = 0f;
+            Instance.PlayerHealth = 0f;
         }
     }
     
@@ -210,15 +231,16 @@ public class Player : GameObject
             line = 0;
         }
     }
-
+    
     private void LifeRegeneration()
     {
-        if(Instance.PlayerLife < Instance.PlayerMaxLife)
+        if(Instance.PlayerHealth < Instance.PlayerMaxHealth)
         {
-            if(Instance.PlayerRegenLifeClock)
-            {
-                Instance.PlayerLife += Instance.PlayerCoefRegenLife;
-            }
+            _lifeTimer.Active = true;
+        }
+        else
+        {
+            _lifeTimer.Active = false;
         }
     }
 
@@ -226,10 +248,11 @@ public class Player : GameObject
     {
         if(Instance.PlayerStamina < Instance.PlayerMaxStamina)
         {
-            if(Instance.PlayerRegenStaminaClock)
-            {
-                Instance.PlayerStamina += Instance.PlayerCoefRegenStamina;
-            }
+            _staminaTimer.Active = true;
+        }
+        else
+        {
+            _staminaTimer.Active = false;
         }
     }
 }

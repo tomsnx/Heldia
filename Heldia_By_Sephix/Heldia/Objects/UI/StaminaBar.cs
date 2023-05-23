@@ -11,7 +11,7 @@ public class StaminaBar : GameObject
     private Player _player;
 
     // Définir la taille initiale de la barre du joueur
-    public static int barWidth { get; set; } = 200;
+    public static int barWidth { get; set; } = (int)Instance.PlayerMaxStamina * 2;
     public static int barHeight { get; set; } = 20;
 
     private int _barNewWidth;
@@ -35,7 +35,7 @@ public class StaminaBar : GameObject
     {
         SetBounds(x, y, barWidth, barHeight);
 
-        float staminaPercent = (float)Instance.PlayerStamina / 100;
+        float staminaPercent = (float)Instance.PlayerStamina / Instance.PlayerMaxStamina;
         _barNewWidth = (int)((barWidth - 4) * staminaPercent);
     }
 

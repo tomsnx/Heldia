@@ -4,25 +4,18 @@ using Microsoft.Xna.Framework;
 namespace Heldia.Engine;
 class Animation
 {
+    public Rectangle rect;
     private Vector2 _dims;
-
-    private float _myElapsed;
-    private float _myDelay = 100;
+    
+    private float _myDelay = 0.1f; // Seconds
     private int _myFrames = 0;
 
-    public Rectangle rect;
+    private Timer _timer;
 
     // Constructor
-    public Animation() { }
-
-    // Get
-    public void GetAnimRect(int dimsx, int dimsy, GameTime gt)
+    public Animation()
     {
-        _dims = new Vector2(dimsx, dimsy);
-
-        _myElapsed += (float)gt.ElapsedGameTime.TotalMilliseconds;
-
-        if (_myElapsed >= _myDelay)
+        _timer = new Timer(_myDelay, () =>
         {
             if (_myFrames >= Player.column)
             {
@@ -32,8 +25,15 @@ class Animation
             {
                 _myFrames++;
             }
-            _myElapsed = 0;
-        }
+        }, true);
+    }
+
+    // Get
+    public void GetAnimRect(int dimsx, int dimsy, GameTime gt)
+    {
+        _dims = new Vector2(dimsx, dimsy);
+        
+        _timer.Update(gt);
         
         rect = new Rectangle((int)_dims.X * _myFrames, (int)_dims.Y * Player.line, (int)_dims.X, (int)_dims.Y);
     }

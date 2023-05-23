@@ -11,11 +11,11 @@ public class GameManager
     public static GameManager Instance { get; private set; }
     
     // Player life
-    public float PlayerLife { get; set; }
-    public float PlayerMaxLife { get; set; }
-    public float PlayerCoefLostLife { get; set; }
-    public float PlayerCoefRegenLife { get; set; }
-    public double PlayerDelayRegenLife { get; set; }
+    public float PlayerHealth { get; set; }
+    public float PlayerMaxHealth { get; set; }
+    public float PlayerCoefLostHealth { get; set; }
+    public float PlayerCoefRegenHealth { get; set; }
+    public double PlayerDelayRegenHealth { get; set; }
     
     // Player Stamina
     public float PlayerStamina { get; set; }
@@ -23,13 +23,9 @@ public class GameManager
     public float PlayerCoefLostStamina { get; set; }
     public float PlayerCoefRegenStamina { get; set; }
     public double PlayerDelayRegenStamina { get; set; }
-
+    
     // Elapsed Time
     public double TotalGameTime { get; set; }
-    
-    // True every second
-    public bool PlayerRegenLifeClock { get; set; }
-    public bool PlayerRegenStaminaClock { get; set; }
 
     // Constructor
     private GameManager()
@@ -48,31 +44,5 @@ public class GameManager
             return;
         }
         Instance = new GameManager();
-    }
-
-    /**
-     * Calculate the time elapsed since the launch of the game 
-     */
-    public void ElapsedTimeUpdate(GameTime gt)
-    {
-        TotalGameTime = gt.TotalGameTime.TotalMilliseconds;
-
-        if (Math.Abs(TotalGameTime % PlayerDelayRegenLife) <= 1f)
-        {
-            PlayerRegenLifeClock = true;
-        }
-        else
-        {
-            PlayerRegenLifeClock = false;
-        }
-
-        if (Math.Abs(TotalGameTime % PlayerDelayRegenStamina) <= 2.5f)
-        {
-            PlayerRegenStaminaClock = true;
-        }
-        else
-        {
-            PlayerRegenStaminaClock = false;
-        }
     }
 }

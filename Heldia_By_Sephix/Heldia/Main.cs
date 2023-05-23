@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.Design.Serialization;
 using Heldia.Engine;
 using Heldia.Managers;
 using Heldia.Pages;
@@ -61,9 +62,6 @@ public class Main : Game
 
     protected override void Update(GameTime gameTime)
     {
-        // Update the clock (ElapsedTime) of the game
-        GameManager.Instance.ElapsedTimeUpdate(gameTime);
-        
         //update pages
         pageMgr.Update(gameTime, this);
 
