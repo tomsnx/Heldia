@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 namespace Heldia.Managers;
 public abstract class GameObject
 {
+    public bool Active { get; set; } = false;
+    
     //Dimensions Variables
     public float x, y;
     public float xSpeed, ySpeed;
@@ -20,7 +22,7 @@ public abstract class GameObject
     public int id;
     public string text, tag;
     public bool rendered, visible;
-    public bool collision, hover;
+    public bool collision = false, hover;
 
     //Sprite
     public Vector2 spritePos;

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Channels;
+﻿using System.Collections.Generic;
 using Heldia.Engine;
 using Heldia.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using static Heldia.Engine.GameManager;
+using static Heldia.Engine.Singleton.GameManager;
 
 namespace Heldia.Objects;
 
@@ -41,10 +39,12 @@ public class Player : GameObject
     public static int column = 5; // Started at 0 so n-1 frame
     public static int line = 0; // Started at 0
     public bool StaminaDownToZero { get; set; }
+    private bool _lostStamina = false;
     
     // Timer
-    private Timer _lifeTimer;
-    private Timer _staminaTimer;
+    private Timer _lifeRegenTimer;
+    private Timer _staminaRegenTimer;
+    private Timer _staminaLostTimer;
 
     public Player(int x, int y) : base(x, y, playerWidth, playerHeight, ObjectId.Player)
     {
@@ -53,31 +53,32 @@ public class Player : GameObject
         runCoef = 2f;
 
         // Life
-        Instance.PlayerMaxHealth = 100f;
         Instance.PlayerHealth = Instance.PlayerMaxHealth;;
         Instance.PlayerCoefRegenHealth = 0.5f;
         Instance.PlayerDelayRegenHealth = 1f;
 
         // Stamina
-        Instance.PlayerMaxStamina = 40f;
         Instance.PlayerStamina = Instance.PlayerMaxStamina;
-        Instance.PlayerCoefLostStamina = 0.25f;
+        Instance.PlayerCoefLostStamina = 1f;
         Instance.PlayerCoefRegenStamina = 0.5f;
         Instance.PlayerDelayRegenStamina = 0.02f;
 
         
         // Set the timers for health and stamina
-        _lifeTimer = new Timer(Instance.PlayerDelayRegenHealth, () =>
+        _lifeRegenTimer = new Timer(Instance.PlayerDelayRegenHealth, () =>
         {
             Instance.PlayerHealth += Instance.PlayerCoefRegenHealth;
-        }, true);
-        _lifeTimer.Active = false;
-        
-        _staminaTimer = new Timer(Instance.PlayerDelayRegenStamina, () =>
+        }, true, false);
+
+        _staminaRegenTimer = new Timer(Instance.PlayerDelayRegenStamina, () =>
         {
             Instance.PlayerStamina += Instance.PlayerCoefRegenStamina;
-        }, true);
-        _staminaTimer.Active = false;
+        }, true, false);
+
+        _staminaLostTimer = new Timer(0.01f, () =>
+        {
+            Instance.PlayerStamina -= Instance.PlayerCoefLostStamina;
+        }, true, false);
     }
 
     public override void Init(Main g)
@@ -95,9 +96,10 @@ public class Player : GameObject
 
     public override void Update(GameTime gt, Main g, List<GameObject> objects)
     {
-        _lifeTimer.Update(gt);
-        _staminaTimer.Update(gt);
-        
+        _lifeRegenTimer.Update(gt);
+        _staminaRegenTimer.Update(gt);
+        _staminaLostTimer.Update(gt);
+
         // input
         _kb = Keyboard.GetState();
         _mouse = Mouse.GetState();
@@ -124,19 +126,22 @@ public class Player : GameObject
         // Check Collisions
         foreach (var obj in objects)
         {
-            if(obj.id == 1)
+            if (obj.collision)
             {
-                if ((xSpeed > 0 && IsTouchingLeft(obj)) || 
-                    (xSpeed < 0 && IsTouchingRight(obj)))
+                if(obj.id == 1)
                 {
-                    xSpeed = 0;
-                    TakeDommage(0.5f);
-                }
-                if ((ySpeed > 0 && IsTouchingTop(obj)) || 
-                    (ySpeed < 0 && IsTouchingBottom(obj)))
-                {
-                    ySpeed = 0;
-                    TakeDommage(0.5f);
+                    if ((xSpeed > 0 && IsTouchingLeft(obj)) || 
+                        (xSpeed < 0 && IsTouchingRight(obj)))
+                    {
+                        xSpeed = 0;
+                        TakeDommage(0.5f);
+                    }
+                    if ((ySpeed > 0 && IsTouchingTop(obj)) || 
+                        (ySpeed < 0 && IsTouchingBottom(obj)))
+                    {
+                        ySpeed = 0;
+                        TakeDommage(0.5f);
+                    }
                 }
             }
         }
@@ -144,11 +149,13 @@ public class Player : GameObject
         // Update x and y positions
         x += xSpeed;
         y += ySpeed;
-
+        Instance.PlayerX = x;
+        Instance.PlayerY = y;
+        
         // Regeneration System
         LifeRegeneration();
         StaminaRegeneration();
-        
+
         // Set variable devideSprite to a X and Y Value of the TileSet
         _anim.GetAnimRect(playerWidth,playerHeight, gt);
         devideSprite = _anim.rect;
@@ -178,7 +185,7 @@ public class Player : GameObject
             Instance.PlayerHealth = 0f;
         }
     }
-    
+
     // Private Methods
     private void MovementInput()
     {
@@ -190,11 +197,14 @@ public class Player : GameObject
         if (_kb.IsKeyDown(Keys.LeftShift) && Instance.PlayerStamina >= 0 && !StaminaDownToZero)
         {
             spd = walkSpeed * runCoef * Drawing.delta;
-            Instance.PlayerStamina -= Instance.PlayerCoefLostStamina;
+            _staminaLostTimer.Active = true;
+            _lostStamina = true;
         }
         else
         {
             spd = walkSpeed * Drawing.delta;
+            _staminaLostTimer.Active = false;
+            _lostStamina = false;
         }
         
         //Diagonal movements
@@ -236,23 +246,25 @@ public class Player : GameObject
     {
         if(Instance.PlayerHealth < Instance.PlayerMaxHealth)
         {
-            _lifeTimer.Active = true;
+            _lifeRegenTimer.Active = true;
         }
         else
         {
-            _lifeTimer.Active = false;
+            _lifeRegenTimer.Active = false;
         }
     }
 
     private void StaminaRegeneration()
     {
+        if (_lostStamina) return;
+        
         if(Instance.PlayerStamina < Instance.PlayerMaxStamina)
         {
-            _staminaTimer.Active = true;
+            _staminaRegenTimer.Active = true;
         }
         else
         {
-            _staminaTimer.Active = false;
+            _staminaRegenTimer.Active = false;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.ComponentModel.Design.Serialization;
 using Heldia.Engine;
+using Heldia.Engine.Singleton;
 using Heldia.Managers;
 using Heldia.Pages;
 using Microsoft.Xna.Framework;
@@ -11,6 +11,8 @@ namespace Heldia;
 public class Main : Game
 {
     public static ContentManager content;
+
+    private Timer _gameTimer;
 
     // page
     public PageManager pageMgr;
@@ -28,10 +30,10 @@ public class Main : Game
     {
         Console.WriteLine("Init");
         GameManager.Init();
-        
+
         // init graphics
         Drawing.Initialize(this);
-        
+
         // Init objects
         pageMgr = new PageManager();
         pageMenu = new PageMenu(content, pageMgr, this);
@@ -53,11 +55,15 @@ public class Main : Game
         pageMgr.Add(pageMenu, this);
         pageMgr.Add(pageGame, this);
         pageMgr.Set(pageMenu);
+        
+        base.LoadContent();
     }
 
     protected override void UnloadContent()
     {
         Console.WriteLine("Unload Content");
+        
+        base.UnloadContent();
     }
 
     protected override void Update(GameTime gameTime)

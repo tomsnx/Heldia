@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Xna.Framework;
 
 namespace Heldia.Engine;
@@ -12,8 +11,8 @@ public class Timer
     private bool ignoreSpeed;
     public double TotalSeconds { get; }
     public double TotalProgressSeconds { get; set; }
-    
-    private Function _delegate; // Déléguée à exécuter
+
+    private Function _delegate;
 
     public Timer(double totalSeconds, Function codeToExecute = null, bool autoReset = false, bool active = true)
     {
@@ -32,6 +31,7 @@ public class Timer
     public void Update(GameTime gameTime)
     {
         if (!Active) return;
+
         if (!end)
         {
             TotalProgressSeconds += gameTime.ElapsedGameTime.TotalSeconds;

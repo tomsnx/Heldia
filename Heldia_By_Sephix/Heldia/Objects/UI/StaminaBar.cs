@@ -2,8 +2,7 @@ using Heldia.Engine;
 using Heldia.Managers;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using static Heldia.Engine.GameManager;
+using static Heldia.Engine.Singleton.GameManager;
 
 namespace Heldia.Objects.UI;
 public class StaminaBar : GameObject

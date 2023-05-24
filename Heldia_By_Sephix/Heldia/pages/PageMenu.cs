@@ -16,7 +16,6 @@ public class PageMenu : Page
     // Managers
     private PageManager _pageMgr;
     private ContentManager _content;
-    public ObjectManager objMgr;
 
     // GameObject List (here : buttons...)
     private List<GameObject> _objectsList;
@@ -39,7 +38,7 @@ public class PageMenu : Page
     {
         _content = content;
         _pageMgr = pageMgr;
-        objMgr = new ObjectManager();
+        ObjMgr = new ObjectManager();
         _titleMenu = new TitleMenu(Drawing.Width / 2, Drawing.Height / 2, 10, 16);
     }
 
@@ -82,13 +81,13 @@ public class PageMenu : Page
         
         foreach (var obj in _objectsList)
         {
-            objMgr.Add(obj, g);
+            ObjMgr.Add(obj, g);
         }
     }
 
     public override void Update(GameTime gt, Main g)
     {
-        objMgr.Update(gt, g);
+        ObjMgr.Update(gt, g);
     }
 
     public override void Draw(Main g)
@@ -102,7 +101,7 @@ public class PageMenu : Page
             Drawing.spriteBatch.Begin();
 
             //objs
-            objMgr.Draw(g);
+            ObjMgr.Draw(g);
             _titleMenu.Draw(g);
 
             // end
@@ -110,12 +109,6 @@ public class PageMenu : Page
         }
     }
 
-    public override void Destroy(Main g)
-    {
-        IsLoad = false;
-        objMgr.Destroy(g);
-    }
-    
     // Methods - Action on event
     private void newGamebutton_Click(object sender, EventArgs e)
     {

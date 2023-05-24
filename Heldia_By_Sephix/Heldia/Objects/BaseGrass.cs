@@ -28,11 +28,17 @@ public class BaseGrass : GameObject
 
     public override void Update(GameTime gt, Main g, List<GameObject> objects)
     {
-        
+        if (Active)
+        {
+            collision = true;
+        }
     }
 
     public override void Draw(Main g)
     {
-        Drawing.FillRect(_sprite.GetSheet(), bounds, Color.White, 0, g);
+        if (Active)
+        {
+            Drawing.FillRect(_sprite.GetSheet(), bounds, Color.White, 0, g);
+        }
     }
 }

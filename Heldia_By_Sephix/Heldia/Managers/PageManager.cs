@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Heldia.Pages;
 using Microsoft.Xna.Framework;
 
@@ -7,6 +8,7 @@ public class PageManager
 {
     // Properties
     public List<Page> pages = new List<Page>();
+    public Page PreviousPage { get; set; }
     public Page ActualPage { get; set;  }
     public Page NextPage { get; set; }
 
@@ -25,11 +27,14 @@ public class PageManager
             Page page = pages[i];
             if(page.id == Selected) { page.Update(gt, g); }
         }
-        
+
         // Destroy the page content which is not used by the game
-        if (ActualPage.id != PageId.Menu)
+        if (PreviousPage != null)
         {
-            Destroy(g);
+            if (PreviousPage.IsLoad)
+            {
+                PreviousPage.Destroy(g);
+            }
         }
     }
     
@@ -39,21 +44,6 @@ public class PageManager
         {
             Page page = pages[i];
             if (page.id == Selected) { page.Draw(g); }
-        }
-    }
-
-    public void Destroy(Main g)
-    {
-        var pageMenu = FindPage(PageId.Menu);
-        PageMenu menuPage = (PageMenu)pageMenu;
-
-        if (menuPage != null)
-        {
-            if(menuPage.IsLoad)
-            {
-                menuPage.IsLoad = false;
-                menuPage.Destroy(g);
-            }
         }
     }
 
@@ -82,6 +72,7 @@ public class PageManager
     {
         if (NextPage != null)
         {
+            PreviousPage = ActualPage;
             ActualPage = NextPage;
             Set(ActualPage); // Set the Selected variable to the id of ActualPage
             NextPage = null;

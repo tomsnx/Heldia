@@ -1,4 +1,6 @@
-﻿using Heldia.Engine;
+﻿using System.ComponentModel.Design.Serialization;
+using Heldia.Engine;
+using Heldia.Engine.Singleton;
 using Heldia.Managers;
 using Heldia.Objects;
 using Heldia.Objects.UI;
@@ -37,8 +39,7 @@ public class PageGame : Page
 
     public override void Init(Main g)
     {
-        // Map
-        map.Init(objMgr ,g);
+        IsLoad = true;
         
         // Player
         player.SetScale(4);
@@ -48,11 +49,15 @@ public class PageGame : Page
         _hud.AddHudObject(_lifeBar);
         _hud.AddHudObject(_staminaBar);
         
-        // HUD (Debug)
+        // Map
+        map.Init(objMgr ,g);
     }
 
     public override void Update(GameTime gt, Main g)
     {
+        GameManager.Instance.TotalGameTime += gt.ElapsedGameTime.TotalMilliseconds;
+
+        map.Update(gt, g);
         cam.Update(player.GetPositionCentered(), g);
         player.GetPositionCentered();
         objMgr.Update(gt, g);
@@ -61,26 +66,24 @@ public class PageGame : Page
 
     public override void Draw(Main g)
     {
-        // Player
-        g.GraphicsDevice.Clear(_backgroundColor);
+        if (IsLoad)
+        {
+            // Player
+            g.GraphicsDevice.Clear(_backgroundColor);
         
-        Drawing.spriteBatch.Begin(sortMode: SpriteSortMode.FrontToBack, 
-                                  transformMatrix: cam.GetViewMatrix(), 
-                                  samplerState: SamplerState.PointClamp);
+            Drawing.spriteBatch.Begin(sortMode: SpriteSortMode.FrontToBack, 
+                transformMatrix: cam.GetViewMatrix(), 
+                samplerState: SamplerState.PointClamp);
         
-        objMgr.Draw(g);
+            objMgr.Draw(g);
         
-        Drawing.spriteBatch.End();
+            Drawing.spriteBatch.End();
         
         
-        // Static Object Drawing
-        Drawing.spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-        _hud.Draw(g);
-        Drawing.spriteBatch.End();
-    }
-
-    public override void Destroy(Main g)
-    {
-        
+            // Static Object Drawing
+            Drawing.spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            _hud.Draw(g);
+            Drawing.spriteBatch.End();
+        }
     }
 }

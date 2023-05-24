@@ -1,5 +1,6 @@
 ﻿using Heldia.Engine;
 using Microsoft.Xna.Framework;
+using static Heldia.Engine.Singleton.GameManager;
 
 namespace Heldia.Engine;
 public class Camera
@@ -7,7 +8,7 @@ public class Camera
     // Properties
     public Vector2 position;
     public Matrix Transform { get; private set; }
-    public float Delay { get; set; } = 10.0f;
+    public float CameraDelay { get; set; } = 10.0f;
 
     // Constructor
     public Camera(Vector2 pos) { this.position = pos; }
@@ -16,7 +17,7 @@ public class Camera
 
     public void Update(Vector2 pos, Main g)
     {
-        float d = Delay * Drawing.delta;
+        float d = Instance.CameraDelay * Drawing.delta;
 
         // Move
         position.X += ((pos.X - position.X) - (float)Drawing.Width / 2) * d;

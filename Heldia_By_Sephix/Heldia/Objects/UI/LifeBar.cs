@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
 using Heldia.Engine;
 using Heldia.Managers;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using static Heldia.Engine.GameManager;
+using static Heldia.Engine.Singleton.GameManager;
 
 namespace Heldia.Objects.UI;
 

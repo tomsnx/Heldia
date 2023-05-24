@@ -12,6 +12,9 @@ public static class Drawing
 
     // Controls
     private static KeyboardState _kb;
+    
+    // Timer 
+    private static Timer _globalTimer;
 
     public static bool IsFullScreen { get; set; } = false;
     
@@ -22,7 +25,8 @@ public static class Drawing
     public static bool Vsync { get; set; } = false;
 
     public static float GoalFps { get; set; } = 144;
-    public static int Fps { get; set; }
+    public static int FpsUpdate { get; set; }
+    public static int FpsDraw { get; set; }
     
     public static SpriteFont Arial32 { get; set; }
     public static SpriteFont Ubuntu12 { get; set; }
@@ -32,26 +36,28 @@ public static class Drawing
     public static SpriteFont PixExtrusion16 { get; set; }
     public static SpriteFont PixExtrusion32 { get; set; }
 
-    // dummy tex
+    // Dummy tex
     public static Texture2D rect;
 
-    // frametime
-    public static float delta, deltaTotal = 0;
+    // Frametime
+    public static float delta, deltaTotal = 0, normalizedDelta;
 
     private static int _framerate = 0;
 
-    // init
+    // Init
     public static void Initialize(Main g)
     {
-        // set screen size
+        // Set screen size
         Width = 1280;
         Height = 720;
 
-        // init graphics
+        // Init graphics
         graphics.PreferredBackBufferWidth = Width;
         graphics.PreferredBackBufferHeight = Height;
         //graphics.IsFullScreen = true;
-        graphics.SynchronizeWithVerticalRetrace = Vsync;
+        graphics.SynchronizeWithVerticalRetrace = false;
+        g.IsFixedTimeStep = true;
+        g.TargetElapsedTime = TimeSpan.FromSeconds(1.0 / 10);
         graphics.ApplyChanges();
 
         // Load Fonts
@@ -63,26 +69,24 @@ public static class Drawing
         PixExtrusion16 = g.Content.Load<SpriteFont>("fonts/PixExtrusion16");
         PixExtrusion32 = g.Content.Load<SpriteFont>("fonts/PixExtrusion32");
 
-        // init
+        // Init
         spriteBatch = new SpriteBatch(g.GraphicsDevice);
+        
+        // Init Timer
+        _globalTimer = new Timer(1, () =>
+        {
+            FpsUpdate = (int)(_framerate / _globalTimer.TotalProgressSeconds);
+            _framerate = 0;
+        }, true);
     }
 
     // update
     public static void Update(GameTime gt, Main g)
     {
-
-        changeMode();
-
         delta = (float)gt.ElapsedGameTime.TotalSeconds;
-        _framerate++;
-        deltaTotal += delta;
 
-        if (deltaTotal >= 1)
-        {
-            Fps = (int)(_framerate / deltaTotal);
-            _framerate = 0;
-            deltaTotal = 0;
-        }
+        _framerate++;
+        _globalTimer.Update(gt);
     }
 
     public static void FillRect(Rectangle bounds, Color color, float depth, Main g)
@@ -124,13 +128,5 @@ public static class Drawing
     public static void DrawText(Vector2 position, SpriteFont font, Color textColor, String text, Main g)
     {
         spriteBatch.DrawString(font, text, position, textColor);
-    }
-
-    public static void changeMode()
-    {
-        /*if (_kb.IsKeyDown(Keys.F) && previousKeyboardState.IsKeyUp(Keys.F))
-        {
-            IsFullScreen = !IsFullScreen;
-        }*/
     }
 }
