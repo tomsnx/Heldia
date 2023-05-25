@@ -18,7 +18,7 @@ public abstract class GameObject
         get
         {
             Vector2 vector = new Vector2(xSpeed, ySpeed);
-            vector.Normalize();
+
             return vector;
         }
         set
@@ -69,7 +69,7 @@ public abstract class GameObject
 
     protected bool IsTouchingLeft(GameObject obj)
     {
-        return this.collisionBounds.Right + this.xSpeed > obj.bounds.Left &&
+        return this.collisionBounds.Right + this.Speed.X > obj.bounds.Left &&
                this.collisionBounds.Left < obj.bounds.Left &&
                this.collisionBounds.Bottom > obj.bounds.Top &&
                this.collisionBounds.Top < obj.bounds.Bottom;
@@ -77,7 +77,7 @@ public abstract class GameObject
 
     protected bool IsTouchingRight(GameObject obj)
     {
-        return this.collisionBounds.Left + this.xSpeed < obj.bounds.Right &&
+        return this.collisionBounds.Left + this.Speed.X < obj.bounds.Right &&
                this.collisionBounds.Right > obj.bounds.Right &&
                this.collisionBounds.Bottom > obj.bounds.Top &&
                this.collisionBounds.Top < obj.bounds.Bottom;
@@ -85,7 +85,7 @@ public abstract class GameObject
 
     protected bool IsTouchingTop(GameObject obj)
     {
-        return this.collisionBounds.Bottom + this.ySpeed > obj.bounds.Top &&
+        return this.collisionBounds.Bottom + this.Speed.Y > obj.bounds.Top &&
                this.collisionBounds.Top < obj.bounds.Top &&
                this.collisionBounds.Right > obj.bounds.Left &&
                this.collisionBounds.Left < obj.bounds.Right;
@@ -93,7 +93,7 @@ public abstract class GameObject
 
     protected bool IsTouchingBottom(GameObject obj)
     {
-        return this.collisionBounds.Top + this.ySpeed < obj.bounds.Bottom &&
+        return this.collisionBounds.Top + this.Speed.Y < obj.bounds.Bottom &&
                this.collisionBounds.Bottom > obj.bounds.Bottom &&
                this.collisionBounds.Right > obj.bounds.Left &&
                this.collisionBounds.Left < obj.bounds.Right;

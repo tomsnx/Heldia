@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Heldia.Engine;
 using Heldia.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using static Heldia.Engine.Singleton.GameManager;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace Heldia.Objects;
 
@@ -40,6 +42,7 @@ public class Player : GameObject
     public static int line = 0; // Started at 0
     public bool StaminaDownToZero { get; set; }
     private bool _lostStamina = false;
+    private bool _isInSprint = false;
 
     private float _spd;
     
@@ -56,7 +59,7 @@ public class Player : GameObject
 
         // Life
         Instance.PlayerHealth = Instance.PlayerMaxHealth;;
-        Instance.PlayerCoefRegenHealth = 0.5f;
+        Instance.PlayerCoefRegenHealth = 1f;
         Instance.PlayerDelayRegenHealth = 1f;
 
         // Stamina
@@ -108,7 +111,7 @@ public class Player : GameObject
         _mouse = Mouse.GetState();
         
         // Move
-        MovementInput();
+        MovementInput(objects);
 
         // Update x and y positions
         x += Speed.X;
@@ -116,9 +119,6 @@ public class Player : GameObject
         y += Speed.Y;
         Instance.PlayerY = y;
 
-        x = 100;
-        y = 100;
-        
         // Set and Update the collision rectangle named `bounds`
         SetCollisionBounds(x + (float)width/6, y + (float)height / 2 + 5, width - (width/6 * 2), height / 2 - spriteBottomSpace - 5);
 
@@ -132,29 +132,6 @@ public class Player : GameObject
             if (Instance.PlayerStamina >= Instance.PlayerMaxStamina)
             {
                 StaminaDownToZero = false;
-            }
-        }
-
-        // Check Collisions
-        foreach (var obj in objects)
-        {
-            if (obj.collision)
-            {
-                if(obj.id == 1)
-                {
-                    if ((xSpeed > 0 && IsTouchingLeft(obj)) || 
-                        (xSpeed < 0 && IsTouchingRight(obj)))
-                    {
-                        xSpeed = 0;
-                        TakeDommage(0.5f);
-                    }
-                    if ((ySpeed > 0 && IsTouchingTop(obj)) || 
-                        (ySpeed < 0 && IsTouchingBottom(obj)))
-                    {
-                        ySpeed = 0;
-                        TakeDommage(0.5f);
-                    }
-                }
             }
         }
 
@@ -193,89 +170,125 @@ public class Player : GameObject
     }
 
     // Private Methods
-    private void MovementInput()
+    private void MovementInput(List<GameObject> objects)
     {
         // --- Pressed ---
-        
-        //Sprint
+
+        // Sprint
         if (_kb.IsKeyDown(Keys.LeftShift) && Instance.PlayerStamina >= 0 && !StaminaDownToZero)
         {
             _spd = walkSpeed * runCoef * Drawing.delta;
             _staminaLostTimer.Active = true;
             _lostStamina = true;
+            _isInSprint = true;
         }
         else
         {
             _spd = walkSpeed * Drawing.delta;
             _staminaLostTimer.Active = false;
             _lostStamina = false;
+            _isInSprint = false;
         }
+
+        Vector2 direction = Vector2.Zero;
 
         //Diagonal movements
         if (_kb.IsKeyDown(Keys.S) && _kb.IsKeyDown(Keys.D))
         {
-            SetSpeed(_spd / (float)Math.Sqrt(2), _spd / (float)Math.Sqrt(2));
+            direction = new Vector2(1, 1);
+            line = 1;
         }
-
-        if (_kb.IsKeyDown(Keys.S) && _kb.IsKeyDown(Keys.Q))
+        else if (_kb.IsKeyDown(Keys.S) && _kb.IsKeyDown(Keys.Q))
         {
-            SetSpeed(-_spd / (float)Math.Sqrt(2), _spd / (float)Math.Sqrt(2));
+            direction = new Vector2(-1, 1);
+            line = 2;
         }
-
-        if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.D))
+        else if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.D))
         {
-            SetSpeed(_spd / (float)Math.Sqrt(2), -_spd / (float)Math.Sqrt(2));
+            direction = new Vector2(1, -1);
+            line = 1;
         }
-
-        if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.Q))
+        else if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.Q))
         {
-            SetSpeed(-_spd / (float)Math.Sqrt(2), -_spd / (float)Math.Sqrt(2));
+            direction = new Vector2(-1, -1);
+            line = 2;
         }
-
+        
         //Vertical movements
-        if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.S)) { ySpeed = 0; line = 0; }
-        else if (_kb.IsKeyDown(Keys.Z)) { 
-            SetSpeed(xSpeed, -_spd);
+        else if (_kb.IsKeyDown(Keys.Z))
+        {
+            direction = new Vector2(0, -1);
             line = 3;
         }
         else if (_kb.IsKeyDown(Keys.S))
         {
-            SetSpeed(xSpeed, _spd);
+            direction = new Vector2(0, 1);
             line = 4;
         }
         
         // Horizontal movements
-        if (_kb.IsKeyDown(Keys.Q) && _kb.IsKeyDown(Keys.D)) { xSpeed = 0; line = 0; }
         else if (_kb.IsKeyDown(Keys.Q))
         {
-            SetSpeed(-_spd, ySpeed);
+            direction = new Vector2(-1, 0);
             line = 2;
         }
         else if (_kb.IsKeyDown(Keys.D))
         {
-            SetSpeed(_spd, ySpeed);
+            direction = new Vector2(1, 0);
             line = 1;
+        }
+
+        // Normalize direction vector if necessary
+        if (direction != Vector2.Zero)
+        {
+            direction.Normalize();
+        }
+
+        SetSpeed(direction.X * _spd, direction.Y * _spd);
+        
+        // TODO: Faire un objet collision avec 2 délégates pour lui
+        // TODO: passer le code à faire en cas de collision sur x ET y
+        // Check Collisions
+        foreach (var obj in objects)
+        {
+            if (obj.collision)
+            {
+                if(obj.id == 1)
+                {
+                    if ((Speed.X > 0 && IsTouchingLeft(obj)) || 
+                        (Speed.X < 0 && IsTouchingRight(obj)))
+                    {
+                        SetSpeed( 0,  Speed.Y);
+                    }
+                    if ((Speed.Y > 0 && IsTouchingTop(obj)) ||
+                        (Speed.Y < 0 && IsTouchingBottom(obj)))
+                    {
+                        SetSpeed(Speed.X,  0);
+                    }
+                }
+            }
         }
 
         // --- Released ---
         if (_kb.IsKeyUp(Keys.Z) && _kb.IsKeyUp(Keys.S))
         {
-            SetSpeed(xSpeed, 0);
+            SetSpeed(Speed.X, 0);
         }
 
         if (_kb.IsKeyUp(Keys.Q) && _kb.IsKeyUp(Keys.D))
         {
-            SetSpeed(0, ySpeed);
+            SetSpeed(0, Speed.Y);
         }
 
         // Set idle animation
         if (_kb.IsKeyUp(Keys.Q) && _kb.IsKeyUp(Keys.D) &&
-            !_kb.IsKeyDown(Keys.Z) && !_kb.IsKeyDown(Keys.S))
+            _kb.IsKeyUp(Keys.Z) && _kb.IsKeyUp(Keys.S))
         {
             line = 0;
         }
     }
-    
+
+
     private void LifeRegeneration()
     {
         if(Instance.PlayerHealth < Instance.PlayerMaxHealth)
