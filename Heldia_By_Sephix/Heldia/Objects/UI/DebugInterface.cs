@@ -57,5 +57,9 @@ public class DebugInterface
         _text = "Clock (sec): " + (int)Instance.TotalGameTime / 1000 ;
         _playerPos = _ubuntu12.MeasureString(_text);
         Drawing.DrawText(new Vector2(Drawing.Width - _playerPos.X -  _hudSpacingRight, 140), _ubuntu12, Color.Black, _text, g);
+
+        _text = "Speed : " + Math.Round((double)Math.Abs(_player.Speed.X) + (double)Math.Abs(_player.Speed.Y), 1);
+        _playerPos = _ubuntu12.MeasureString(_text);
+        Drawing.DrawText(new Vector2(Drawing.Width - _playerPos.X -  _hudSpacingRight, 160), _ubuntu12, Color.Black, _text, g);
     }
 }

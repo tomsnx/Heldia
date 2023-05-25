@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Heldia.Engine;
 using Heldia.Managers;
 using Microsoft.Xna.Framework;
@@ -18,7 +19,6 @@ public class Player : GameObject
 
     // speeds
     public float walkSpeed;
-    private const float DiagonalDivide = 1.55f; // To have the same speed between x, y, and diagonal speed
     public float runCoef;
 
     // sprite
@@ -40,6 +40,8 @@ public class Player : GameObject
     public static int line = 0; // Started at 0
     public bool StaminaDownToZero { get; set; }
     private bool _lostStamina = false;
+
+    private float _spd;
     
     // Timer
     private Timer _lifeRegenTimer;
@@ -96,6 +98,7 @@ public class Player : GameObject
 
     public override void Update(GameTime gt, Main g, List<GameObject> objects)
     {
+        // Timers Update
         _lifeRegenTimer.Update(gt);
         _staminaRegenTimer.Update(gt);
         _staminaLostTimer.Update(gt);
@@ -103,6 +106,18 @@ public class Player : GameObject
         // input
         _kb = Keyboard.GetState();
         _mouse = Mouse.GetState();
+        
+        // Move
+        MovementInput();
+
+        // Update x and y positions
+        x += Speed.X;
+        Instance.PlayerX = x;
+        y += Speed.Y;
+        Instance.PlayerY = y;
+
+        x = 100;
+        y = 100;
         
         // Set and Update the collision rectangle named `bounds`
         SetCollisionBounds(x + (float)width/6, y + (float)height / 2 + 5, width - (width/6 * 2), height / 2 - spriteBottomSpace - 5);
@@ -119,9 +134,6 @@ public class Player : GameObject
                 StaminaDownToZero = false;
             }
         }
-        
-        // Move
-        MovementInput();
 
         // Check Collisions
         foreach (var obj in objects)
@@ -146,12 +158,6 @@ public class Player : GameObject
             }
         }
 
-        // Update x and y positions
-        x += xSpeed;
-        y += ySpeed;
-        Instance.PlayerX = x;
-        Instance.PlayerY = y;
-        
         // Regeneration System
         LifeRegeneration();
         StaminaRegeneration();
@@ -189,50 +195,78 @@ public class Player : GameObject
     // Private Methods
     private void MovementInput()
     {
-        float spd;
-        
         // --- Pressed ---
         
         //Sprint
         if (_kb.IsKeyDown(Keys.LeftShift) && Instance.PlayerStamina >= 0 && !StaminaDownToZero)
         {
-            spd = walkSpeed * runCoef * Drawing.delta;
+            _spd = walkSpeed * runCoef * Drawing.delta;
             _staminaLostTimer.Active = true;
             _lostStamina = true;
         }
         else
         {
-            spd = walkSpeed * Drawing.delta;
+            _spd = walkSpeed * Drawing.delta;
             _staminaLostTimer.Active = false;
             _lostStamina = false;
         }
-        
+
         //Diagonal movements
-        if (_kb.IsKeyDown(Keys.S) && _kb.IsKeyDown(Keys.D)) { spd /= DiagonalDivide; }
-        if (_kb.IsKeyDown(Keys.S) && _kb.IsKeyDown(Keys.Q)) { spd /= DiagonalDivide; }
-        if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.D)) { spd /= DiagonalDivide; }
-        if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.Q)) { spd /= DiagonalDivide; }
-        
+        if (_kb.IsKeyDown(Keys.S) && _kb.IsKeyDown(Keys.D))
+        {
+            SetSpeed(_spd / (float)Math.Sqrt(2), _spd / (float)Math.Sqrt(2));
+        }
+
+        if (_kb.IsKeyDown(Keys.S) && _kb.IsKeyDown(Keys.Q))
+        {
+            SetSpeed(-_spd / (float)Math.Sqrt(2), _spd / (float)Math.Sqrt(2));
+        }
+
+        if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.D))
+        {
+            SetSpeed(_spd / (float)Math.Sqrt(2), -_spd / (float)Math.Sqrt(2));
+        }
+
+        if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.Q))
+        {
+            SetSpeed(-_spd / (float)Math.Sqrt(2), -_spd / (float)Math.Sqrt(2));
+        }
+
         //Vertical movements
         if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.S)) { ySpeed = 0; line = 0; }
         else if (_kb.IsKeyDown(Keys.Z)) { 
-            ySpeed = -spd; 
+            SetSpeed(xSpeed, -_spd);
             line = 3;
         }
         else if (_kb.IsKeyDown(Keys.S))
         {
-            ySpeed = spd; 
+            SetSpeed(xSpeed, _spd);
             line = 4;
         }
         
         // Horizontal movements
         if (_kb.IsKeyDown(Keys.Q) && _kb.IsKeyDown(Keys.D)) { xSpeed = 0; line = 0; }
-        else if (_kb.IsKeyDown(Keys.Q)) { xSpeed = -spd; line = 2; }
-        else if (_kb.IsKeyDown(Keys.D)) { xSpeed = spd; line = 1; }
+        else if (_kb.IsKeyDown(Keys.Q))
+        {
+            SetSpeed(-_spd, ySpeed);
+            line = 2;
+        }
+        else if (_kb.IsKeyDown(Keys.D))
+        {
+            SetSpeed(_spd, ySpeed);
+            line = 1;
+        }
 
         // --- Released ---
-        if (_kb.IsKeyUp(Keys.Z) && _kb.IsKeyUp(Keys.S)) { ySpeed = 0; }
-        if (_kb.IsKeyUp(Keys.Q) && _kb.IsKeyUp(Keys.D)) { xSpeed = 0; }
+        if (_kb.IsKeyUp(Keys.Z) && _kb.IsKeyUp(Keys.S))
+        {
+            SetSpeed(xSpeed, 0);
+        }
+
+        if (_kb.IsKeyUp(Keys.Q) && _kb.IsKeyUp(Keys.D))
+        {
+            SetSpeed(0, ySpeed);
+        }
 
         // Set idle animation
         if (_kb.IsKeyUp(Keys.Q) && _kb.IsKeyUp(Keys.D) &&
