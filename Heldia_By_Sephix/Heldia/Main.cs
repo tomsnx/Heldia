@@ -1,11 +1,10 @@
 ﻿using System;
 using Heldia.Engine;
-using Heldia.Engine.Singleton;
 using Heldia.Managers;
 using Heldia.Pages;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
+using static Heldia.Engine.Singleton.GameManager;
 
 namespace Heldia;
 
@@ -28,7 +27,7 @@ public class Main : Game
     protected override void Initialize()
     {
         Console.WriteLine("Init");
-        GameManager.Init();
+        Init();
 
         // init graphics
         Drawing.Initialize(this);
@@ -42,9 +41,6 @@ public class Main : Game
         IsMouseVisible = true;
         IsFixedTimeStep = false;
         Window.Title = Drawing.Title;
-        
-        IsFixedTimeStep = true;
-        TargetElapsedTime = TimeSpan.FromSeconds(1.0 / Drawing.GoalFps);
 
         base.Initialize();
     }
@@ -70,6 +66,10 @@ public class Main : Game
 
     protected override void Update(GameTime gameTime)
     {
+        // Set the fps mode
+        FixedTimeStep(true);
+        ChangeFpsMode(Instance.GoalFps);
+        
         //update pages
         pageMgr.Update(gameTime, this);
 
@@ -83,8 +83,17 @@ public class Main : Game
     
     protected override void Draw(GameTime gameTime)
     {
-        pageMgr.Draw(this);
+        pageMgr.Draw(gameTime, this);
 
         base.Draw(gameTime);
+    }
+
+    public void FixedTimeStep(bool fixedFps = false)
+    {
+        IsFixedTimeStep = fixedFps;
+    }
+    public void ChangeFpsMode(float fps)
+    {
+        TargetElapsedTime = TimeSpan.FromSeconds(1.0 / fps);
     }
 }

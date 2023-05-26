@@ -15,7 +15,7 @@ public abstract class Page
 
     public abstract void Init(Main g);
     public abstract void Update(GameTime gt, Main g);
-    public abstract void Draw(Main g);
+    public abstract void Draw(GameTime gt, Main g);
 
     public void Destroy(Main g)
     {

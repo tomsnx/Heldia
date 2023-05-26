@@ -30,7 +30,7 @@ public class PageGame : Page
     {
         objMgr = new ObjectManager();
         map = new Map();
-        player = new Player(-100, -100);
+        player = new Player(200, 200);
         cam = new Camera(new Vector2(0, 0));
         _lifeBar = new LifeBar(10, 10, player);
         _staminaBar = new StaminaBar(10, LifeBar.barHeight * 2, player);
@@ -64,10 +64,12 @@ public class PageGame : Page
         _hud.Update(gt, g);
     }
 
-    public override void Draw(Main g)
+    public override void Draw(GameTime gt, Main g)
     {
         if (IsLoad)
         {
+            Drawing.Draw(gt);
+            
             // Player
             g.GraphicsDevice.Clear(_backgroundColor);
         

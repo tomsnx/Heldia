@@ -9,6 +9,9 @@ public class GameManager
 {
     public static GameManager Instance { get; private set; }
     
+    // FPS
+    public float GoalFps { get; set; } = 144;
+    
     // Camera
     public float CameraDelay { get; set; } = 10.0f;
     

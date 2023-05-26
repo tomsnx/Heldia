@@ -37,9 +37,13 @@ public class DebugInterface
         _playerPos = _ubuntu12.MeasureString(_text);
         Drawing.DrawText(new Vector2(Drawing.Width - _playerPos.X -  _hudSpacingRight - 10, 20), _ubuntu12, Color.Black, _text, g);
         
-        _text = "FPS : " + Drawing.FpsUpdate;
+        _text = "TPS : " + Drawing.TpsUpdate;
         _playerPos = _ubuntu12.MeasureString(_text);
         Drawing.DrawText(new Vector2(Drawing.Width - _playerPos.X -  _hudSpacingRight, 40), _ubuntu12, Color.Black, _text, g);
+        
+        _text = "FPS : " + Drawing.FpsDraw;
+        _playerPos = _ubuntu12.MeasureString(_text);
+        Drawing.DrawText(new Vector2(Drawing.Width - _playerPos.X -  _hudSpacingRight, 60), _ubuntu12, Color.Black, _text, g);
 
         _text = "Player - X : " + Instance.PlayerX;
         _playerPos = _ubuntu12.MeasureString(_text);

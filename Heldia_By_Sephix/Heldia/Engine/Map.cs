@@ -1,6 +1,4 @@
 using System;
-using System.ComponentModel.Design.Serialization;
-using System.Security.Cryptography;
 using Heldia.Managers;
 using Heldia.Objects;
 using Microsoft.Xna.Framework;
@@ -11,8 +9,9 @@ namespace Heldia.Engine;
 
 public class Map
 {
-    private static int _sizeX = 250;
-    private static int _sizeY = 250;
+    private static int _sizeX = 100;
+    private static int _sizeY = 100;
+
     private GameObject[,] _map;
     private float[,] _noiseMap = new float[_sizeX, _sizeY];
 
@@ -20,7 +19,7 @@ public class Map
     public static int tileSize = 16;
 
     // Number of tiles to display around of the player - x2 on x && x2 on y (left/right && top/bottom)
-    private int _nbTilesToDisplay = 10;
+    private int _nbTilesToDisplay = 5;
     
     private int _mapScale;
     private Random _rand;

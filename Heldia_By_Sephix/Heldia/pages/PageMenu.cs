@@ -90,7 +90,7 @@ public class PageMenu : Page
         ObjMgr.Update(gt, g);
     }
 
-    public override void Draw(Main g)
+    public override void Draw(GameTime gt, Main g)
     {
         if (IsLoad)
         {

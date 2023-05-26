@@ -13,8 +13,9 @@ public static class Drawing
     // Controls
     private static KeyboardState _kb;
     
-    // Timer 
-    private static Timer _globalTimer;
+    // Timer
+    private static Timer _globalTimerFps;
+    private static Timer _globalTimerTps;
 
     public static bool IsFullScreen { get; set; } = false;
     
@@ -23,9 +24,7 @@ public static class Drawing
     public static int Height { get; private set; }
     public static string Title { get; set; } = "Heldia";
     public static bool Vsync { get; set; } = false;
-
-    public static float GoalFps { get; set; } = 144;
-    public static int FpsUpdate { get; set; }
+    public static int TpsUpdate { get; set; }
     public static int FpsDraw { get; set; }
     
     public static SpriteFont Arial32 { get; set; }
@@ -42,7 +41,8 @@ public static class Drawing
     // Frametime
     public static float delta, deltaTotal = 0, normalizedDelta;
 
-    private static int _framerate = 0;
+    private static int _framerateTps = 0;
+    private static int _framerateFps = 0;
 
     // Init
     public static void Initialize(Main g)
@@ -54,7 +54,6 @@ public static class Drawing
         // Init graphics
         graphics.PreferredBackBufferWidth = Width;
         graphics.PreferredBackBufferHeight = Height;
-        //graphics.IsFullScreen = true;
         graphics.SynchronizeWithVerticalRetrace = false;
         graphics.ApplyChanges();
 
@@ -67,26 +66,43 @@ public static class Drawing
         PixExtrusion16 = g.Content.Load<SpriteFont>("fonts/PixExtrusion16");
         PixExtrusion32 = g.Content.Load<SpriteFont>("fonts/PixExtrusion32");
 
-        // Init
+        // SpriteBatch
         spriteBatch = new SpriteBatch(g.GraphicsDevice);
         
         // Init Timer
-        _globalTimer = new Timer(1, () =>
+        _globalTimerTps = new Timer(1, () =>
         {
-            FpsUpdate = (int)(_framerate / _globalTimer.TotalProgressSeconds);
-            _framerate = 0;
+            TpsUpdate = (int)(_framerateTps / _globalTimerTps.TotalProgressSeconds);
+            _framerateTps = 0;
+        }, true);
+        
+        _globalTimerFps = new Timer(1, () =>
+        {
+            FpsDraw = (int)(_framerateFps / _globalTimerFps.TotalProgressSeconds);
+            _framerateFps = 0;
         }, true);
     }
 
-    // update
+    // Update
     public static void Update(GameTime gt, Main g)
     {
         delta = (float)gt.ElapsedGameTime.TotalSeconds;
+        
+        SetFullScreen();
 
-        _framerate++;
-        _globalTimer.Update(gt);
+        // Calculate TPS
+        _framerateTps++;
+        _globalTimerTps.Update(gt);
     }
 
+    public static void Draw(GameTime gt)
+    {
+        // Calculate FPS
+        _framerateFps++;
+        _globalTimerFps.Update(gt);
+    }
+
+    // Fill Rect
     public static void FillRect(Rectangle bounds, Color color, float depth, Main g)
     {
         if(rect == null) { rect = new Texture2D(g.GraphicsDevice, 1, 1); }
@@ -126,5 +142,14 @@ public static class Drawing
     public static void DrawText(Vector2 position, SpriteFont font, Color textColor, String text, Main g)
     {
         spriteBatch.DrawString(font, text, position, textColor);
+    }
+
+    /**
+     * Set the mode o the game window
+     */
+    public static void SetFullScreen(bool isFullScreen = false)
+    {
+        graphics.IsFullScreen = isFullScreen;
+        graphics.ApplyChanges();
     }
 }

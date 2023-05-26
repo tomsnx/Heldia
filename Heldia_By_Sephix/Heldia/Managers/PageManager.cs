@@ -38,12 +38,12 @@ public class PageManager
         }
     }
     
-    public void Draw(Main g)
+    public void Draw(GameTime gt, Main g)
     {
         for (int i = 0; i < Count; i++)
         {
             Page page = pages[i];
-            if (page.id == Selected) { page.Draw(g); }
+            if (page.id == Selected) { page.Draw(gt, g); }
         }
     }
 
