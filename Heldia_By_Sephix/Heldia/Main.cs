@@ -4,6 +4,7 @@ using Heldia.Engine.Singleton;
 using Heldia.Managers;
 using Heldia.Pages;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 
 namespace Heldia;
@@ -11,8 +12,6 @@ namespace Heldia;
 public class Main : Game
 {
     public static ContentManager content;
-
-    private Timer _gameTimer;
 
     // page
     public PageManager pageMgr;
@@ -44,6 +43,9 @@ public class Main : Game
         IsFixedTimeStep = false;
         Window.Title = Drawing.Title;
         
+        IsFixedTimeStep = true;
+        TargetElapsedTime = TimeSpan.FromSeconds(1.0 / Drawing.GoalFps);
+
         base.Initialize();
     }
     

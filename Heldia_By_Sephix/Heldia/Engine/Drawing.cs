@@ -56,8 +56,6 @@ public static class Drawing
         graphics.PreferredBackBufferHeight = Height;
         //graphics.IsFullScreen = true;
         graphics.SynchronizeWithVerticalRetrace = false;
-        g.IsFixedTimeStep = true;
-        g.TargetElapsedTime = TimeSpan.FromSeconds(1.0 / 10);
         graphics.ApplyChanges();
 
         // Load Fonts

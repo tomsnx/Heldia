@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
+﻿using System.Collections.Generic;
 using Heldia.Engine;
 using Heldia.Managers;
 using Microsoft.Xna.Framework;
@@ -248,7 +246,7 @@ public class Player : GameObject
         
         // TODO: Faire un objet collision avec 2 délégates pour lui
         // TODO: passer le code à faire en cas de collision sur x ET y
-        // Check Collisions
+        // Check Collisions and stop movement
         foreach (var obj in objects)
         {
             if (obj.collision)

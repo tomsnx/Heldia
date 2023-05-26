@@ -12,13 +12,13 @@ public class Timer
     public double TotalSeconds { get; }
     public double TotalProgressSeconds { get; set; }
 
-    private Function _delegate;
+    public Function fdelegate { get; set; }
 
     public Timer(double totalSeconds, Function codeToExecute = null, bool autoReset = false, bool active = true)
     {
         TotalSeconds = totalSeconds;
         this.autoReset = autoReset;
-        _delegate = codeToExecute;
+        fdelegate = codeToExecute;
         Active = active;
     }
 
@@ -36,9 +36,9 @@ public class Timer
         {
             TotalProgressSeconds += gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (TotalProgressSeconds >= TotalSeconds && _delegate != null)
+            if (TotalProgressSeconds >= TotalSeconds && fdelegate != null)
             {
-                _delegate();
+                fdelegate();
                 end = true;
             }
 
