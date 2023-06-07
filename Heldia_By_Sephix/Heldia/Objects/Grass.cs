@@ -11,13 +11,35 @@ public class Grass : GameObject
     private SpriteSheets _sprite;
 
     // texture name
-    string _name = "grass";
+    private string _name;
     private int _grassState = 0; // Start at 0 -> 4 grass states in 1 sprite
 
     public Grass(int x, int y, int grassState) : base(x, y, Map.tileSize, Map.tileSize, ObjectId.Grass)
     {
         _grassState = grassState;
-        devideSprite = new Rectangle(width * _grassState, 0, width, height);
+        devideSprite = new Rectangle(0, 0, width, height);
+        
+        switch (_grassState)
+        { 
+            case 1:
+                _name = "Grass_2";
+                break;
+            case 2:
+                _name = "Grass_3";
+                break;
+            case 3:
+                _name = "Flower_1";
+                break;
+            case 4:
+                _name = "Flower_2";
+                break;
+            case 5:
+                _name = "Flower_3";
+                break;
+            default:
+                _name = "Grass_1";
+                break;
+        }
     }
 
     public override void Init(Main g)
@@ -34,7 +56,7 @@ public class Grass : GameObject
     {
         if (Active)
         {
-            collision = true;
+            collision = false;
         }
     }
 

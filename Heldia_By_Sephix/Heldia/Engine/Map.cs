@@ -9,19 +9,15 @@ namespace Heldia.Engine;
 
 public class Map
 {
-    private static int _sizeX = 100;
-    private static int _sizeY = 100;
+    private static int _sizeX = 250;
+    private static int _sizeY = 250;
 
     private GameObject[,] _map;
     private float[,] _noiseMap = new float[_sizeX, _sizeY];
 
     // Tiles size in pixels
-    public static int tileSize = 16;
+    public static int tileSize = 32;
 
-    // Number of tiles to display around of the player - x2 on x && x2 on y (left/right && top/bottom)
-    private int _nbTilesToDisplay = 5;
-    
-    private int _mapScale;
     private Random _rand;
     
     private static int[] _permutation = { 151, 160, 137, 91, 90, 15, 131, 13, 201, 95, 96, 53, 194, 233, 
@@ -43,10 +39,11 @@ public class Map
                                             114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180 };
 
     // Constructor
-    public Map(int mapScale = 4)
+    public Map(int mapScale)
     {
         //_map = new int[_sizeX, _sizeY];
-        _mapScale = mapScale;
+        Instance.MapScale = mapScale;
+        Instance.TileSize = tileSize;
         _rand = new Random();
     }
 
@@ -68,18 +65,11 @@ public class Map
 
     public void Update(GameTime gt, Main g)
     {
-        // Convert player position in coordinates of the grid
-        int playerTileX = (int)Math.Floor(Instance.PlayerX / (tileSize * _mapScale));
-        int playerTileY = (int)Math.Floor(Instance.PlayerY / (tileSize * _mapScale));
+        // Convertir la position du joueur en coordonnées de la grille
+        int playerTileX = (int)Math.Floor(Instance.PlayerX / (tileSize * Instance.MapScale));
+        int playerTileY = (int)Math.Floor(Instance.PlayerY / (tileSize * Instance.MapScale));
 
-        
-        int minX = Math.Max(playerTileX - _nbTilesToDisplay, 0);
-        int maxX = Math.Min(playerTileX + _nbTilesToDisplay, _sizeX - 1);
-        
-        int minY = Math.Max(playerTileY - _nbTilesToDisplay, 0);
-        int maxY = Math.Min(playerTileY + _nbTilesToDisplay, _sizeY - 1);
-        
-        // Disable all tiles
+        // Désactiver toutes les tiles
         for (int x = 0; x < _sizeX; x++)
         {
             for (int y = 0; y < _sizeY; y++)
@@ -88,7 +78,38 @@ public class Map
             }
         }
 
-        // Active tiles in the _nbTilesToDisplay
+        // Activer les tiles autour de la caméra du joueur
+        ActivateTilesAroundCamera(playerTileX, playerTileY);
+    }
+    
+    private void ActivateTilesAroundCamera(int playerTileX, int playerTileY)
+    {
+        
+        /*int minX = Math.Max(playerTileX - _nbTilesToDisplay, 0);
+        int maxX = Math.Min(playerTileX + _nbTilesToDisplay, _sizeX - 1);
+        int minY = Math.Max(playerTileY - _nbTilesToDisplay, 0);
+        int maxY = Math.Min(playerTileY + _nbTilesToDisplay, _sizeY - 1);
+
+        // Active les tiles dans la zone définie
+        for (int x = minX; x <= maxX; x++)
+        {
+            for (int y = minY; y <= maxY; y++)
+            {
+                _map[x, y].Active = true;
+            }
+        }*/
+        
+        int cameraLeftTile = playerTileX - (Instance.Camera.CameraBounds.Width / tileSize / Instance.MapScale) / 2 - 2;
+        int cameraTopTile = playerTileY - (Instance.Camera.CameraBounds.Height / tileSize / Instance.MapScale) / 2 - 2;
+        int cameraRightTile = playerTileX + (Instance.Camera.CameraBounds.Width / tileSize / Instance.MapScale) / 2 + 4;
+        int cameraBottomTile = playerTileY + (Instance.Camera.CameraBounds.Height / tileSize / Instance.MapScale) / 2 + 4;
+
+        int minX = Math.Max(cameraLeftTile, 0);
+        int maxX = Math.Min(cameraRightTile, _sizeX - 1);
+        int minY = Math.Max(cameraTopTile, 0);
+        int maxY = Math.Min(cameraBottomTile, _sizeY - 1);
+
+        // Active les tuiles dans la zone définie par la caméra
         for (int x = minX; x <= maxX; x++)
         {
             for (int y = minY; y <= maxY; y++)
@@ -144,19 +165,19 @@ public class Map
         
         if (objectType == EObjectId.BaseGrass)
         {
-            BaseGrass grass = new BaseGrass(tileSize * _mapScale * x, tileSize * _mapScale * y);
-            grass.SetScale(_mapScale);
+            BaseGrass grass = new BaseGrass(tileSize * Instance.MapScale * x, tileSize * Instance.MapScale * y);
+            grass.SetScale(Instance.MapScale);
             obj = grass;
         } else if (objectType == EObjectId.Grass)
         {
-            Grass grass = new Grass(tileSize * _mapScale * x, tileSize * _mapScale * y, _rand.Next(0, 4));
-            grass.SetScale(_mapScale);
+            Grass grass = new Grass(tileSize * Instance.MapScale * x, tileSize * Instance.MapScale * y, _rand.Next(0, 6));
+            grass.SetScale(Instance.MapScale);
             obj = grass;
         }
         else
         {
-            Grass grass = new Grass(tileSize * _mapScale * x, tileSize * _mapScale * y, _rand.Next(0, 4));
-            grass.SetScale(_mapScale);
+            Grass grass = new Grass(tileSize * Instance.MapScale * x, tileSize * Instance.MapScale * y, _rand.Next(0, 6));
+            grass.SetScale(Instance.MapScale);
             obj = grass;
         }
 

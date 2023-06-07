@@ -53,16 +53,24 @@ public class DebugInterface
         _playerPos = _ubuntu12.MeasureString(_text);
         Drawing.DrawText(new Vector2(Drawing.Width - _playerPos.X -  _hudSpacingRight, 100), _ubuntu12, Color.Black, _text, g);
         
-        _text = "StaminaDownToZero : " + _player.StaminaDownToZero ;
+        _text = "Player - TilesX : " + (int)Math.Floor(Instance.PlayerX / (Instance.TileSize * Instance.MapScale));
         _playerPos = _ubuntu12.MeasureString(_text);
         Drawing.DrawText(new Vector2(Drawing.Width - _playerPos.X -  _hudSpacingRight, 120), _ubuntu12, Color.Black, _text, g);
         
-        _text = "Clock (sec): " + (int)Instance.TotalGameTime / 1000 ;
+        _text = "Player - TilesY : " + (int)Math.Floor(Instance.PlayerY / (Instance.TileSize * Instance.MapScale));
         _playerPos = _ubuntu12.MeasureString(_text);
         Drawing.DrawText(new Vector2(Drawing.Width - _playerPos.X -  _hudSpacingRight, 140), _ubuntu12, Color.Black, _text, g);
+        
+        _text = "StaminaDownToZero : " + _player.StaminaDownToZero ;
+        _playerPos = _ubuntu12.MeasureString(_text);
+        Drawing.DrawText(new Vector2(Drawing.Width - _playerPos.X -  _hudSpacingRight, 160), _ubuntu12, Color.Black, _text, g);
+        
+        _text = "Clock (sec): " + (int)Instance.TotalGameTime / 1000 ;
+        _playerPos = _ubuntu12.MeasureString(_text);
+        Drawing.DrawText(new Vector2(Drawing.Width - _playerPos.X -  _hudSpacingRight, 180), _ubuntu12, Color.Black, _text, g);
 
         _text = "Speed : " + Math.Round((_player.Speed.Length()), 1);
         _playerPos = _ubuntu12.MeasureString(_text);
-        Drawing.DrawText(new Vector2(Drawing.Width - _playerPos.X -  _hudSpacingRight, 160), _ubuntu12, Color.Black, _text, g);
+        Drawing.DrawText(new Vector2(Drawing.Width - _playerPos.X -  _hudSpacingRight, 200), _ubuntu12, Color.Black, _text, g);
     }
 }

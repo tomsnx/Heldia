@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.Design.Serialization;
 using Heldia.Engine;
-using Heldia.Engine.Singleton;
 using Heldia.Managers;
 using Heldia.Objects;
 using Heldia.Objects.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using static Heldia.Engine.Singleton.GameManager;
 using Overlay = Heldia.Managers.Overlay;
 
 namespace Heldia.Pages;
@@ -29,9 +29,9 @@ public class PageGame : Page
     public PageGame() : base(PageId.Game)
     {
         objMgr = new ObjectManager();
-        map = new Map();
         player = new Player(200, 200);
         cam = new Camera(new Vector2(0, 0));
+        map = new Map(Instance.GameScale);
         _lifeBar = new LifeBar(10, 10, player);
         _staminaBar = new StaminaBar(10, LifeBar.barHeight * 2, player);
         _hud = new Overlay(cam, player);
@@ -42,7 +42,7 @@ public class PageGame : Page
         IsLoad = true;
         
         // Player
-        player.SetScale(4);
+        player.SetScale(Instance.GameScale);
         objMgr.Add(player, g);
         
         // HUD
@@ -55,10 +55,10 @@ public class PageGame : Page
 
     public override void Update(GameTime gt, Main g)
     {
-        GameManager.Instance.TotalGameTime += gt.ElapsedGameTime.TotalMilliseconds;
-
-        map.Update(gt, g);
+        Instance.TotalGameTime += gt.ElapsedGameTime.TotalMilliseconds;
+        
         cam.Update(player.GetPositionCentered(), g);
+        map.Update(gt, g);
         player.GetPositionCentered();
         objMgr.Update(gt, g);
         _hud.Update(gt, g);

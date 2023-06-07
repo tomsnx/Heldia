@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/sephix/Documents/Dev/C#/Heldia/Heldia_By_Sephix/Heldia/Heldia.csproj": {}
+    "/Users/sephix/Desktop/Heldia/Heldia_By_Sephix/Heldia/Heldia.csproj": {}
   },
   "projects": {
-    "/Users/sephix/Documents/Dev/C#/Heldia/Heldia_By_Sephix/Heldia/Heldia.csproj": {
+    "/Users/sephix/Desktop/Heldia/Heldia_By_Sephix/Heldia/Heldia.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/sephix/Documents/Dev/C#/Heldia/Heldia_By_Sephix/Heldia/Heldia.csproj",
+        "projectUniqueName": "/Users/sephix/Desktop/Heldia/Heldia_By_Sephix/Heldia/Heldia.csproj",
         "projectName": "Heldia",
-        "projectPath": "/Users/sephix/Documents/Dev/C#/Heldia/Heldia_By_Sephix/Heldia/Heldia.csproj",
+        "projectPath": "/Users/sephix/Desktop/Heldia/Heldia_By_Sephix/Heldia/Heldia.csproj",
         "packagesPath": "/Users/sephix/.nuget/packages/",
-        "outputPath": "/Users/sephix/Documents/Dev/C#/Heldia/Heldia_By_Sephix/Heldia/obj/",
+        "outputPath": "/Users/sephix/Desktop/Heldia/Heldia_By_Sephix/Heldia/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/sephix/.nuget/NuGet/NuGet.Config"

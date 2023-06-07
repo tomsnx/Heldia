@@ -173,7 +173,10 @@ public class Player : GameObject
         // --- Pressed ---
 
         // Sprint
-        if (_kb.IsKeyDown(Keys.LeftShift) && Instance.PlayerStamina >= 0 && !StaminaDownToZero)
+        if (_kb.IsKeyDown(Keys.LeftShift) && 
+            Instance.PlayerStamina >= 0 && 
+            !StaminaDownToZero && 
+            (xSpeed != 0 || ySpeed != 0))
         {
             _spd = walkSpeed * runCoef * Drawing.delta;
             _staminaLostTimer.Active = true;

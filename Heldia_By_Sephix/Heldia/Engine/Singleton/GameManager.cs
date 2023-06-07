@@ -9,11 +9,19 @@ public class GameManager
 {
     public static GameManager Instance { get; private set; }
     
+    // Global
+    public int GameScale { get; private set; } = 3;
+    
     // FPS
-    public float GoalFps { get; set; } = 144;
+    public float GoalFps { get; set; } = 60;
     
     // Camera
+    public Camera Camera { get; set; }
     public float CameraDelay { get; set; } = 10.0f;
+    
+    // Map
+    public int MapScale { get; set; }
+    public int TileSize { get; set; }
     
     // Player Position
     public float PlayerX { get; set; }
