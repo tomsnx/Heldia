@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using static Heldia.Engine.Singleton.GameManager;
 
 namespace Heldia.Engine;
 public static class Drawing
@@ -10,19 +11,14 @@ public static class Drawing
     public static GraphicsDeviceManager graphics;
     public static SpriteBatch spriteBatch;
 
-    // Controls
-    private static KeyboardState _kb;
-    
     // Timer
     private static Timer _globalTimerFps;
     private static Timer _globalTimerTps;
 
-    public static bool IsFullScreen { get; set; } = false;
-    
     // window
     public static int Width { get; private set; }
     public static int Height { get; private set; }
-    public static string Title { get; set; } = "Heldia";
+    public static string Title { get; set; }
     public static bool Vsync { get; set; } = false;
     public static int TpsUpdate { get; set; }
     public static int FpsDraw { get; set; }
@@ -47,9 +43,14 @@ public static class Drawing
     // Init
     public static void Initialize(Main g)
     {
+        // Title
+        Title = "Heldia";
+        
         // Set screen size
         Width = 1280;
         Height = 720;
+        SetFullScreen(false); // -> false by default but can change it in update
+        
 
         // Init graphics
         graphics.PreferredBackBufferWidth = Width;
@@ -69,7 +70,7 @@ public static class Drawing
         // SpriteBatch
         spriteBatch = new SpriteBatch(g.GraphicsDevice);
         
-        // Init Timer
+        // Init Timers
         _globalTimerTps = new Timer(1, () =>
         {
             TpsUpdate = (int)(_framerateTps / _globalTimerTps.TotalProgressSeconds);
@@ -88,7 +89,7 @@ public static class Drawing
     {
         delta = (float)gt.ElapsedGameTime.TotalSeconds;
         
-        SetFullScreen();
+        SetFullScreen(false);
 
         // Calculate TPS
         _framerateTps++;
@@ -147,9 +148,20 @@ public static class Drawing
     /**
      * Set the mode o the game window
      */
-    public static void SetFullScreen(bool isFullScreen = false)
+    public static void SetFullScreen(bool isFullScreen)
     {
-        graphics.IsFullScreen = isFullScreen;
+        // Set the game instance
+        Instance.IsFullScreen = isFullScreen;
+        
+        // Set the game engine
+        graphics.IsFullScreen = Instance.IsFullScreen;
         graphics.ApplyChanges();
+        
+        // Update Width and Height
+        if (Instance.IsFullScreen)
+        {
+            Width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            Height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+        }
     }
 }

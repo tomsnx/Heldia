@@ -84,21 +84,6 @@ public class Map
     
     private void ActivateTilesAroundCamera(int playerTileX, int playerTileY)
     {
-        
-        /*int minX = Math.Max(playerTileX - _nbTilesToDisplay, 0);
-        int maxX = Math.Min(playerTileX + _nbTilesToDisplay, _sizeX - 1);
-        int minY = Math.Max(playerTileY - _nbTilesToDisplay, 0);
-        int maxY = Math.Min(playerTileY + _nbTilesToDisplay, _sizeY - 1);
-
-        // Active les tiles dans la zone définie
-        for (int x = minX; x <= maxX; x++)
-        {
-            for (int y = minY; y <= maxY; y++)
-            {
-                _map[x, y].Active = true;
-            }
-        }*/
-        
         int cameraLeftTile = playerTileX - (Instance.Camera.CameraBounds.Width / tileSize / Instance.MapScale) / 2 - 2;
         int cameraTopTile = playerTileY - (Instance.Camera.CameraBounds.Height / tileSize / Instance.MapScale) / 2 - 2;
         int cameraRightTile = playerTileX + (Instance.Camera.CameraBounds.Width / tileSize / Instance.MapScale) / 2 + 4;

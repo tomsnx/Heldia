@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Heldia.Engine;
 using Heldia.Managers;
 using Microsoft.Xna.Framework;
@@ -7,39 +8,32 @@ namespace Heldia.Objects;
 
 public class Grass : GameObject
 {
-    //Sprite
-    private SpriteSheets _sprite;
+    // Textures names
+    private static readonly string[] GrassNames = {
+        "Grass_1",
+        "Grass_2",
+        "Grass_3",
+        "Flower_1",
+        "Flower_2",
+        "Flower_3"
+    };
 
-    // texture name
+    public static int stateNumber;
+    private int _actualState; // Start at 0 -> 4 grass states in 1 sprite
+
+    // Sprite
+    private SpriteSheets _sprite;
+    
+    // Name of the current object
     private string _name;
-    private int _grassState = 0; // Start at 0 -> 4 grass states in 1 sprite
 
     public Grass(int x, int y, int grassState) : base(x, y, Map.tileSize, Map.tileSize, ObjectId.Grass)
     {
-        _grassState = grassState;
+        _actualState = grassState;
         devideSprite = new Rectangle(0, 0, width, height);
-        
-        switch (_grassState)
-        { 
-            case 1:
-                _name = "Grass_2";
-                break;
-            case 2:
-                _name = "Grass_3";
-                break;
-            case 3:
-                _name = "Flower_1";
-                break;
-            case 4:
-                _name = "Flower_2";
-                break;
-            case 5:
-                _name = "Flower_3";
-                break;
-            default:
-                _name = "Grass_1";
-                break;
-        }
+
+        _name = GrassNames[_actualState];
+        stateNumber = GrassNames.Count();
     }
 
     public override void Init(Main g)

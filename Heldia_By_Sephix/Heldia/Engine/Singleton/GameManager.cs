@@ -11,9 +11,10 @@ public class GameManager
     
     // Global
     public int GameScale { get; private set; } = 3;
+    public bool IsFullScreen { get; set; }
     
     // FPS
-    public float GoalFps { get; set; } = 60;
+    public float GoalFps { get; set; } = 144;
     
     // Camera
     public Camera Camera { get; set; }

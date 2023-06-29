@@ -33,6 +33,12 @@ public class LifeBar : GameObject
 
     public override void Update(GameTime gt, Main g, List<GameObject> objects)
     {
+        if (Instance.IsFullScreen)
+        {
+            barWidth *= Instance.GameScale / 2;
+            barHeight *= Instance.GameScale / 2;
+        }
+        
         SetBounds(x, y, barWidth, barHeight);
 
         float viePercent = (float)Instance.PlayerHealth / Instance.PlayerMaxHealth;

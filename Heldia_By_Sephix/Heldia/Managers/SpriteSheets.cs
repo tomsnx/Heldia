@@ -21,9 +21,9 @@ public class SpriteSheets
 
         if (type != null)
         {
-            this.path = Path.Combine(path, type, name);
+            path = Path.Combine(path, type, name);
         }
-        this._texture = g.Content.Load<Texture2D>(path);
+        _texture = g.Content.Load<Texture2D>(path);
     }
 
     // gets
