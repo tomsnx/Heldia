@@ -1,40 +1,61 @@
-﻿using System.ComponentModel.Design.Serialization;
+﻿using System;
 using Heldia.Engine;
 using Heldia.Managers;
 using Heldia.Objects;
 using Heldia.Objects.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using static Heldia.Engine.Singleton.GameManager;
-using Overlay = Heldia.Managers.Overlay;
 
 namespace Heldia.Pages;
 public class PageGame : Page
 {
     Color _backgroundColor = Color.Azure;
 
-    public ObjectManager objMgr;
-    public Map map;
-    public Player player;
+    private ObjectManager _objMgr;
     
-    private Overlay _hud;
+    private Map _map;
+    private Player _player;
+    
+    private Managers.Overlay _hud;
     private LifeBar _lifeBar;
     private StaminaBar _staminaBar;
 
-    public Camera cam;
+    private Camera _cam;
+
+    private Timer _dayTimer;
+
+    private Song _song;
+
+    private Pointer _pointer;
+    
+    // Others
+    private bool escapePressed;
+    
+    //TODO: Faire une variable KeyBoard pour tous le jeux et pas une private à chaque fois
+    private KeyboardState _kb;
 
     /// <summary>
     /// States which display the game and made all calculations
     /// </summary>
     public PageGame() : base(PageId.Game)
     {
-        objMgr = new ObjectManager();
-        player = new Player(200, 200);
-        cam = new Camera(new Vector2(0, 0));
-        map = new Map(Instance.GameScale);
-        _lifeBar = new LifeBar(10, 10, player);
-        _staminaBar = new StaminaBar(10, LifeBar.barHeight * 2, player);
-        _hud = new Overlay(cam, player);
+        _objMgr = new ObjectManager();
+        _player = new Player(500, 500);
+        _cam = new Camera(new Vector2(0, 0));
+        _map = new Map(Instance.GameScale);
+        _lifeBar = new LifeBar(10, 10, _player);
+        _staminaBar = new StaminaBar(10, LifeBar.barHeight * 2, _player);
+        _hud = new Managers.Overlay(_player);
+
+        _pointer = new Pointer();
+
+        _dayTimer = new Timer(960, () =>
+        {
+            Instance.Day++;
+        }, true);
     }
 
     public override void Init(Main g)
@@ -42,26 +63,53 @@ public class PageGame : Page
         IsLoad = true;
         
         // Player
-        player.SetScale(Instance.GameScale);
-        objMgr.Add(player, g);
+        _player.SetScale(Instance.GameScale);
+        _objMgr.Add(_player, g);
         
         // HUD
         _hud.AddHudObject(_lifeBar);
         _hud.AddHudObject(_staminaBar);
         
         // Map
-        map.Init(objMgr ,g);
+        _map.Init(_objMgr ,g);
+        
+        //FIXME: Mettre le fichier test en .xnb
+        /*_song = g.Content.Load<Song>("Sounds/test");
+        MediaPlayer.Play(_song);
+        MediaPlayer.IsRepeating = true;
+        MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;*/
     }
 
     public override void Update(GameTime gt, Main g)
     {
         Instance.TotalGameTime += gt.ElapsedGameTime.TotalMilliseconds;
         
-        cam.Update(player.GetPositionCentered(), g);
-        map.Update(gt, g);
-        player.GetPositionCentered();
-        objMgr.Update(gt, g);
-        _hud.Update(gt, g);
+        var currentlyPressed = Instance.Kb.IsKeyDown(Keys.Escape);
+        if (currentlyPressed && !escapePressed)
+        {
+            if (Instance.SettingsMode) Instance.SettingsMode = false;
+            else Instance.SettingsMode = true;
+            
+            escapePressed = true;
+        }
+        else if (!currentlyPressed)
+        {
+            escapePressed = false;
+        }
+
+        if (!Instance.SettingsMode)
+        {
+            _cam.Update(g);
+            Instance.CameraPos = _player.GetPositionCentered();
+            
+            _map.Update(gt, g);
+            
+            _objMgr.Update(gt, g);
+        
+            _hud.Update(gt, g);
+        
+            _dayTimer.Update(gt);
+        }
     }
 
     public override void Draw(GameTime gt, Main g)
@@ -74,18 +122,26 @@ public class PageGame : Page
             g.GraphicsDevice.Clear(_backgroundColor);
         
             Drawing.spriteBatch.Begin(sortMode: SpriteSortMode.FrontToBack, 
-                transformMatrix: cam.GetViewMatrix(), 
+                transformMatrix: _cam.GetViewMatrix(), 
                 samplerState: SamplerState.PointClamp);
         
-            objMgr.Draw(g);
-        
+            _objMgr.Draw(g);
+
             Drawing.spriteBatch.End();
-        
-        
+
+            
             // Static Object Drawing
             Drawing.spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             _hud.Draw(g);
+            //_pointer.Draw(g);
             Drawing.spriteBatch.End();
         }
+    }
+    
+    void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
+    {
+        // 0.0f is silent, 1.0f is full volume
+        MediaPlayer.Volume -= 0.1f;
+        MediaPlayer.Play(_song);
     }
 }

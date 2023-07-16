@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 namespace Heldia.Engine;
 class Animation
 {
-    public Rectangle rect;
+    private Rectangle _rect;
     private Vector2 _dims;
     
     private float _myDelay = 0.1f; // Seconds
@@ -27,14 +27,15 @@ class Animation
             }
         }, true);
     }
-
-    // Get
-    public void GetAnimRect(int dimsx, int dimsy, GameTime gt)
+    
+    // Gets
+    public Rectangle GetAnimRect(int dimsx, int dimsy, GameTime gt)
     {
         _dims = new Vector2(dimsx, dimsy);
         
         _timer.Update(gt);
         
-        rect = new Rectangle((int)_dims.X * _myFrames, (int)_dims.Y * Player.line, (int)_dims.X, (int)_dims.Y);
+        _rect = new Rectangle((int)_dims.X * _myFrames, (int)_dims.Y * Player.line, (int)_dims.X, (int)_dims.Y);
+        return _rect;
     }
 }

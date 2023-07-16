@@ -1,4 +1,6 @@
 using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace Heldia.Engine.Singleton;
 
@@ -10,16 +12,24 @@ public class GameManager
     public static GameManager Instance { get; private set; }
     
     // Global
+    public string GameTitle { get; private set; } = "Heldia";
     public int GameScale { get; private set; } = 3;
     public bool IsFullScreen { get; set; }
+    public bool DebugMode { get; set; } = true;
+    public bool SettingsMode { get; set; } = false;
     
     // FPS
+    public bool FixedFps { get; } = false;
     public float GoalFps { get; set; } = 144;
-    
+
     // Camera
     public Camera Camera { get; set; }
     public float CameraDelay { get; set; } = 10.0f;
+    public Vector2 CameraPos { get; set; } // Camera destination position (2var system)
     
+    // input
+    public KeyboardState Kb { get; set; }
+
     // Map
     public int MapScale { get; set; }
     public int TileSize { get; set; }
@@ -27,6 +37,7 @@ public class GameManager
     // Player Position
     public float PlayerX { get; set; }
     public float PlayerY { get; set; }
+    public bool sprint { get; set; }
     
     // Player life
     public float PlayerHealth { get; set; }
@@ -44,6 +55,8 @@ public class GameManager
     
     // Elapsed Time
     public double TotalGameTime { get; set; }
+
+    public int Day { get; set; }
 
     // Constructor
     private GameManager()

@@ -5,25 +5,25 @@ namespace Heldia.Managers;
 public class SpriteSheets
 {
     // texture path
-    string path { get; set; } = "textures";
-    string type { get; set; }
-    string name { get; set; }
+    string GlobalPath { get; set; } = "textures";
+    string Type { get; set; }
+    string Name { get; set; }
 
     Texture2D _texture;
 
-    SpriteFolderManager _sfManager = new SpriteFolderManager();
+    SpriteFolderManager _sfManager = new ();
 
     //constructor
     public SpriteSheets(Main g, int id,string name)
     {
-        this.name = name;
-        type = _sfManager.GetSfManager(id);
+        Name = name;
+        Type = _sfManager.GetSfManager(id);
 
-        if (type != null)
+        if (Type != null)
         {
-            path = Path.Combine(path, type, name);
+            GlobalPath = Path.Combine(GlobalPath, Type, Name);
         }
-        _texture = g.Content.Load<Texture2D>(path);
+        _texture = g.Content.Load<Texture2D>(GlobalPath);
     }
 
     // gets

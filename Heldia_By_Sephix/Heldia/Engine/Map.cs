@@ -1,9 +1,9 @@
 using System;
+using Heldia.Engine.Enum;
 using Heldia.Managers;
 using Heldia.Objects;
 using Microsoft.Xna.Framework;
 using static Heldia.Engine.Singleton.GameManager;
-using static Heldia.Objects.ObjectId;
 
 namespace Heldia.Engine;
 
@@ -65,7 +65,7 @@ public class Map
 
     public void Update(GameTime gt, Main g)
     {
-        // Convertir la position du joueur en coordonnées de la grille
+        /*// Convertir la position du joueur en coordonnées de la grille
         int playerTileX = (int)Math.Floor(Instance.PlayerX / (tileSize * Instance.MapScale));
         int playerTileY = (int)Math.Floor(Instance.PlayerY / (tileSize * Instance.MapScale));
 
@@ -79,7 +79,26 @@ public class Map
         }
 
         // Activer les tiles autour de la caméra du joueur
-        ActivateTilesAroundCamera(playerTileX, playerTileY);
+        ActivateTilesAroundCamera(playerTileX, playerTileY);*/
+        
+        // Convertir la position du joueur en coordonnées de la grille
+        int cameraTileX = (int)Math.Floor(Instance.Camera.GetPositionCentered().X / (tileSize * Instance.MapScale));
+        int cameraTileY = (int)Math.Floor(Instance.Camera.GetPositionCentered().Y / (tileSize * Instance.MapScale));
+
+        // Désactiver toutes les tiles
+        for (int x = 0; x < _sizeX; x++)
+        {
+            for (int y = 0; y < _sizeY; y++)
+            {
+                if (_map[x, y].Active)
+                {
+                    _map[x, y].Active = false;
+                }
+            }
+        }
+
+        // Activer les tiles autour de la caméra du joueur
+        ActivateTilesAroundCamera(cameraTileX, cameraTileY);
     }
     
     private void ActivateTilesAroundCamera(int playerTileX, int playerTileY)

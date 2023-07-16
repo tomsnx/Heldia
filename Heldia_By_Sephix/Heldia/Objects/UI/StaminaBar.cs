@@ -1,6 +1,7 @@
 using Heldia.Engine;
 using Heldia.Managers;
 using System.Collections.Generic;
+using Heldia.Engine.Enum;
 using Microsoft.Xna.Framework;
 using static Heldia.Engine.Singleton.GameManager;
 
@@ -18,19 +19,19 @@ public class StaminaBar : GameObject
     private Color _outlineColor;
     private Color _inlineColor;
 
-    public StaminaBar(int x, int y, Player player) : base(x, y, barWidth, barHeight, ObjectId.StaminaBar)
+    public StaminaBar(int x, int y, Player player) : base(x, y, barWidth, barHeight, (int)EObjectId.StaminaBar)
     {
         _player = player;
         _outlineColor = Color.Black;
         _inlineColor = Color.Green;
     }
 
-    public override void Init(Main g)
+    public override void Init(Main g, List<GameObject> objects)
     {
         
     }
 
-    public override void Update(GameTime gt, Main g, List<GameObject> objects)
+    public override void Update(GameTime gt, Main g)
     {
         if (Instance.IsFullScreen)
         {

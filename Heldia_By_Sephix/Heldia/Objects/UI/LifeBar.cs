@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Heldia.Engine;
+using Heldia.Engine.Enum;
 using Heldia.Managers;
 using Microsoft.Xna.Framework;
 using static Heldia.Engine.Singleton.GameManager;
@@ -19,19 +20,19 @@ public class LifeBar : GameObject
     private Color _outlineColor;
     private Color _inlineColor;
 
-    public LifeBar(int x, int y, Player player) : base(x, y, barWidth, barHeight, ObjectId.LifeBar)
+    public LifeBar(int x, int y, Player player) : base(x, y, barWidth, barHeight, (int)EObjectId.LifeBar)
     {
         _player = player;
         _outlineColor = Color.Black;
         _inlineColor = Color.Red;
     }
 
-    public override void Init(Main g)
+    public override void Init(Main g, List<GameObject> objects)
     {
         
     }
 
-    public override void Update(GameTime gt, Main g, List<GameObject> objects)
+    public override void Update(GameTime gt, Main g)
     {
         if (Instance.IsFullScreen)
         {

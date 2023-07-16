@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Heldia.Engine;
+using Heldia.Engine.Enum;
 using Heldia.Managers;
 using Microsoft.Xna.Framework;
 
@@ -27,7 +28,7 @@ public class Grass : GameObject
     // Name of the current object
     private string _name;
 
-    public Grass(int x, int y, int grassState) : base(x, y, Map.tileSize, Map.tileSize, ObjectId.Grass)
+    public Grass(int x, int y, int grassState) : base(x, y, Map.tileSize, Map.tileSize, (int)EObjectId.Grass)
     {
         _actualState = grassState;
         devideSprite = new Rectangle(0, 0, width, height);
@@ -36,17 +37,17 @@ public class Grass : GameObject
         stateNumber = GrassNames.Count();
     }
 
-    public override void Init(Main g)
+    public override void Init(Main g, List<GameObject> objects)
     {
-        _sprite = new SpriteSheets(g, ObjectId.Grass, _name);
+        _sprite = new SpriteSheets(g, (int)EObjectId.Grass, _name);
     }
 
     public override void Destroy(Main g)
     {
-
+        
     }
 
-    public override void Update(GameTime gt, Main g, List<GameObject> objects)
+    public override void Update(GameTime gt, Main g)
     {
         if (Active)
         {
@@ -57,8 +58,6 @@ public class Grass : GameObject
     public override void Draw(Main g)
     {
         if (Active)
-        {
             Drawing.FillRect(_sprite.GetSheet(), devideSprite, bounds, Color.White, 0, g);
-        }
     }
 }

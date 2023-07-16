@@ -18,11 +18,9 @@ public class Button : GameObject
 
     // Button Click Event
     public event EventHandler Click;
-
-    // TODO: Mettre du text dans les boutons
-    /*private String text;
-    private SpriteFont font;
-    private Color textColor;*/
+    
+    //TODO: Mettre des textures sur les boutons
+    //private SpriteFont font;
 
     /*public Button(int x, int y, int w, int h, int id, string text, SpriteFont font , Color textColor) : base(x, y, w, h, id)
     {
@@ -40,7 +38,7 @@ public class Button : GameObject
     }
     
     // Init
-    public override void Init(Main g)
+    public override void Init(Main g, List<GameObject> objects)
     {
         _textSize = Drawing.Arial32.MeasureString(text);
         _textPosition = new Vector2(
@@ -56,7 +54,7 @@ public class Button : GameObject
     }
 
     // Update states of button, check if is clicked...
-    public override void Update(GameTime gt, Main g, List<GameObject> objects)
+    public override void Update(GameTime gt, Main g)
     {
         // Check if the button is being clicked
         if (bounds.Contains(Mouse.GetState().Position))

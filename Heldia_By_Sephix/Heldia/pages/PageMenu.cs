@@ -4,7 +4,6 @@ using Heldia.Engine;
 using Heldia.Managers;
 using Heldia.Menu;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 
 namespace Heldia.Pages;
 
@@ -15,7 +14,6 @@ public class PageMenu : Page
     
     // Managers
     private PageManager _pageMgr;
-    private ContentManager _content;
 
     // GameObject List (here : buttons...)
     private List<GameObject> _objectsList;
@@ -34,9 +32,8 @@ public class PageMenu : Page
     private TitleMenu _titleMenu;
 
     // Constructor
-    public PageMenu(ContentManager content, PageManager pageMgr, Main g) : base(PageId.Menu)
+    public PageMenu(PageManager pageMgr, Main g) : base(PageId.Menu)
     {
-        _content = content;
         _pageMgr = pageMgr;
         ObjMgr = new ObjectManager();
         _titleMenu = new TitleMenu(Drawing.Width / 2, Drawing.Height / 2, 10, 16);

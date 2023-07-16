@@ -1,24 +1,26 @@
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using Heldia.Engine;
 using Heldia.Objects;
 using Heldia.Objects.UI;
+using Heldia.Overlay;
 using Microsoft.Xna.Framework;
+using static Heldia.Engine.Singleton.GameManager;
 
 namespace Heldia.Managers;
 
 public class Overlay
 {
-    private bool _debugMode;
     private readonly List<GameObject> _uiObjects = new List<GameObject>();
-    private Camera _cam;
     private Player _player;
     private DebugInterface _debugInterface;
+    private Settings _settings;
 
-    public Overlay(Camera cam, Player player)
+    public Overlay(Player player)
     {
-        _cam = cam;
         _player = player;
-        _debugMode = true;
+        _settings = new Settings(player);
         _debugInterface = new DebugInterface(player);
     }
 
@@ -26,7 +28,7 @@ public class Overlay
     {
         foreach (var uiObject in _uiObjects)
         {
-            uiObject.Update(gt, g, _uiObjects);
+            uiObject.Update(gt, g);
         }
     }
 
@@ -37,9 +39,14 @@ public class Overlay
             uiObject.Draw(g);
         }
 
-        if (_debugMode)
+        if (Instance.DebugMode)
         {
             _debugInterface.Draw(g);
+        }
+
+        if (Instance.SettingsMode)
+        {
+            _settings.Draw(g);
         }
     }
     

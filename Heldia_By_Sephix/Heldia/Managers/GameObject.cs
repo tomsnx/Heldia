@@ -8,7 +8,7 @@ public abstract class GameObject
     
     //Dimensions Variables
     public float x, y;
-    public float xSpeed, ySpeed;
+    protected float xSpeed, ySpeed;
     public int width, height;
 
     public Vector2 Position { get { return new Vector2(x, y); } set { x = value.X; y = value.Y; } }
@@ -27,19 +27,19 @@ public abstract class GameObject
             ySpeed = value.Y;
         }
     }
-    public Vector2 Size { get { return new Vector2(width, height); } set { width = (int)value.X; height = (int)value.Y; } }
-    public Rectangle bounds;
-    public Rectangle collisionBounds;
-    public Rectangle devideSprite;
+    protected Vector2 Size { get { return new Vector2(width, height); } set { width = (int)value.X; height = (int)value.Y; } }
+    protected Rectangle bounds;
+    protected Rectangle collisionBounds;
+    protected Rectangle devideSprite;
 
     //Properties
-    public int id;
-    public string text, tag;
+    protected int id;
+    protected string text, tag;
     public bool rendered, visible;
-    public bool collision = false, hover;
+    protected bool collision = false, hover;
 
     //Sprite
-    public Vector2 spritePos;
+    protected Vector2 spritePos;
 
     public GameObject(int x, int y, int w, int h, int id)
     {
@@ -62,12 +62,12 @@ public abstract class GameObject
     }
 
     //Abstracts Methods
-    public abstract void Init(Main g);
+    public abstract void Init(Main g, List<GameObject> objects);
     public abstract void Destroy(Main g);
-    public abstract void Update(GameTime gt, Main g, List<GameObject> objects);
+    public abstract void Update(GameTime gt, Main g);
     public abstract void Draw(Main g);
 
-    protected bool IsTouchingLeft(GameObject obj)
+    public bool IsTouchingLeft(GameObject obj)
     {
         return this.collisionBounds.Right + this.Speed.X > obj.bounds.Left &&
                this.collisionBounds.Left < obj.bounds.Left &&
@@ -75,7 +75,7 @@ public abstract class GameObject
                this.collisionBounds.Top < obj.bounds.Bottom;
     }
 
-    protected bool IsTouchingRight(GameObject obj)
+    public bool IsTouchingRight(GameObject obj)
     {
         return this.collisionBounds.Left + this.Speed.X < obj.bounds.Right &&
                this.collisionBounds.Right > obj.bounds.Right &&
@@ -83,7 +83,7 @@ public abstract class GameObject
                this.collisionBounds.Top < obj.bounds.Bottom;
     }
 
-    protected bool IsTouchingTop(GameObject obj)
+    public bool IsTouchingTop(GameObject obj)
     {
         return this.collisionBounds.Bottom + this.Speed.Y > obj.bounds.Top &&
                this.collisionBounds.Top < obj.bounds.Top &&
@@ -91,7 +91,7 @@ public abstract class GameObject
                this.collisionBounds.Left < obj.bounds.Right;
     }
 
-    protected bool IsTouchingBottom(GameObject obj)
+    public bool IsTouchingBottom(GameObject obj)
     {
         return this.collisionBounds.Top + this.Speed.Y < obj.bounds.Bottom &&
                this.collisionBounds.Bottom > obj.bounds.Bottom &&
@@ -109,6 +109,12 @@ public abstract class GameObject
 
     //gets
     public int GetId() { return id; }
+    
+    /// <summary>
+    /// Give you if the object is collide or not.
+    /// </summary>
+    /// <returns>True if object is collide else False</returns>
+    public bool GetCollisionState() { return collision; }
     public float DistanceTo(Vector2 pos) { return Vector2.Distance(Position, pos); }
-    public Vector2 GetPositionCentered() { return new Vector2(x + ((float)width / 2), y + ((float)height / 2)); }
+    public Vector2 GetPositionCentered() { return new Vector2(x + (float)width / 2, y + (float)height / 2); }
 }

@@ -25,7 +25,7 @@ public class ObjectManager
             if (obj.rendered)
             {
                 obj.SetBounds(obj.x, obj.y, obj.width, obj.height);
-                obj.Update(gt, g, objects);
+                obj.Update(gt, g);
             }
         }
     }
@@ -53,7 +53,7 @@ public class ObjectManager
     }
 
     //Sets
-    public void Add(GameObject obj, Main g) { objects.Add(obj); obj.Init(g); }
+    public void Add(GameObject obj, Main g) { objects.Add(obj); obj.Init(g, objects); }
     public virtual bool Remove(GameObject obj, Main g) { obj.Destroy(g); return objects.Remove(obj); }
     public virtual bool Remove(Button obj, Main g) { obj.Destroy(g); return objects.Remove(obj); }
     public virtual bool Remove(int index, Main g) { objects[index].Destroy(g);  return objects.Remove(objects[index]); }

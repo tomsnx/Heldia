@@ -4,14 +4,17 @@ using Heldia.Managers;
 using Heldia.Pages;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Input;
 using static Heldia.Engine.Singleton.GameManager;
 
 namespace Heldia;
 
+//TODO: Faire un système de clavier pour que quand les paramètres seront
+//TODO: créés, il y est un tableau de touches modifiable (apporter les modification nécessaire au system de déplacement du joueur)
+//TODO: Je pense qu'il faut utiliser les dictionnaires pour que ce soit plus simple,(ex: espace = clé et la touche = coffre)
+
 public class Main : Game
 {
-    public static ContentManager content;
-
     // page
     public PageManager pageMgr;
     public PageMenu pageMenu;
@@ -34,7 +37,7 @@ public class Main : Game
 
         // Init objects
         pageMgr = new PageManager();
-        pageMenu = new PageMenu(content, pageMgr, this);
+        pageMenu = new PageMenu(pageMgr, this);
         pageGame = new PageGame();
 
         // window
@@ -67,15 +70,18 @@ public class Main : Game
     protected override void Update(GameTime gameTime)
     {
         // Set the fps mode
-        FixedTimeStep(true);
+        FixedTimeStep(Instance.FixedFps);
         ChangeFpsMode(Instance.GoalFps);
+        
+        // input
+        Instance.Kb = Keyboard.GetState();
         
         //update pages
         pageMgr.Update(gameTime, this);
 
         // update drawing
         Drawing.Update(gameTime, this);
-        Window.Title = "Heldia";
+        Window.Title = Instance.GameTitle;
 
         // update base
         base.Update(gameTime);
@@ -88,10 +94,22 @@ public class Main : Game
         base.Draw(gameTime);
     }
 
+    /// <summary>
+    /// If true, the game will take into account the
+    /// TargetElapsedTime(ChangeFpsMode() function) to set the fps to given
+    /// number otherwise the game will run at an
+    /// unlimited number of FPS.
+    /// </summary>
+    /// <param name="fixedFps">false as default</param>
     public void FixedTimeStep(bool fixedFps = false)
     {
         IsFixedTimeStep = fixedFps;
     }
+    
+    /// <summary>
+    /// Apply the FPS parameter to the game if FixedTimeStep() is true
+    /// </summary>
+    /// <param name="fps"></param>
     public void ChangeFpsMode(float fps)
     {
         TargetElapsedTime = TimeSpan.FromSeconds(1.0 / fps);

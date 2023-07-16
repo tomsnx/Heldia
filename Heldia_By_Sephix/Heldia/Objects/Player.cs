@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Heldia.Engine;
+using Heldia.Engine.Collisions;
+using Heldia.Engine.Enum;
 using Heldia.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -13,13 +15,22 @@ namespace Heldia.Objects;
 /// </summary>
 public class Player : GameObject
 {
-    // input
-    private KeyboardState _kb;
     private MouseState _mouse;
 
     // speeds
+    public bool walk;
     public float walkSpeed;
     public float runCoef;
+    
+    // Direction
+    private Vector2 _direction = Vector2.Zero;
+    public static bool north;
+    public static bool east;
+    public static bool south;
+    public static bool west;
+    
+    // Collision
+    private Collision _collisionManager;
 
     // sprite
     private SpriteSheets _sprite;
@@ -33,23 +44,26 @@ public class Player : GameObject
     // set dimensions
     public static int playerWidth = 16;
     public static int playerHeight = 32;
-    public int spriteBottomSpace = 27; // Space at the bottom of the sprite
+    public static int spriteBottomSpace = 27; // Space at the bottom of the sprite
 
-    // init the started animation
+    // Init the started animation
     public static int column = 5; // Started at 0 so n-1 frame
     public static int line = 0; // Started at 0
+    
+    // Stamina
     public bool StaminaDownToZero { get; set; }
-    private bool _lostStamina = false;
-    private bool _isInSprint = false;
+    private bool _lostStamina;
+    private bool _isInSprint;
 
+    // Speed
     private float _spd;
     
-    // Timer
+    // Timers
     private Timer _lifeRegenTimer;
     private Timer _staminaRegenTimer;
     private Timer _staminaLostTimer;
 
-    public Player(int x, int y) : base(x, y, playerWidth, playerHeight, ObjectId.Player)
+    public Player(int x, int y) : base(x, y, playerWidth, playerHeight, (int)EObjectId.Player)
     {
         // Speed
         walkSpeed = 225f;
@@ -84,80 +98,97 @@ public class Player : GameObject
         }, true, false);
     }
 
-    public override void Init(Main g)
+    public override void Init(Main g, List<GameObject> objects)
     {
         // Init anim
         _anim = new Animation();
         
         // Sprite Properties
         _name = "player";
-    }
-    public override void Destroy(Main g)
-    {
+
+        // Load Sprite
+        _sprite = new SpriteSheets(g, (int)EObjectId.Player, _name);
         
+        // Collision
+        _collisionManager = new Collision();
+        _collisionManager.SetMainObj(this);
+        _collisionManager.SetObjList(objects);
+        _collisionManager.FdelegateX = () =>
+        {
+            SetSpeed(0, Speed.Y);
+        };
+        _collisionManager.FdelegateY = () =>
+        {
+            SetSpeed(Speed.X, 0);
+        };
     }
 
-    public override void Update(GameTime gt, Main g, List<GameObject> objects)
+    public override void Update(GameTime gt, Main g)
     {
         // Timers Update
         _lifeRegenTimer.Update(gt);
         _staminaRegenTimer.Update(gt);
         _staminaLostTimer.Update(gt);
-
-        // input
-        _kb = Keyboard.GetState();
+        
         _mouse = Mouse.GetState();
         
         // Move
-        MovementInput(objects);
+        MovementInput();
+        
+        // Collision
+        _collisionManager.Update();
 
         // Update x and y positions
         x += Speed.X;
-        Instance.PlayerX = x;
+        Instance.PlayerX = GetPositionCentered().X;
         y += Speed.Y;
-        Instance.PlayerY = y;
+        Instance.PlayerY = GetPositionCentered().Y;
 
         // Set and Update the collision rectangle named `bounds`
-        SetCollisionBounds(x + (float)width/6, y + (float)height / 2 + 5, width - (width/6 * 2), height / 2 - spriteBottomSpace - 5);
+        SetCollisionBounds(x + (float)width/6, 
+                           y + (float)height / 2 + 5, 
+                           width - (width/6 * 2), 
+                           height / 2 - spriteBottomSpace - 5);
 
         if (Instance.PlayerStamina == 0)
-        {
             StaminaDownToZero = true;
-        }
 
         if (StaminaDownToZero)
         {
             if (Instance.PlayerStamina >= Instance.PlayerMaxStamina)
-            {
                 StaminaDownToZero = false;
-            }
         }
 
         // Regeneration System
         LifeRegeneration();
         StaminaRegeneration();
-
-        // Set variable devideSprite to a X and Y Value of the TileSet
-        _anim.GetAnimRect(playerWidth,playerHeight, gt);
-        devideSprite = _anim.rect;
         
-        _sprite = new SpriteSheets(g, ObjectId.Player, _name);
+        // Set variable devideSprite to a X and Y Value of the TileSet
+        devideSprite = _anim.GetAnimRect(playerWidth,playerHeight, gt);
     }
 
     public override void Draw(Main g)
     {
         Drawing.FillRect(_sprite.GetSheet(), devideSprite, bounds, Color.White, 0.5f, g);
-        //Drawing.FillRect(collisionBounds, Color.Red, 0.49f, g);
+        //Drawing.FillRect(collisionBounds, Color.Red, 0.51f, g);
     }
+    
+    public override void Destroy(Main g)
+    {
+        
+    }
+    
     
     // Other Public Methods
     
-    /**
-     * Decrease life of the player with the dommages parameter
-     */
+    /// <summary>
+    /// Decrease life of the player with the dommages parameter
+    /// </summary>
+    /// <param name="dommage">Dommage that you want to afflige to player</param>
     public void TakeDommage(float dommage)
     {
-        if (Instance.PlayerHealth > 0f && (Instance.PlayerHealth - dommage) >= 0f)
+        if (Instance.PlayerHealth > 0f && 
+            (Instance.PlayerHealth - dommage) >= 0f)
         {
             Instance.PlayerHealth -= dommage;
         }
@@ -167,13 +198,99 @@ public class Player : GameObject
         }
     }
 
-    // Private Methods
-    private void MovementInput(List<GameObject> objects)
+    /// <summary>
+    /// Manages all of the player movement.
+    /// Check entrys 
+    /// </summary>
+    private void MovementInput()
     {
         // --- Pressed ---
+        CheckSprint();
 
-        // Sprint
-        if (_kb.IsKeyDown(Keys.LeftShift) && 
+        if (Instance.Kb.IsKeyDown(Keys.Z)) north = true;
+        else north = false;
+        
+        if (Instance.Kb.IsKeyDown(Keys.S)) south = true;
+        else south = false;
+        
+        if (Instance.Kb.IsKeyDown(Keys.Q)) west = true;
+        else west = false;
+        
+        if (Instance.Kb.IsKeyDown(Keys.D)) east = true;
+        else east = false;
+
+        UpdateDirection();
+
+        // Normalize direction vector if necessary
+        if (_direction != Vector2.Zero)
+        {
+            _direction.Normalize();
+        }
+
+        SetSpeed(_direction.X * _spd, _direction.Y * _spd);
+    }
+
+    /// <summary>
+    /// Update the sprite direction and the vector direction
+    /// </summary>
+    private void UpdateDirection()
+    {
+        // Diagonal
+        if (north && east)
+        {
+            _direction = new Vector2(1, -1);
+            line = (int)ESpriteDirection.East;
+        }
+        else if (south && east)
+        {
+            _direction = new Vector2(1, 1);
+            line = (int)ESpriteDirection.East;
+        }
+        else if (north && west)
+        {
+            _direction = new Vector2(-1, -1);
+            line = (int)ESpriteDirection.West;
+        }
+        else if (south && west)
+        {
+            _direction = new Vector2(-1, 1);
+            line = (int)ESpriteDirection.West;
+        }
+        // Vertical
+        else if (north)
+        {
+            _direction = new Vector2(0, -1);
+            line =(int)ESpriteDirection.North;
+        }
+        else if (south)
+        {
+            _direction = new Vector2(0, 1);
+            line = (int)ESpriteDirection.South;
+        }
+        // Horizontal
+        else if (east)
+        {
+            _direction = new Vector2(1, 0);
+            line = (int)ESpriteDirection.East;
+        }
+        else if (west)
+        {
+            _direction = new Vector2(-1, 0);
+            line = (int)ESpriteDirection.West;
+        }
+        else
+        {
+            _direction = new Vector2(0, 0);
+            line = (int)ESpriteDirection.Idle;
+        }
+    }
+
+    /// <summary>
+    /// Check if the player sprint or not.
+    /// </summary>
+    private void CheckSprint()
+    {
+        if (Instance.Kb.IsKeyDown(Keys.LeftShift) && 
             Instance.PlayerStamina >= 0 && 
             !StaminaDownToZero && 
             (xSpeed != 0 || ySpeed != 0))
@@ -182,6 +299,7 @@ public class Player : GameObject
             _staminaLostTimer.Active = true;
             _lostStamina = true;
             _isInSprint = true;
+            Instance.sprint = _isInSprint;
         }
         else
         {
@@ -189,107 +307,14 @@ public class Player : GameObject
             _staminaLostTimer.Active = false;
             _lostStamina = false;
             _isInSprint = false;
-        }
-
-        Vector2 direction = Vector2.Zero;
-
-        //Diagonal movements
-        if (_kb.IsKeyDown(Keys.S) && _kb.IsKeyDown(Keys.D))
-        {
-            direction = new Vector2(1, 1);
-            line = 1;
-        }
-        else if (_kb.IsKeyDown(Keys.S) && _kb.IsKeyDown(Keys.Q))
-        {
-            direction = new Vector2(-1, 1);
-            line = 2;
-        }
-        else if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.D))
-        {
-            direction = new Vector2(1, -1);
-            line = 1;
-        }
-        else if (_kb.IsKeyDown(Keys.Z) && _kb.IsKeyDown(Keys.Q))
-        {
-            direction = new Vector2(-1, -1);
-            line = 2;
-        }
-        
-        //Vertical movements
-        else if (_kb.IsKeyDown(Keys.Z))
-        {
-            direction = new Vector2(0, -1);
-            line = 3;
-        }
-        else if (_kb.IsKeyDown(Keys.S))
-        {
-            direction = new Vector2(0, 1);
-            line = 4;
-        }
-        
-        // Horizontal movements
-        else if (_kb.IsKeyDown(Keys.Q))
-        {
-            direction = new Vector2(-1, 0);
-            line = 2;
-        }
-        else if (_kb.IsKeyDown(Keys.D))
-        {
-            direction = new Vector2(1, 0);
-            line = 1;
-        }
-
-        // Normalize direction vector if necessary
-        if (direction != Vector2.Zero)
-        {
-            direction.Normalize();
-        }
-
-        SetSpeed(direction.X * _spd, direction.Y * _spd);
-        
-        // TODO: Faire un objet collision avec 2 délégates pour lui
-        // TODO: passer le code à faire en cas de collision sur x ET y
-        // Check Collisions and stop movement
-        foreach (var obj in objects)
-        {
-            if (obj.collision)
-            {
-                if(obj.id == 1)
-                {
-                    if ((Speed.X > 0 && IsTouchingLeft(obj)) || 
-                        (Speed.X < 0 && IsTouchingRight(obj)))
-                    {
-                        SetSpeed( 0,  Speed.Y);
-                    }
-                    if ((Speed.Y > 0 && IsTouchingTop(obj)) ||
-                        (Speed.Y < 0 && IsTouchingBottom(obj)))
-                    {
-                        SetSpeed(Speed.X,  0);
-                    }
-                }
-            }
-        }
-
-        // --- Released ---
-        if (_kb.IsKeyUp(Keys.Z) && _kb.IsKeyUp(Keys.S))
-        {
-            SetSpeed(Speed.X, 0);
-        }
-
-        if (_kb.IsKeyUp(Keys.Q) && _kb.IsKeyUp(Keys.D))
-        {
-            SetSpeed(0, Speed.Y);
-        }
-
-        // Set idle animation
-        if (_kb.IsKeyUp(Keys.Q) && _kb.IsKeyUp(Keys.D) &&
-            _kb.IsKeyUp(Keys.Z) && _kb.IsKeyUp(Keys.S))
-        {
-            line = 0;
+            Instance.sprint = _isInSprint;
         }
     }
 
-
+    /// <summary>
+    /// Manages the player's life regeneration by activating
+    /// or disable the life timer.
+    /// </summary>
     private void LifeRegeneration()
     {
         if(Instance.PlayerHealth < Instance.PlayerMaxHealth)
@@ -302,6 +327,10 @@ public class Player : GameObject
         }
     }
 
+    /// <summary>
+    /// Manages the player's stamina regeneration by
+    /// activating or disable the stamina timer.
+    /// </summary>
     private void StaminaRegeneration()
     {
         if (_lostStamina) return;

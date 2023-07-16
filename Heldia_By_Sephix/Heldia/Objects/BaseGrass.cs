@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Heldia.Engine;
+using Heldia.Engine.Enum;
 using Heldia.Managers;
 using Microsoft.Xna.Framework;
 
@@ -12,25 +13,25 @@ public class BaseGrass : GameObject
     // texture name
     string _name = "baseGrass";
 
-    public BaseGrass(int x, int y) : base(x, y, Map.tileSize, Map.tileSize, ObjectId.BaseGrass)
+    public BaseGrass(int x, int y) : base(x, y, Map.tileSize, Map.tileSize, (int)EObjectId.BaseGrass)
     {
         
     }
 
-    public override void Init(Main g)
+    public override void Init(Main g, List<GameObject> objects)
     {
-        _sprite = new SpriteSheets(g, ObjectId.BaseGrass, _name);
+        _sprite = new SpriteSheets(g, (int)EObjectId.BaseGrass, _name);
     }
     public override void Destroy(Main g)
     {
-
+        
     }
 
-    public override void Update(GameTime gt, Main g, List<GameObject> objects)
+    public override void Update(GameTime gt, Main g)
     {
         if (Active)
         {
-            collision = true;
+            if(collision) collision = false;
         }
     }
 

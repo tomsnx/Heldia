@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Heldia.Engine;
+using Heldia.Engine.Enum;
 using Heldia.Managers;
 using Microsoft.Xna.Framework;
 
@@ -12,12 +13,12 @@ public class Tree : GameObject
     // texture name
     private string _name = "tree";
 
-    public Tree(int x, int y) : base(x, y, 32, 37, ObjectId.Tree)
+    public Tree(int x, int y) : base(x, y, 32, 37, (int)EObjectId.Tree)
     {
 
     }
 
-    public override void Init(Main g)
+    public override void Init(Main g, List<GameObject> objects)
     {
 
     }
@@ -26,9 +27,9 @@ public class Tree : GameObject
 
     }
 
-    public override void Update(GameTime gt, Main g, List<GameObject> objects)
+    public override void Update(GameTime gt, Main g)
     {
-        _sprite = new SpriteSheets(g, ObjectId.Tree, _name);
+        _sprite = new SpriteSheets(g, (int)EObjectId.Tree, _name);
     }
 
     public override void Draw(Main g)

@@ -1,34 +1,35 @@
-﻿using Heldia.Objects;
+﻿using Heldia.Engine.Enum;
+using Heldia.Objects;
 
 namespace Heldia.Managers;
 public class SpriteFolderManager
 {
-    enum e_IdFile // Int by default
+    enum EIdFile // Int by default
     {
-        Characters = ObjectId.Player,
-        Block = ObjectId.Block,
-        Tree = ObjectId.Tree,
-        Grass = ObjectId.Grass,
-        BaseGrass = ObjectId.BaseGrass
+        Characters = EObjectId.Player,
+        Block = EObjectId.Block,
+        Tree = EObjectId.Tree,
+        Grass = EObjectId.Grass,
+        BaseGrass = EObjectId.BaseGrass
     }
 
-    private e_IdFile _id;
+    private EIdFile _id;
 
     // get
     public string GetSfManager(int id)
     {
-        _id = (e_IdFile)id;
+        _id = (EIdFile)id;
 
         //determine the folder of the texture
-        if (_id == e_IdFile.Characters)
+        if (_id == EIdFile.Characters)
         {
             return "characters";
         }
-        else if (_id == e_IdFile.Grass)
+        else if (_id == EIdFile.Grass)
         {
             return "world";
         }
-        else if (_id == e_IdFile.BaseGrass)
+        else if (_id == EIdFile.BaseGrass)
         {
             return "world";
         }
