@@ -53,11 +53,11 @@ public class DebugInterface
         _playerPos = _ubuntu12.MeasureString(_text);
         Drawing.DrawText(new Vector2(Drawing.Width - _playerPos.X -  _hudSpacing, 100), _ubuntu12, Color.Black, _text, g);
         
-        _text = "Player - TilesX : " + (int)Math.Floor(Instance.PlayerX / (Instance.TileSize * Instance.MapScale));
+        _text = "Player - TilesX : " + Instance.PlayerTileX;
         _playerPos = _ubuntu12.MeasureString(_text);
         Drawing.DrawText(new Vector2(Drawing.Width - _playerPos.X -  _hudSpacing, 120), _ubuntu12, Color.Black, _text, g);
         
-        _text = "Player - TilesY : " + (int)Math.Floor(Instance.PlayerY / (Instance.TileSize * Instance.MapScale));
+        _text = "Player - TilesY : " + Instance.PlayerTileY;
         _playerPos = _ubuntu12.MeasureString(_text);
         Drawing.DrawText(new Vector2(Drawing.Width - _playerPos.X -  _hudSpacing, 140), _ubuntu12, Color.Black, _text, g);
         
