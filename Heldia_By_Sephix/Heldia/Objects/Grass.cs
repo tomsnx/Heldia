@@ -31,7 +31,7 @@ public class Grass : GameObject
     public Grass(int x, int y, int grassState) : base(x, y, Map.tileSize, Map.tileSize, (int)EObjectId.Grass)
     {
         _actualState = grassState;
-        devideSprite = new Rectangle(0, 0, width, height);
+        devideSprite = new Rectangle(0, 0, (int)width, (int)height);
 
         _name = GrassNames[_actualState];
         stateNumber = GrassNames.Count();

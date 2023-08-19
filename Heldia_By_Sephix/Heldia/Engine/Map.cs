@@ -9,14 +9,14 @@ namespace Heldia.Engine;
 
 public class Map
 {
-    private static int _sizeX = 250;
-    private static int _sizeY = 250;
+    public static int sizeX = 250;
+    public static int sizeY = 250;
 
     private GameObject[,] _map;
-    private float[,] _noiseMap = new float[_sizeX, _sizeY];
+    private float[,] _noiseMap = new float[sizeX, sizeY];
 
     // Tiles size in pixels
-    public static int tileSize = 32;
+    public static int tileSize;
 
     private Random _rand;
     
@@ -43,14 +43,14 @@ public class Map
     {
         //_map = new int[_sizeX, _sizeY];
         Instance.MapScale = mapScale;
-        Instance.TileSize = tileSize;
+        tileSize = Instance.TileSize;
         _rand = new Random();
     }
 
     // Init
     public void Init(ObjectManager objMgr, Main g)
     {
-        _noiseMap = GeneratePerlinMap(_sizeX, _sizeY, 1f);
+        _noiseMap = GeneratePerlinMap(sizeX, sizeY, 1f);
         _noiseMap = Remap(_noiseMap, 0, 255);
         _map = GenerateGameObjects(_noiseMap);
 
@@ -65,30 +65,14 @@ public class Map
 
     public void Update(GameTime gt, Main g)
     {
-        /*// Convertir la position du joueur en coordonnées de la grille
-        int playerTileX = (int)Math.Floor(Instance.PlayerX / (tileSize * Instance.MapScale));
-        int playerTileY = (int)Math.Floor(Instance.PlayerY / (tileSize * Instance.MapScale));
-
-        // Désactiver toutes les tiles
-        for (int x = 0; x < _sizeX; x++)
-        {
-            for (int y = 0; y < _sizeY; y++)
-            {
-                _map[x, y].Active = false;
-            }
-        }
-
-        // Activer les tiles autour de la caméra du joueur
-        ActivateTilesAroundCamera(playerTileX, playerTileY);*/
-        
         // Convertir la position du joueur en coordonnées de la grille
         int cameraTileX = (int)Math.Floor(Instance.Camera.GetPositionCentered().X / (tileSize * Instance.MapScale));
         int cameraTileY = (int)Math.Floor(Instance.Camera.GetPositionCentered().Y / (tileSize * Instance.MapScale));
 
         // Désactiver toutes les tiles
-        for (int x = 0; x < _sizeX; x++)
+        for (int x = 0; x < sizeX; x++)
         {
-            for (int y = 0; y < _sizeY; y++)
+            for (int y = 0; y < sizeY; y++)
             {
                 if (_map[x, y].Active)
                 {
@@ -109,9 +93,9 @@ public class Map
         int cameraBottomTile = playerTileY + (Instance.Camera.CameraBounds.Height / tileSize / Instance.MapScale) / 2 + 4;
 
         int minX = Math.Max(cameraLeftTile, 0);
-        int maxX = Math.Min(cameraRightTile, _sizeX - 1);
+        int maxX = Math.Min(cameraRightTile, sizeX - 1);
         int minY = Math.Max(cameraTopTile, 0);
-        int maxY = Math.Min(cameraBottomTile, _sizeY - 1);
+        int maxY = Math.Min(cameraBottomTile, sizeY - 1);
 
         // Active les tuiles dans la zone définie par la caméra
         for (int x = minX; x <= maxX; x++)
@@ -125,11 +109,11 @@ public class Map
     
     private GameObject[,] GenerateGameObjects(float[,] noiseMap)
     {
-        GameObject[,] map = new GameObject[_sizeX, _sizeY];
+        GameObject[,] map = new GameObject[sizeX, sizeY];
 
-        for (int x = 0; x < _sizeX; x++)
+        for (int x = 0; x < sizeX; x++)
         {
-            for (int y = 0; y < _sizeY; y++)
+            for (int y = 0; y < sizeY; y++)
             {
                 float noiseValue = noiseMap[x, y];
 

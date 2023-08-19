@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Heldia.Engine;
 using Heldia.Engine.Collisions;
 using Heldia.Engine.Enum;
@@ -6,7 +7,6 @@ using Heldia.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using static Heldia.Engine.Singleton.GameManager;
-using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace Heldia.Objects;
 
@@ -15,8 +15,6 @@ namespace Heldia.Objects;
 /// </summary>
 public class Player : GameObject
 {
-    private MouseState _mouse;
-
     // speeds
     public bool walk;
     public float walkSpeed;
@@ -129,9 +127,7 @@ public class Player : GameObject
         _lifeRegenTimer.Update(gt);
         _staminaRegenTimer.Update(gt);
         _staminaLostTimer.Update(gt);
-        
-        _mouse = Mouse.GetState();
-        
+
         // Move
         MovementInput();
         
@@ -144,11 +140,14 @@ public class Player : GameObject
         y += Speed.Y;
         Instance.PlayerY = GetPositionCentered().Y;
 
+        Instance.PlayerTileX = (int)Math.Floor(GetPositionCentered().X / (Instance.TileSize * Instance.MapScale));
+        Instance.PlayerTileY = (int)Math.Floor(GetPositionCentered().Y / (Instance.TileSize * Instance.MapScale));
+
         // Set and Update the collision rectangle named `bounds`
         SetCollisionBounds(x + (float)width/6, 
                            y + (float)height / 2 + 5, 
                            width - (width/6 * 2), 
-                           height / 2 - spriteBottomSpace - 5);
+                            height / 2 - spriteBottomSpace - 5);
 
         if (Instance.PlayerStamina == 0)
             StaminaDownToZero = true;
@@ -184,7 +183,7 @@ public class Player : GameObject
     /// <summary>
     /// Decrease life of the player with the dommages parameter
     /// </summary>
-    /// <param name="dommage">Dommage that you want to afflige to player</param>
+    /// <param name="dommage">Dommage that you want to affect to player</param>
     public void TakeDommage(float dommage)
     {
         if (Instance.PlayerHealth > 0f && 
@@ -207,16 +206,16 @@ public class Player : GameObject
         // --- Pressed ---
         CheckSprint();
 
-        if (Instance.Kb.IsKeyDown(Keys.Z)) north = true;
+        if (Instance.KbState.IsKeyDown(Keys.Z)) north = true;
         else north = false;
-        
-        if (Instance.Kb.IsKeyDown(Keys.S)) south = true;
+
+        if (Instance.KbState.IsKeyDown(Keys.S)) south = true;
         else south = false;
-        
-        if (Instance.Kb.IsKeyDown(Keys.Q)) west = true;
+
+        if (Instance.KbState.IsKeyDown(Keys.Q)) west = true;
         else west = false;
-        
-        if (Instance.Kb.IsKeyDown(Keys.D)) east = true;
+
+        if (Instance.KbState.IsKeyDown(Keys.D)) east = true;
         else east = false;
 
         UpdateDirection();
@@ -235,8 +234,14 @@ public class Player : GameObject
     /// </summary>
     private void UpdateDirection()
     {
+        // Contradictory
+        if (north && south || west && east)
+        {
+            _direction = new Vector2(0, 0);
+            line = (int)ESpriteDirection.Idle;
+        }
         // Diagonal
-        if (north && east)
+        else if (north && east)
         {
             _direction = new Vector2(1, -1);
             line = (int)ESpriteDirection.East;
@@ -290,7 +295,7 @@ public class Player : GameObject
     /// </summary>
     private void CheckSprint()
     {
-        if (Instance.Kb.IsKeyDown(Keys.LeftShift) && 
+        if (Instance.KbState.IsKeyDown(Keys.LeftShift) && 
             Instance.PlayerStamina >= 0 && 
             !StaminaDownToZero && 
             (xSpeed != 0 || ySpeed != 0))
@@ -299,7 +304,7 @@ public class Player : GameObject
             _staminaLostTimer.Active = true;
             _lostStamina = true;
             _isInSprint = true;
-            Instance.sprint = _isInSprint;
+            Instance.Sprint = _isInSprint;
         }
         else
         {
@@ -307,7 +312,7 @@ public class Player : GameObject
             _staminaLostTimer.Active = false;
             _lostStamina = false;
             _isInSprint = false;
-            Instance.sprint = _isInSprint;
+            Instance.Sprint = _isInSprint;
         }
     }
 

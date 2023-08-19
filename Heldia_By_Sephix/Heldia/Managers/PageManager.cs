@@ -7,7 +7,7 @@ namespace Heldia.Managers;
 public class PageManager
 {
     // Properties
-    public List<Page> pages = new List<Page>();
+    public List<Page> pages = new();
     public Page PreviousPage { get; set; }
     public Page ActualPage { get; set;  }
     public Page NextPage { get; set; }
@@ -25,16 +25,13 @@ public class PageManager
         for(int i = 0; i < Count; i++)
         {
             Page page = pages[i];
-            if(page.id == Selected) { page.Update(gt, g); }
+            if(page.id == Selected) page.Update(gt, g);
         }
 
         // Destroy the page content which is not used by the game
         if (PreviousPage != null)
         {
-            if (PreviousPage.IsLoad)
-            {
-                PreviousPage.Destroy(g);
-            }
+            if (PreviousPage.IsLoad) PreviousPage.Destroy(g);
         }
     }
     
@@ -43,7 +40,7 @@ public class PageManager
         for (int i = 0; i < Count; i++)
         {
             Page page = pages[i];
-            if (page.id == Selected) { page.Draw(gt, g); }
+            if (page.id == Selected) page.Draw(gt, g);
         }
     }
 
@@ -60,7 +57,7 @@ public class PageManager
     }
 
     // Private methods
-    private Page FindPage(int id)
+    public Page FindPage(int id)
     {
         return pages.Find(p => p.id == id);
     }

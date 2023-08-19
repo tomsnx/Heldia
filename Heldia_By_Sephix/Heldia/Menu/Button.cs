@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using Heldia.Engine;
 using Heldia.Managers;
-using Heldia.Pages;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using static Heldia.Engine.Singleton.GameManager;
 
 namespace Heldia.Menu;
 public class Button : GameObject
@@ -16,7 +16,11 @@ public class Button : GameObject
     private Vector2 _textSize;
     private Vector2 _textPosition;
 
-    // Button Click Event
+    public static bool isAnyButtonHovered;
+    public bool MouseHover { get; private set; }
+    
+    public Color ButtonColor { get; set; }
+    
     public event EventHandler Click;
     
     //TODO: Mettre des textures sur les boutons
@@ -37,7 +41,7 @@ public class Button : GameObject
         this.text = text;
     }
     
-    // Init
+    // Methods
     public override void Init(Main g, List<GameObject> objects)
     {
         _textSize = Drawing.Arial32.MeasureString(text);
@@ -46,47 +50,60 @@ public class Button : GameObject
             bounds.Center.Y - _textSize.Y / 2
         );
     }
-
-    // Destroy
+    
     public override void Destroy(Main g)
     {
         
     }
-
-    // Update states of button, check if is clicked...
+    
     public override void Update(GameTime gt, Main g)
     {
-        // Check if the button is being clicked
-        if (bounds.Contains(Mouse.GetState().Position))
+        if (bounds.Contains(Instance.MouseState.Position))
         {
-            hover = true;
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (!MouseHover)
             {
+                MouseHover = true;
+                isAnyButtonHovered = true;
+            }
+
+            ButtonColor = Color.Gray;
+
+            if (Instance.MouseState.LeftButton == ButtonState.Pressed)
+            {
+                isAnyButtonHovered = false;
                 Click?.Invoke(this, EventArgs.Empty);
             }
         }
         else
         {
-            hover = false;
+            if (MouseHover)
+            {
+                MouseHover = false;
+                if (IsAnyButtonHovered())
+                {
+                    isAnyButtonHovered = false;
+                }
+            }
+
+            ButtonColor = Color.White;
         }
     }
 
-    // Draw button
     public override void Draw(Main g)
     {
-        // Draw the button texture
         if (visible)
         {
-            Color color = Color.White;
-            if (hover)
-            {
-                color = Color.Gray;
-            }
-            Drawing.FillRect(bounds, color, 0, g);
+            Drawing.FillRect(bounds, ButtonColor, 0, g);
             
             Drawing.DrawText(_textPosition,
-                Drawing.Arial32, Color.Black, 
-                text, g);
+                             Drawing.Arial32, 
+                             Color.Black, 
+                             text, g);
         }
+    }
+    
+    public static bool IsAnyButtonHovered()
+    {
+        return isAnyButtonHovered;
     }
 }

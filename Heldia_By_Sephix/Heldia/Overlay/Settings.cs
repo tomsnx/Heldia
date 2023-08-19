@@ -26,6 +26,12 @@ public class Settings
 
     public void Draw(Main g)
     {
-        Drawing.FillRect(new Rectangle(100, 100, Drawing.Width - 200, Drawing.Height - 200), Color.Red, 0.9f, g);
+        Drawing.FillRect(new Rectangle(50, 50, 
+                    Drawing.Width - 100, Drawing.Height - 100), 
+                         new Color(Color.Black, 0.648f), 0.999f, g);
+
+        var title = "Settings";
+        var textPos = Drawing.Ubuntu32.MeasureString(title);
+        Drawing.DrawText(new Vector2((Drawing.Width / (float)2)- textPos.X / 2, 75), Drawing.Ubuntu32, Color.White, title,g);
     }
 }

@@ -48,7 +48,7 @@ public abstract class GameObject
         this.y = y;
         this.width = w;
         this.height = h;
-        this.bounds = new Rectangle(x, y, width, height);
+        this.bounds = new Rectangle(x, y, (int)width, (int)height);
         this.collisionBounds = bounds;
         this.devideSprite = new Rectangle(0, 0, 0, 0);
 

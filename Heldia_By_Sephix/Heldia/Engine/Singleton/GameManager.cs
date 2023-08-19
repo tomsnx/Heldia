@@ -16,7 +16,7 @@ public class GameManager
     public int GameScale { get; private set; } = 3;
     public bool IsFullScreen { get; set; }
     public bool DebugMode { get; set; } = true;
-    public bool SettingsMode { get; set; } = false;
+    public bool SettingsMode { get; set; }
     
     // FPS
     public bool FixedFps { get; } = false;
@@ -28,16 +28,20 @@ public class GameManager
     public Vector2 CameraPos { get; set; } // Camera destination position (2var system)
     
     // input
-    public KeyboardState Kb { get; set; }
+    public KeyboardState KbState { get; set; }
+    public MouseState MouseState { get; set; }
+    public MouseCursor CurrentMouseCursor { get; set; }
 
     // Map
     public int MapScale { get; set; }
-    public int TileSize { get; set; }
+    public int TileSize { get; set; } = 32;
     
     // Player Position
     public float PlayerX { get; set; }
     public float PlayerY { get; set; }
-    public bool sprint { get; set; }
+    public int PlayerTileX { get; set; }
+    public int PlayerTileY { get; set; }
+    public bool Sprint { get; set; }
     
     // Player life
     public float PlayerHealth { get; set; }

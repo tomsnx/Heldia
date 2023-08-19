@@ -32,7 +32,7 @@ public class PageMenu : Page
     private TitleMenu _titleMenu;
 
     // Constructor
-    public PageMenu(PageManager pageMgr, Main g) : base(PageId.Menu)
+    public PageMenu(PageManager pageMgr) : base(PageId.Menu)
     {
         _pageMgr = pageMgr;
         ObjMgr = new ObjectManager();
@@ -51,7 +51,7 @@ public class PageMenu : Page
             (int)_buttonHeight,
             999,
             "New Game");
-            newGameButton.Click += newGamebutton_Click;
+        newGameButton.Click += newGamebutton_Click;
         
         var loadGameButton = new Button((int)_middleScreenWidth, 
             (int)_yPositionButtonCenter, 
@@ -109,7 +109,7 @@ public class PageMenu : Page
     // Methods - Action on event
     private void newGamebutton_Click(object sender, EventArgs e)
     {
-        _pageMgr.ChangePage(new PageGame());
+        _pageMgr.ChangePage(new PageGame(_pageMgr));
     }
     
     private void loadGamebutton_Click(object sender, EventArgs e)

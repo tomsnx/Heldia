@@ -1,14 +1,11 @@
-﻿using System.Reflection;
-using Heldia.Engine;
-using Heldia.Objects;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using static Heldia.Engine.Singleton.GameManager;
 
 namespace Heldia.Engine;
 public class Camera
 {
     // Properties
-    private Vector2 position;
+    public static Vector2 position;
     public Matrix Transform { get; private set; }
     public float CameraDelay { get; set; } = 1.0f;
     public Rectangle CameraBounds { get; set; }
@@ -36,7 +33,7 @@ public class Camera
             GetPositionCentered().X <= Instance.PlayerX + 25 &&
             GetPositionCentered().Y >= Instance.PlayerY - 25 &&
             GetPositionCentered().Y <= Instance.PlayerY + 25 || 
-            Instance.sprint)
+            Instance.Sprint)
         {
             CameraDelay = 1;
         }
@@ -73,12 +70,12 @@ public class Camera
     /// The position will be positioned at the center of the screen.
     /// </summary>
     /// <param name="pos"></param>
-    public void SetPosition(Vector2 pos)
+    public static  void SetPosition(Vector2 pos)
     {
         position = new Vector2(pos.X - Drawing.Width / (float)2, pos.Y - Drawing.Height / (float)2);
     }
 
-    public void Move(Vector2 pos)
+    public static void Move(Vector2 pos)
     {
         Instance.CameraPos = pos;
     }

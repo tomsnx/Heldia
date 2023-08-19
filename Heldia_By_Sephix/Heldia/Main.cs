@@ -1,9 +1,9 @@
 ﻿using System;
 using Heldia.Engine;
 using Heldia.Managers;
+using Heldia.Menu;
 using Heldia.Pages;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
 using static Heldia.Engine.Singleton.GameManager;
 
@@ -37,13 +37,13 @@ public class Main : Game
 
         // Init objects
         pageMgr = new PageManager();
-        pageMenu = new PageMenu(pageMgr, this);
-        pageGame = new PageGame();
+        pageMenu = new PageMenu(pageMgr);
+        pageGame = new PageGame(pageMgr);
 
         // window
         IsMouseVisible = true;
         IsFixedTimeStep = false;
-        Window.Title = Drawing.Title;
+        Window.Title = Instance.GameTitle;
 
         base.Initialize();
     }
@@ -74,19 +74,20 @@ public class Main : Game
         ChangeFpsMode(Instance.GoalFps);
         
         // input
-        Instance.Kb = Keyboard.GetState();
-        
+        Instance.KbState = Keyboard.GetState();
+        Instance.MouseState = Mouse.GetState();
+        UpdateCursor();
+
         //update pages
         pageMgr.Update(gameTime, this);
 
         // update drawing
         Drawing.Update(gameTime, this);
-        Window.Title = Instance.GameTitle;
 
         // update base
         base.Update(gameTime);
     }
-    
+
     protected override void Draw(GameTime gameTime)
     {
         pageMgr.Draw(gameTime, this);
@@ -113,5 +114,26 @@ public class Main : Game
     public void ChangeFpsMode(float fps)
     {
         TargetElapsedTime = TimeSpan.FromSeconds(1.0 / fps);
+    }
+
+    /// <summary>
+    /// Determine which cursor Set on the game
+    /// </summary>
+    private void UpdateCursor()
+    {
+        // Arrow Cursor
+        if (!Button.IsAnyButtonHovered() &&
+            Instance.CurrentMouseCursor != MouseCursor.Arrow)
+        {
+            Instance.CurrentMouseCursor = MouseCursor.Arrow;
+            Mouse.SetCursor(Instance.CurrentMouseCursor);
+        }
+        // Hand Cursor
+        else if (Button.IsAnyButtonHovered() &&
+                 Instance.CurrentMouseCursor != MouseCursor.Hand)
+        {
+            Instance.CurrentMouseCursor = MouseCursor.Hand;
+            Mouse.SetCursor(Instance.CurrentMouseCursor);
+        }
     }
 }
