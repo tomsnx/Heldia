@@ -6,9 +6,7 @@ using Heldia.Engine.Enum;
 using Heldia.Engine.Static;
 using Heldia.Managers;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using static Heldia.Engine.Singleton.GameManager;
-using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace Heldia.Objects;
 
@@ -18,7 +16,6 @@ namespace Heldia.Objects;
 public class Player : GameObject
 {
     // speeds
-    public bool walk;
     public float walkSpeed;
     public float runCoef;
     
@@ -138,18 +135,22 @@ public class Player : GameObject
 
         // Update x and y positions
         x += Speed.X;
-        Instance.PlayerX = GetPositionCentered().X;
         y += Speed.Y;
-        Instance.PlayerY = GetPositionCentered().Y;
 
-        Instance.PlayerTileX = (int)Math.Floor(GetPositionCentered().X / (Instance.TileSize * Instance.MapScale));
-        Instance.PlayerTileY = (int)Math.Floor(GetPositionCentered().Y / (Instance.TileSize * Instance.MapScale));
-
-        // Set and Update the collision rectangle named `bounds`
-        SetCollisionBounds(x + (float)width/6, 
-                           y + (float)height / 2 + 5, 
-                           width - (width/6 * 2), 
-                            height / 2 - spriteBottomSpace - 5);
+        if (IsMoving())
+        {
+            Instance.PlayerX = GetPositionCentered().X;
+            Instance.PlayerY = GetPositionCentered().Y;
+            
+            Instance.PlayerTileX = (int)Math.Floor(GetPositionCentered().X / (Instance.TileSize * Instance.MapScale));
+            Instance.PlayerTileY = (int)Math.Floor(GetPositionCentered().Y / (Instance.TileSize * Instance.MapScale));
+            
+            // Set and Update the collision rectangle named `bounds`
+            SetCollisionBounds(x + (float)width/6, 
+                y + (float)height / 2 + 5, 
+                width - (width/6 * 2), 
+                height / 2 - spriteBottomSpace - 5);
+        }
 
         if (Instance.PlayerStamina == 0)
             StaminaDownToZero = true;
@@ -160,7 +161,7 @@ public class Player : GameObject
                 StaminaDownToZero = false;
         }
 
-        if (Instance.KbState.IsKeyDown(Keys.J))
+        if (Instance.GameKb.GetKeyPressed(KeysList.away))
         {
             Instance.Camera.Move(new Vector2(5000, 5000));
         }
@@ -228,12 +229,21 @@ public class Player : GameObject
         UpdateDirection();
 
         // Normalize direction vector if necessary
-        if (_direction != Vector2.Zero)
+        if(IsMoving())
         {
             _direction.Normalize();
         }
-
+        
         SetSpeed(_direction.X * _spd, _direction.Y * _spd);
+    }
+
+    /// <summary>
+    /// Check if the player is moving.
+    /// </summary>
+    /// <returns>True if player move else false.</returns>
+    private bool IsMoving()
+    {
+        return _direction != Vector2.Zero;
     }
 
     /// <summary>
@@ -302,24 +312,26 @@ public class Player : GameObject
     /// </summary>
     private void CheckSprint()
     {
-        if (Instance.GameKb.GetKeyPressed(KeysList.sprint) && 
-            Instance.PlayerStamina >= 0 && 
-            !StaminaDownToZero && 
-            (xSpeed != 0 || ySpeed != 0))
+        if (IsMoving())
         {
-            _spd = walkSpeed * runCoef * Drawing.delta;
-            _staminaLostTimer.Active = true;
-            _lostStamina = true;
-            _isInSprint = true;
-            Instance.Sprint = _isInSprint;
-        }
-        else
-        {
-            _spd = walkSpeed * Drawing.delta;
-            _staminaLostTimer.Active = false;
-            _lostStamina = false;
-            _isInSprint = false;
-            Instance.Sprint = _isInSprint;
+            if (Instance.GameKb.GetKeyPressed(KeysList.sprint) && 
+                Instance.PlayerStamina >= 0 && 
+                !StaminaDownToZero)
+            {
+                _spd = walkSpeed * runCoef * Drawing.delta;
+                _staminaLostTimer.Active = true;
+                _lostStamina = true;
+                _isInSprint = true;
+                Instance.Sprint = _isInSprint;
+            }
+            else
+            {
+                _spd = walkSpeed * Drawing.delta;
+                _staminaLostTimer.Active = false;
+                _lostStamina = false;
+                _isInSprint = false;
+                Instance.Sprint = _isInSprint;
+            }
         }
     }
 

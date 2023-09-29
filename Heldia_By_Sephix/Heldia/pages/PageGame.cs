@@ -1,5 +1,6 @@
 ﻿using System;
 using Heldia.Engine;
+using Heldia.Engine.Static;
 using Heldia.Managers;
 using Heldia.Objects;
 using Heldia.Objects.UI;
@@ -40,9 +41,6 @@ public class PageGame : Page
 
     // Others
     private bool _escapePressed;
-    
-    //TODO: Faire une variable KeyBoard pour tous le jeux et pas une private à chaque fois
-    private KeyboardState _kb;
 
     /// <summary>
     /// States which display the game and made all calculations
@@ -92,7 +90,7 @@ public class PageGame : Page
     {
         Instance.TotalGameTime += gt.ElapsedGameTime.TotalMilliseconds;
         
-        var currentlyPressed = Instance.KbState.IsKeyDown(Keys.Escape);
+        var currentlyPressed = Instance.GameKb.GetKeyPressed(KeysList.escape);
         if (currentlyPressed && !_escapePressed)
         {
             if (Instance.SettingsMode) Instance.SettingsMode = false;

@@ -26,7 +26,9 @@ public class GameKeyboard
             {KeysList.right, Keys.D},
             {KeysList.fspel, Keys.A},
             {KeysList.qspel, Keys.E},
-            {KeysList.sprint, Keys.LeftShift}
+            {KeysList.escape, Keys.Escape},
+            {KeysList.sprint, Keys.LeftShift},
+            {KeysList.away, Keys.J}
         };
     }
 
@@ -66,30 +68,10 @@ public class GameKeyboard
     {
         return this._kbState.IsKeyDown(k);
     }
-    
-    /*
-    //set
-    public void SetTop(Keys k)
-    {
-        this._keys[0] = k;
-    }
-    public void SetLeft(Keys k)
-    {
-        this._keys[1] = k;
-    }
-    public void SetBot(Keys k)
-    {
-        this._keys[2] = k;
-    }
-    public void SetRight(Keys k)
-    {
-        this._keys[3] = k;
-    }
-    public void SetSprint(Keys k)
-    {
-        this._keys[6] = k;
-    }*/
 
+    /// <summary>
+    /// Update the Keyboard state.
+    /// </summary>
     public void Update()
     {
         _kbState = Keyboard.GetState();

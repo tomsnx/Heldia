@@ -12,4 +12,6 @@ public static class KeysList
     public static string sprint = "Sprint";
     public static string qspel = "Qspel";
     public static string fspel = "Fspel";
+    public static string escape = "Escape";
+    public static string away = "Away";
 }
