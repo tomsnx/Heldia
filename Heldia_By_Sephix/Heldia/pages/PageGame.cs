@@ -130,8 +130,8 @@ public class PageGame : Page
             g.GraphicsDevice.Clear(_backgroundColor);
         
             Drawing.spriteBatch.Begin(sortMode: SpriteSortMode.FrontToBack, 
-                transformMatrix: _cam.GetViewMatrix(), 
-                samplerState: SamplerState.PointClamp);
+                                      transformMatrix: _cam.GetViewMatrix(), 
+                                      samplerState: SamplerState.PointClamp);
         
             _objMgr.Draw(g);
 

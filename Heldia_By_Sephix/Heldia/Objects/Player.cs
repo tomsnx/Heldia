@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using Heldia.Engine;
 using Heldia.Engine.Collisions;
 using Heldia.Engine.Enum;
+using Heldia.Engine.Static;
 using Heldia.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using static Heldia.Engine.Singleton.GameManager;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace Heldia.Objects;
 
@@ -158,6 +160,11 @@ public class Player : GameObject
                 StaminaDownToZero = false;
         }
 
+        if (Instance.KbState.IsKeyDown(Keys.J))
+        {
+            Instance.Camera.Move(new Vector2(5000, 5000));
+        }
+
         // Regeneration System
         LifeRegeneration();
         StaminaRegeneration();
@@ -205,17 +212,17 @@ public class Player : GameObject
     {
         // --- Pressed ---
         CheckSprint();
-
-        if (Instance.KbState.IsKeyDown(Keys.Z)) north = true;
+        
+        if (Instance.GameKb.GetKeyPressed(KeysList.top)) north = true;
         else north = false;
 
-        if (Instance.KbState.IsKeyDown(Keys.S)) south = true;
+        if (Instance.GameKb.GetKeyPressed(KeysList.bottom)) south = true;
         else south = false;
 
-        if (Instance.KbState.IsKeyDown(Keys.Q)) west = true;
+        if (Instance.GameKb.GetKeyPressed(KeysList.left)) west = true;
         else west = false;
 
-        if (Instance.KbState.IsKeyDown(Keys.D)) east = true;
+        if (Instance.GameKb.GetKeyPressed(KeysList.right)) east = true;
         else east = false;
 
         UpdateDirection();
@@ -295,7 +302,7 @@ public class Player : GameObject
     /// </summary>
     private void CheckSprint()
     {
-        if (Instance.KbState.IsKeyDown(Keys.LeftShift) && 
+        if (Instance.GameKb.GetKeyPressed(KeysList.sprint) && 
             Instance.PlayerStamina >= 0 && 
             !StaminaDownToZero && 
             (xSpeed != 0 || ySpeed != 0))

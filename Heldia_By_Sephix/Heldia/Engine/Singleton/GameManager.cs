@@ -28,6 +28,7 @@ public class GameManager
     public Vector2 CameraPos { get; set; } // Camera destination position (2var system)
     
     // input
+    public GameKeyboard GameKb { get; set; }
     public KeyboardState KbState { get; set; }
     public MouseState MouseState { get; set; }
     public MouseCursor CurrentMouseCursor { get; set; }

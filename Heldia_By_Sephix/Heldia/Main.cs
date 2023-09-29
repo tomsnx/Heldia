@@ -6,6 +6,7 @@ using Heldia.Pages;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using static Heldia.Engine.Singleton.GameManager;
+using Keyboard = Microsoft.Xna.Framework.Input.Keyboard;
 
 namespace Heldia;
 
@@ -57,6 +58,9 @@ public class Main : Game
         pageMgr.Add(pageGame, this);
         pageMgr.Set(pageMenu);
         
+        // Inputs
+        Instance.GameKb = new GameKeyboard();
+        
         base.LoadContent();
     }
 
@@ -74,7 +78,7 @@ public class Main : Game
         ChangeFpsMode(Instance.GoalFps);
         
         // input
-        Instance.KbState = Keyboard.GetState();
+        Instance.GameKb.Update();
         Instance.MouseState = Mouse.GetState();
         UpdateCursor();
 
