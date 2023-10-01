@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Heldia.Engine;
 using Heldia.Engine.Collisions;
 using Heldia.Engine.Enum;
 using Heldia.Engine.Static;
 using Heldia.Managers;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using static Heldia.Engine.Singleton.GameManager;
+using Timer = Heldia.Engine.Timer;
 
 namespace Heldia.Objects;
 
@@ -59,6 +62,8 @@ public class Player : GameObject
     private Timer _lifeRegenTimer;
     private Timer _staminaRegenTimer;
     private Timer _staminaLostTimer;
+    
+    public int CurrentSlot { get; private set; }
 
     public Player(int x, int y) : base(x, y, playerWidth, playerHeight, (int)EObjectId.Player)
     {
@@ -82,17 +87,19 @@ public class Player : GameObject
         _lifeRegenTimer = new Timer(Instance.PlayerDelayRegenHealth, () =>
         {
             Instance.PlayerHealth += Instance.PlayerCoefRegenHealth;
-        }, true, false);
+        }, null,true, false);
 
         _staminaRegenTimer = new Timer(Instance.PlayerDelayRegenStamina, () =>
         {
             Instance.PlayerStamina += Instance.PlayerCoefRegenStamina;
-        }, true, false);
+        }, null,true, false);
 
         _staminaLostTimer = new Timer(0.01f, () =>
         {
             Instance.PlayerStamina -= Instance.PlayerCoefLostStamina;
-        }, true, false);
+        }, null,true, false);
+
+        this.CurrentSlot = 0;
     }
 
     public override void Init(Main g, List<GameObject> objects)
@@ -129,9 +136,6 @@ public class Player : GameObject
 
         // Move
         MovementInput();
-        
-        // Collision
-        _collisionManager.Update();
 
         // Update x and y positions
         x += Speed.X;
@@ -139,6 +143,9 @@ public class Player : GameObject
 
         if (IsMoving())
         {
+            // Collisions
+            _collisionManager.Update();
+            
             Instance.PlayerX = GetPositionCentered().X;
             Instance.PlayerY = GetPositionCentered().Y;
             
@@ -152,6 +159,8 @@ public class Player : GameObject
                 height / 2 - spriteBottomSpace - 5);
         }
 
+        if(Instance.GameKb.GetPressedKeys().Length > 0) ItemBarInput();
+
         if (Instance.PlayerStamina == 0)
             StaminaDownToZero = true;
 
@@ -161,21 +170,16 @@ public class Player : GameObject
                 StaminaDownToZero = false;
         }
 
-        if (Instance.GameKb.GetKeyPressed(KeysList.away))
-        {
-            Instance.Camera.Move(new Vector2(5000, 5000));
-        }
-
         // Regeneration System
         LifeRegeneration();
         StaminaRegeneration();
-        
-        // Set variable devideSprite to a X and Y Value of the TileSet
-        devideSprite = _anim.GetAnimRect(playerWidth,playerHeight, gt);
     }
 
-    public override void Draw(Main g)
+    public override void Draw(GameTime gt, Main g)
     {
+        // Set variable devideSprite to a X and Y Value of the TileSet
+        devideSprite = _anim.GetAnimRect(playerWidth,playerHeight, gt);
+        
         Drawing.FillRect(_sprite.GetSheet(), devideSprite, bounds, Color.White, 0.5f, g);
         //Drawing.FillRect(collisionBounds, Color.Red, 0.51f, g);
     }
@@ -184,26 +188,8 @@ public class Player : GameObject
     {
         
     }
-    
-    
+
     // Other Public Methods
-    
-    /// <summary>
-    /// Decrease life of the player with the dommages parameter
-    /// </summary>
-    /// <param name="dommage">Dommage that you want to affect to player</param>
-    public void TakeDommage(float dommage)
-    {
-        if (Instance.PlayerHealth > 0f && 
-            (Instance.PlayerHealth - dommage) >= 0f)
-        {
-            Instance.PlayerHealth -= dommage;
-        }
-        else
-        {
-            Instance.PlayerHealth = 0f;
-        }
-    }
 
     /// <summary>
     /// Manages all of the player movement.
@@ -213,7 +199,7 @@ public class Player : GameObject
     {
         // --- Pressed ---
         CheckSprint();
-        
+            
         if (Instance.GameKb.GetKeyPressed(KeysList.top)) north = true;
         else north = false;
 
@@ -238,7 +224,7 @@ public class Player : GameObject
     }
 
     /// <summary>
-    /// Check if the player is moving.
+    /// Check if the player is moving with the vector.
     /// </summary>
     /// <returns>True if player move else false.</returns>
     private bool IsMoving()
@@ -314,8 +300,8 @@ public class Player : GameObject
     {
         if (IsMoving())
         {
-            if (Instance.GameKb.GetKeyPressed(KeysList.sprint) && 
-                Instance.PlayerStamina >= 0 && 
+            if (Instance.GameKb.GetKeyPressed(KeysList.sprint) &&
+                Instance.PlayerStamina >= 0 &&
                 !StaminaDownToZero)
             {
                 _spd = walkSpeed * runCoef * Drawing.delta;
@@ -367,5 +353,47 @@ public class Player : GameObject
         {
             _staminaRegenTimer.Active = false;
         }
+    }
+
+    /// <summary>
+    /// Determines which slot is used in the player's inventory bar.
+    /// </summary>
+    private void ItemBarInput()
+    {
+        if (Instance.GameKb.KeyboardUsed())
+        {
+            if (Instance.GameKb.GetKeyPressed(KeysList.one)) CurrentSlot = 0;
+            else if (Instance.GameKb.GetKeyPressed(KeysList.two)) CurrentSlot = 1;
+            else if (Instance.GameKb.GetKeyPressed(KeysList.three)) CurrentSlot = 2;
+            else if (Instance.GameKb.GetKeyPressed(KeysList.four)) CurrentSlot = 3;
+            else if (Instance.GameKb.GetKeyPressed(KeysList.five)) CurrentSlot = 4;
+            else if (Instance.GameKb.GetKeyPressed(KeysList.six)) CurrentSlot = 5;
+            else if (Instance.GameKb.GetKeyPressed(KeysList.seven)) CurrentSlot = 6;
+            else if (Instance.GameKb.GetKeyPressed(KeysList.eight)) CurrentSlot = 7;
+            else if (Instance.GameKb.GetKeyPressed(KeysList.nine)) CurrentSlot = 8;
+            else if (Instance.GameKb.GetKeyPressed(KeysList.zero)) CurrentSlot = 9;
+        }
+    }
+    
+    /// <summary>
+    /// Decrease life of the player with the dommages parameter
+    /// </summary>
+    /// <param name="dommage">Dommage that you want to affect to player</param>
+    public void TakeDommage(float dommage)
+    {
+        if (Instance.PlayerHealth > 0f && 
+            (Instance.PlayerHealth - dommage) >= 0f)
+        {
+            Instance.PlayerHealth -= dommage;
+        }
+        else
+        {
+            Instance.PlayerHealth = 0f;
+        }
+    }
+
+    public String GetCurrentItemName()
+    {
+        return "test";
     }
 }

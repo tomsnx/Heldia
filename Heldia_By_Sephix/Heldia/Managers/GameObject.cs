@@ -65,7 +65,7 @@ public abstract class GameObject
     public abstract void Init(Main g, List<GameObject> objects);
     public abstract void Destroy(Main g);
     public abstract void Update(GameTime gt, Main g);
-    public abstract void Draw(Main g);
+    public abstract void Draw(GameTime gt, Main g);
 
     public bool IsTouchingLeft(GameObject obj)
     {

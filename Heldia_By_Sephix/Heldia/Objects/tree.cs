@@ -32,7 +32,7 @@ public class Tree : GameObject
         _sprite = new SpriteSheets(g, (int)EObjectId.Tree, _name);
     }
 
-    public override void Draw(Main g)
+    public override void Draw(GameTime gt, Main g)
     {
         Drawing.FillRect(_sprite.GetSheet(), bounds, Color.White, 0, g);
     }

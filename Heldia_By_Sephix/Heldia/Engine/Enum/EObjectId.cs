@@ -14,5 +14,8 @@ public enum EObjectId
     Tree = 3,
     Grass = 1,
     BaseGrass = 2,
-    Pointer = 14
+    Pointer = 14,
+    ItemCase = 15,
+    ItemBar = 16,
+    ItemSlot = 17,
 }

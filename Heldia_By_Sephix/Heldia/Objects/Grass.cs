@@ -55,7 +55,7 @@ public class Grass : GameObject
         }
     }
 
-    public override void Draw(Main g)
+    public override void Draw(GameTime gt, Main g)
     {
         if (Active)
             Drawing.FillRect(_sprite.GetSheet(), devideSprite, bounds, Color.White, 0, g);

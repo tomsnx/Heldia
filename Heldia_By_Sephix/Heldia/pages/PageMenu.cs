@@ -98,7 +98,7 @@ public class PageMenu : Page
             Drawing.spriteBatch.Begin();
 
             //objs
-            ObjMgr.Draw(g);
+            ObjMgr.Draw(gt, g);
             _titleMenu.Draw(g);
 
             // end

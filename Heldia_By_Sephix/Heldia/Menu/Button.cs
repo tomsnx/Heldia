@@ -89,7 +89,7 @@ public class Button : GameObject
         }
     }
 
-    public override void Draw(Main g)
+    public override void Draw(GameTime gt, Main g)
     {
         if (visible)
         {

@@ -31,7 +31,7 @@ public class ObjectManager
     }
 
     //Drawing
-    public void Draw(Main g)
+    public void Draw(GameTime gt, Main g)
     {
         for (int i = 0; i < Count; i++)
         {
@@ -39,7 +39,7 @@ public class ObjectManager
 
             if (obj.rendered && obj.visible)
             {
-                obj.Draw(g);
+                obj.Draw(gt, g);
             }
         }
     }

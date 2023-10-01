@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Heldia.Engine;
 using Heldia.Engine.Static;
 using Heldia.Managers;
@@ -9,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using static Heldia.Engine.Singleton.GameManager;
+using Timer = Heldia.Engine.Timer;
 
 namespace Heldia.Pages;
 
@@ -30,6 +32,7 @@ public class PageGame : Page
     private Managers.Overlay _hud;
     private LifeBar _lifeBar;
     private StaminaBar _staminaBar;
+    private ItemBar _itemBar;
 
     private Camera _cam;
 
@@ -55,13 +58,16 @@ public class PageGame : Page
         _lifeBar = new LifeBar(10, 10, _player);
         _staminaBar = new StaminaBar(10, LifeBar.barHeight * 2, _player);
         _hud = new Managers.Overlay(_player);
+        _itemBar = new ItemBar((int)(Drawing.Width/(float)2 - ItemBar.barWidth/(float)2), 
+                                Drawing.Height - ItemCase.Height - 2, 
+                                 _player);
 
         _pointer = new Pointer();
 
         _dayTimer = new Timer(960, () =>
         {
             Instance.Day++;
-        }, true);
+        }, null,true);
     }
 
     public override void Init(Main g)
@@ -75,12 +81,14 @@ public class PageGame : Page
         // HUD
         _hud.AddHudObject(_lifeBar);
         _hud.AddHudObject(_staminaBar);
+        _hud.AddHudObject(_itemBar);
         
         // Map
         _map.Init(_objMgr ,g);
         
-        //FIXME: Mettre le fichier test en .xnb
-        /*_song = g.Content.Load<Song>("Sounds/test");
+        //FIXME: System.IO.InvalidDataException: Could not determine container type!
+        /*_song = g.Content.Load<Song>("sounds/test");
+        MediaPlayer.Volume = 1.0f;
         MediaPlayer.Play(_song);
         MediaPlayer.IsRepeating = true;
         MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;*/
@@ -111,9 +119,9 @@ public class PageGame : Page
             _map.Update(gt, g);
             
             _objMgr.Update(gt, g);
-        
+
             _hud.Update(gt, g);
-        
+
             _dayTimer.Update(gt);
         }
     }
@@ -131,14 +139,14 @@ public class PageGame : Page
                                       transformMatrix: _cam.GetViewMatrix(), 
                                       samplerState: SamplerState.PointClamp);
         
-            _objMgr.Draw(g);
+            _objMgr.Draw(gt, g);
 
             Drawing.spriteBatch.End();
             
             
             // Static Object Drawing
             Drawing.spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-            _hud.Draw(g);
+            _hud.Draw(gt, g);
             //_pointer.Draw(g);
             Drawing.spriteBatch.End();
         }

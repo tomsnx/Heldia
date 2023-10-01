@@ -29,7 +29,6 @@ public class GameManager
     
     // input
     public GameKeyboard GameKb { get; set; }
-    public KeyboardState KbState { get; set; }
     public MouseState MouseState { get; set; }
     public MouseCursor CurrentMouseCursor { get; set; }
 

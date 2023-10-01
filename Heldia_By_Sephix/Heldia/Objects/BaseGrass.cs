@@ -35,7 +35,7 @@ public class BaseGrass : GameObject
         }
     }
 
-    public override void Draw(Main g)
+    public override void Draw(GameTime gt, Main g)
     {
         if (Active)
         {

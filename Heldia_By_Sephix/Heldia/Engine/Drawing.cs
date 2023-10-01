@@ -74,13 +74,13 @@ public static class Drawing
         {
             TpsUpdate = (int)(_framerateTps / _globalTimerTps.TotalProgressSeconds);
             _framerateTps = 0;
-        }, true);
+        }, null,true);
         
         _globalTimerFps = new Timer(1, () =>
         {
             FpsDraw = (int)(_framerateFps / _globalTimerFps.TotalProgressSeconds);
             _framerateFps = 0;
-        }, true);
+        }, null,true);
     }
 
     // Update
@@ -142,6 +142,12 @@ public static class Drawing
     public static void DrawText(Vector2 position, SpriteFont font, Color textColor, String text, Main g)
     {
         spriteBatch.DrawString(font, text, position, textColor);
+    }
+    
+    public static void DrawText(Vector2 position, SpriteFont font, Color textColor, String text, float depth, Main g)
+    {
+        Vector2 pos = new Vector2(0, 0);
+        spriteBatch.DrawString(font, text, position, textColor, 0, pos, 1.0f, SpriteEffects.None, depth);
     }
 
     /**

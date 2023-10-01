@@ -45,7 +45,7 @@ public class StaminaBar : GameObject
         _barNewWidth = (int)((barWidth - 4) * staminaPercent);
     }
 
-    public override  void Draw(Main g)
+    public override  void Draw(GameTime gt, Main g)
     {
         Rectangle barNewRect = new Rectangle((int)x + 2, (int)y + 2, _barNewWidth, barHeight - 4);
         

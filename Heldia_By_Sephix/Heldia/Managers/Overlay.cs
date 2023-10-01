@@ -32,11 +32,11 @@ public class Overlay
         }
     }
 
-    public void Draw(Main g)
+    public void Draw(GameTime gt, Main g)
     {
         foreach (var uiObject in _uiObjects)
         {
-            uiObject.Draw(g);
+            uiObject.Draw(gt, g);
         }
 
         if (Instance.DebugMode)

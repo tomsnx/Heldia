@@ -6,13 +6,8 @@ using Heldia.Pages;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using static Heldia.Engine.Singleton.GameManager;
-using Keyboard = Microsoft.Xna.Framework.Input.Keyboard;
 
 namespace Heldia;
-
-//TODO: Faire un système de clavier pour que quand les paramètres seront
-//TODO: créés, il y est un tableau de touches modifiable (apporter les modification nécessaire au system de déplacement du joueur)
-//TODO: Je pense qu'il faut utiliser les dictionnaires pour que ce soit plus simple,(ex: espace = clé et la touche = coffre)
 
 public class Main : Game
 {

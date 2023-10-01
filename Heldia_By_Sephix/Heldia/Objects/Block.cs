@@ -32,7 +32,7 @@ public class Block : GameObject
         _sprite = new SpriteSheets(g, (int)EObjectId.Block, _name);
     }
 
-    public override void Draw(Main g)
+    public override void Draw(GameTime gt, Main g)
     {
         Drawing.FillRect( _sprite.GetSheet(),bounds, Color.Red, 0, g);
     }

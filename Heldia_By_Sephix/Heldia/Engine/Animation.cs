@@ -6,7 +6,7 @@ class Animation
 {
     private Rectangle _rect;
     private Vector2 _dims;
-    
+
     private float _myDelay = 0.1f; // Seconds
     private int _myFrames = 0;
 
@@ -25,7 +25,7 @@ class Animation
             {
                 _myFrames++;
             }
-        }, true);
+        }, null,true);
     }
     
     // Gets
