@@ -54,6 +54,19 @@
             "rid": "win-x86"
           }
         }
+      },
+      "TiledCS/3.3.3": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/TiledCS.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/TiledCS.dll": {
+            "related": ".xml"
+          }
+        }
       }
     }
   },
@@ -93,12 +106,26 @@
         "runtimes/win-x86/native/SDL2.dll",
         "runtimes/win-x86/native/soft_oal.dll"
       ]
+    },
+    "TiledCS/3.3.3": {
+      "sha512": "YoB5tE8FoBNp9zUKCZVnnr+qKJnO54v1ke8yyx4JoIGbI4AaIrqqJwFGL93j9J/r3Po9N2YYytoUvr/rswkurA==",
+      "type": "package",
+      "path": "tiledcs/3.3.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/TiledCS.dll",
+        "lib/netstandard2.0/TiledCS.xml",
+        "tiledcs.3.3.3.nupkg.sha512",
+        "tiledcs.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
       "MonoGame.Content.Builder.Task >= 3.8.1.303",
-      "MonoGame.Framework.DesktopGL >= 3.8.1.303"
+      "MonoGame.Framework.DesktopGL >= 3.8.1.303",
+      "TiledCS >= 3.3.3"
     ]
   },
   "packageFolders": {
@@ -107,11 +134,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/sephix/Desktop/Heldia/Heldia_By_Sephix/Heldia/Heldia.csproj",
+      "projectUniqueName": "/Users/sephix/Documents/development/Heldia/Heldia_By_Sephix/Heldia/Heldia.csproj",
       "projectName": "Heldia",
-      "projectPath": "/Users/sephix/Desktop/Heldia/Heldia_By_Sephix/Heldia/Heldia.csproj",
+      "projectPath": "/Users/sephix/Documents/development/Heldia/Heldia_By_Sephix/Heldia/Heldia.csproj",
       "packagesPath": "/Users/sephix/.nuget/packages/",
-      "outputPath": "/Users/sephix/Desktop/Heldia/Heldia_By_Sephix/Heldia/obj/",
+      "outputPath": "/Users/sephix/Documents/development/Heldia/Heldia_By_Sephix/Heldia/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/sephix/.nuget/NuGet/NuGet.Config"
@@ -145,6 +172,10 @@
           "MonoGame.Framework.DesktopGL": {
             "target": "Package",
             "version": "[3.8.1.303, )"
+          },
+          "TiledCS": {
+            "target": "Package",
+            "version": "[3.3.3, )"
           }
         },
         "imports": [
@@ -161,15 +192,15 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[6.0.15, 6.0.15]"
+            "version": "[6.0.25, 6.0.25]"
           },
           {
-            "name": "Microsoft.NETCore.App.Host.osx-x64",
-            "version": "[6.0.15, 6.0.15]"
+            "name": "Microsoft.NETCore.App.Host.osx-arm64",
+            "version": "[6.0.25, 6.0.25]"
           },
           {
             "name": "Microsoft.NETCore.App.Ref",
-            "version": "[6.0.15, 6.0.15]"
+            "version": "[6.0.25, 6.0.25]"
           }
         ],
         "frameworkReferences": {
@@ -177,7 +208,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/x64/sdk/7.0.202/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.100/RuntimeIdentifierGraph.json"
       }
     }
   }

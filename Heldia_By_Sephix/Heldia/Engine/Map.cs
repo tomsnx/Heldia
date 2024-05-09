@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using TiledCS;
 using Heldia.Engine.Enum;
 using Heldia.Managers;
 using Heldia.Objects;
@@ -9,7 +11,45 @@ namespace Heldia.Engine;
 
 public class Map
 {
-    public static int sizeX = 250;
+    public Map()
+    {
+        var map = new TiledMap("path-to-map.tmx");
+        //var tileset = new TiledTileset("path-to-tileset.tsx");
+        var tileLayers = map.Layers.Where(x => x.type == TiledLayerType.TileLayer);
+        
+        foreach (var layer in tileLayers)
+        {
+            for (var y = 0; y < layer.height; y++)
+            {
+                for (var x = 0; x < layer.width; x++)
+                {
+                    var index = (y * layer.width) + x; // Assuming the default render order is used which is from right to bottom
+                    var gid = layer.data[index]; // The tileset tile index
+                    var tileX = (x * map.TileWidth);
+                    var tileY = (y * map.TileHeight);
+
+                    // Gid 0 is used to tell there is no tile set
+                    if (gid == 0)
+                    {
+                        continue;
+                    }
+
+                    // Helper method to fetch the right TieldMapTileset instance. 
+                    // This is a connection object Tiled uses for linking the correct tileset to the gid value using the firstgid property.
+                    var mapTileset = map.GetTiledMapTileset(gid);
+            
+                    // Retrieve the actual tileset based on the firstgid property of the connection object we retrieved just now
+                    var tileset = tilesets[mapTileset.firstgid];
+            
+                    // Use the connection object as well as the tileset to figure out the source rectangle.
+                    var rect = map.GetSourceRect(mapTileset, tileset, gid);
+            
+                    // Render sprite at position tileX, tileY using the rect
+                }
+            }
+        }
+    }
+    /*public static int sizeX = 250;
     public static int sizeY = 250;
 
     private GameObject[,] _map;
@@ -37,7 +77,7 @@ public class Map
                                             51, 145, 235, 249, 14, 239, 107, 49, 192, 214, 31, 181, 199, 106, 157, 184, 
                                             84, 204, 176, 115, 121, 50, 45, 127, 4, 150, 254, 138, 236, 205, 93, 222, 
                                             114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180 };
-
+    
     // Constructor
     public Map(int mapScale)
     {
@@ -269,5 +309,5 @@ public class Map
         }
 
         return remappedMap;
-    }
+    }*/
 }

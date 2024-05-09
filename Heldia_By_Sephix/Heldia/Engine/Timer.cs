@@ -8,7 +8,6 @@ public class Timer
     public bool Active { get; set; }
     private bool _end;
     private bool _autoReset;
-    private bool _ignoreSpeed;
     public double TotalSeconds { get; }
     public double TotalProgressSeconds { get; set; }
 

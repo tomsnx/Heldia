@@ -391,9 +391,4 @@ public class Player : GameObject
             Instance.PlayerHealth = 0f;
         }
     }
-
-    public String GetCurrentItemName()
-    {
-        return "test";
-    }
 }
