@@ -99,3 +99,4 @@
 /Users/sephix/Documents/development/Heldia/Heldia_By_Sephix/Heldia/obj/Debug/net6.0/Heldia.pdb
 /Users/sephix/Documents/development/Heldia/Heldia_By_Sephix/Heldia/obj/Debug/net6.0/Heldia.genruntimeconfig.cache
 /Users/sephix/Documents/development/Heldia/Heldia_By_Sephix/Heldia/obj/Debug/net6.0/ref/Heldia.dll
+/Users/sephix/Documents/development/Heldia/Heldia_By_Sephix/Heldia/bin/Debug/net6.0/TiledCS.dll

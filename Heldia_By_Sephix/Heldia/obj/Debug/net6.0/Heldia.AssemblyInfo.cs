@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Heldia")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9822112299310d367bf405cc33497f76631fe281")]
 [assembly: System.Reflection.AssemblyProductAttribute("Heldia")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Heldia")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -9,7 +9,8 @@
       "Heldia/1.0.0": {
         "dependencies": {
           "MonoGame.Content.Builder.Task": "3.8.1.303",
-          "MonoGame.Framework.DesktopGL": "3.8.1.303"
+          "MonoGame.Framework.DesktopGL": "3.8.1.303",
+          "TiledCS": "3.3.3"
         },
         "runtime": {
           "Heldia.dll": {}
@@ -65,6 +66,14 @@
             "fileVersion": "0.0.0.0"
           }
         }
+      },
+      "TiledCS/3.3.3": {
+        "runtime": {
+          "lib/netstandard2.0/TiledCS.dll": {
+            "assemblyVersion": "3.3.3.0",
+            "fileVersion": "3.3.3.0"
+          }
+        }
       }
     }
   },
@@ -87,6 +96,13 @@
       "sha512": "sha512-eGYhqn0n1olk8MNYeE9EuBmoNNECN1T18rPMaQpkzsEQ0H3nVyFPXC+uCo78v5pi5juQpJ3PSFnSkjzZJ1U58A==",
       "path": "monogame.framework.desktopgl/3.8.1.303",
       "hashPath": "monogame.framework.desktopgl.3.8.1.303.nupkg.sha512"
+    },
+    "TiledCS/3.3.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YoB5tE8FoBNp9zUKCZVnnr+qKJnO54v1ke8yyx4JoIGbI4AaIrqqJwFGL93j9J/r3Po9N2YYytoUvr/rswkurA==",
+      "path": "tiledcs/3.3.3",
+      "hashPath": "tiledcs.3.3.3.nupkg.sha512"
     }
   }
 }
